@@ -28,28 +28,12 @@ dat$Period.Start.Date <- mdy(dat$Period.Start.Date)
 
 #Fill in missing days by ID 
 df <- dat %>% group_by(Subject.Number) %>%
-  complete(daterated = seq.Date((Period.Start.Date)-14, max(Period.Start.Date)+14, by = "day"))
+  complete(daterated = seq.Date((Period.Start.Date)-15, max(Period.Start.Date)+14, by = "day"))
 
 df$cycleday <- ifelse(df$firstdayofperiod == 1, 1, 0)
 
-
-Clear3DailyData <- cbind(Clear3DailyData, 
-                         year = year(Clear3DailyData$daterated), 
-                         month = month(Clear3DailyData$daterated), 
-                         day = day(Clear3DailyData$daterated)) 
-Clear3DailyData <- Clear3DailyData[with(Clear3DailyData,order(as.numeric(id), 
-                                                              year, month, day, daterated), cycleday),]
-
-Clear3DailyData$cycleday[is.na(Clear3DailyData$cycleday)] <- 0
-
-Clear3DailyData <- Clear3DailyData[with(Clear3DailyData,order(id, 
-                                                              year, 
-                                                              month, 
-                                                              day, 
-                                                              daterated),cycleday),]
-
-#make A the variable where menstrualbleeding starts AND period starts
-Clear3DailyData$A <- Clear3DailyData$cycleday
+#make A the variable where period starts
+df$A <- df$cycleday
 
 cycleCount <- function(x) {
   #Get the index of 1
@@ -67,10 +51,16 @@ cycleCount <- function(x) {
   do.call(coalesce, num)
 }
 
-Clear3DailyData <- Clear3DailyData %>% group_by(id) %>% 
+#rename Subject.Number to id 
+names(df)[names(df) == "Subject.Number"  ] <- "id"
+
+df <- df %>% group_by(id) %>% 
   mutate(cycleday = cycleCount(A))
 
-Clear3DailyData <- Clear3DailyData %>% select(!A)
+df <- df %>% select(!A)
+
+
+
 
 Clear3DailyData %>% group_by(cycleday) %>% summarize(n=n())
 Clear3DailyData %>% filter(cycleday==0) %>% pull(id)
