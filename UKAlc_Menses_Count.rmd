@@ -51,6 +51,29 @@ cycleCount <- function(x) {
   do.call(coalesce, num)
 }
 
+
+cycleCountw0 <- function(x) {
+  #Get the index of 1
+  inds <- which(x == 1)
+  if(!length(inds)) return(0) 
+  #Create a sequence with that index as 0
+  num <- lapply(inds, function(i) {
+    num <- seq_along(x) - i
+    #Add 1 to values greater than equal to 0
+    #[num > 0] <- num[num > 0] 
+    num[num < -15] <- NA
+    num[num > 10] <- NA
+    num
+  })
+  #Select the first non-NA values from the sequence
+  do.call(coalesce, num)
+}
+
+
+
+
+
+
 #rename Subject.Number to id 
 names(df)[names(df) == "Subject.Number"  ] <- "id"
 
@@ -59,20 +82,11 @@ df <- df %>% group_by(id) %>%
 
 df <- df %>% select(!A)
 
+df <- df %>% group_by(id) %>% 
+  mutate(cycledaywzero = cycleCountw0(firstdayofperiod))
 
+df %>% filter(cycleday==0) %>% pull(id)
 
-
-Clear3DailyData %>% group_by(cycleday) %>% summarize(n=n())
-Clear3DailyData %>% filter(cycleday==0) %>% pull(id)
-
-#only 3 participants where CycleCount didnt work and created a 0 for them - look into these 3
-Clear3DailyData %>% filter(id==3061 | id==3068 | id==3069) %>%
-  select(id, daterated, firstdayofperiod, cycleday)
-
-Clear3DailyData <- Clear3DailyData %>%
-  filter(id!=3061) %>%
-  filter(id!=3068) %>%
-  filter(id!=3069)
 ```
 
 
