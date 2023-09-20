@@ -1,0 +1,83 @@
+---
+title: "UKAlc_Menses_Count"
+author: "Anisha Nagpal"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Load libraries and import data
+
+```{r}
+library(tidyverse)
+dat <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/01_raw_data/Period Start Dates.csv")
+
+```
+
+```{r}
+#if menstrualbleeding = 0.5 (spotting) or 1 (bleeding) and firstdayofperiod = 1, then cycleday = 1
+Clear3DailyData$cycleday <- ifelse(Clear3DailyData$menstrualbleeding >= 0.5 & Clear3DailyData$firstdayofperiod == 1, 1, 0)
+#convert all NAs in cycleday to 0
+Clear3DailyData$cycleday[is.na(Clear3DailyData$cycleday)] <- 0
+
+#Fill in missing days by ID 
+Clear3DailyData <- Clear3DailyData[!is.na(Clear3DailyData$daterated), ]
+Clear3DailyData <- Clear3DailyData %>% group_by(id) %>%
+  complete(daterated = seq.Date(min(daterated), max(daterated), by = "day"))
+Clear3DailyData <- cbind(Clear3DailyData, 
+                         year = year(Clear3DailyData$daterated), 
+                         month = month(Clear3DailyData$daterated), 
+                         day = day(Clear3DailyData$daterated)) 
+Clear3DailyData <- Clear3DailyData[with(Clear3DailyData,order(as.numeric(id), 
+                                                              year, month, day, daterated), cycleday),]
+
+Clear3DailyData$cycleday[is.na(Clear3DailyData$cycleday)] <- 0
+
+Clear3DailyData <- Clear3DailyData[with(Clear3DailyData,order(id, 
+                                                              year, 
+                                                              month, 
+                                                              day, 
+                                                              daterated),cycleday),]
+
+#make A the variable where menstrualbleeding starts AND period starts
+Clear3DailyData$A <- Clear3DailyData$cycleday
+
+cycleCount <- function(x) {
+  #Get the index of 1
+  inds <- which(x == 1)
+  if(!length(inds)) return(0) 
+  #Create a sequence with that index as 0
+  num <- lapply(inds, function(i) {
+    num <- seq_along(x) - i
+    #Add 1 to values greater than equal to 0
+    num[num >= 0] <- num[num >= 0] + 1
+    num[num < -15 | num > 10] <- NA #jb changed days here 8/24/21
+    num
+  })
+  #Select the first non-NA values from the sequence
+  do.call(coalesce, num)
+}
+
+Clear3DailyData <- Clear3DailyData %>% group_by(id) %>% 
+  mutate(cycleday = cycleCount(A))
+
+Clear3DailyData <- Clear3DailyData %>% select(!A)
+
+Clear3DailyData %>% group_by(cycleday) %>% summarize(n=n())
+Clear3DailyData %>% filter(cycleday==0) %>% pull(id)
+
+#only 3 participants where CycleCount didnt work and created a 0 for them - look into these 3
+Clear3DailyData %>% filter(id==3061 | id==3068 | id==3069) %>%
+  select(id, daterated, firstdayofperiod, cycleday)
+
+Clear3DailyData <- Clear3DailyData %>%
+  filter(id!=3061) %>%
+  filter(id!=3068) %>%
+  filter(id!=3069)
+```
+
+
+
