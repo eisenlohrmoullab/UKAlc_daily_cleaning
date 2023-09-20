@@ -18,15 +18,21 @@ dat <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Ma
 ```
 
 ```{r}
-#if menstrualbleeding = 0.5 (spotting) or 1 (bleeding) and firstdayofperiod = 1, then cycleday = 1
-Clear3DailyData$cycleday <- ifelse(Clear3DailyData$menstrualbleeding >= 0.5 & Clear3DailyData$firstdayofperiod == 1, 1, 0)
-#convert all NAs in cycleday to 0
-Clear3DailyData$cycleday[is.na(Clear3DailyData$cycleday)] <- 0
+
+dat$firstdayofperiod <- 1
+
+dat$daterated <- dat$Period.Start.Date
+
+dat$daterated <- mdy(dat$daterated)
+dat$Period.Start.Date <- mdy(dat$Period.Start.Date)
 
 #Fill in missing days by ID 
-Clear3DailyData <- Clear3DailyData[!is.na(Clear3DailyData$daterated), ]
-Clear3DailyData <- Clear3DailyData %>% group_by(id) %>%
-  complete(daterated = seq.Date(min(daterated), max(daterated), by = "day"))
+df <- dat %>% group_by(Subject.Number) %>%
+  complete(daterated = seq.Date((Period.Start.Date)-14, max(Period.Start.Date)+14, by = "day"))
+
+df$cycleday <- ifelse(df$firstdayofperiod == 1, 1, 0)
+
+
 Clear3DailyData <- cbind(Clear3DailyData, 
                          year = year(Clear3DailyData$daterated), 
                          month = month(Clear3DailyData$daterated), 
