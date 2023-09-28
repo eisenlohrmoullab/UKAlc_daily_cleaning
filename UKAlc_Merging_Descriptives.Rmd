@@ -89,7 +89,22 @@ length(pm_part.u.n)
 #After correcting for duplicates, we have n = 83 for am data and n = 82 for pm data 
 ```{r}
 strsplit(am_data$DateTime, " +")
+
 strsplit(pm_data$DateTime, " +") 
+```
+```{r}
+#loadlibraries 
+
+library(dplyr)
+library(tidyr)
+library(stringr)
+
+
+am_data[c('Date', 'Time')] <- str_split_fixed(am_data$DateTime, ' ', 2)
+pm_data[c('Date', 'Time')] <- str_split_fixed(pm_data$DateTime, ' ', 2)
+
+df = subset(am_data, select = -c(DateTime) )
+df = subset(pm_data, select = -c(DateTime))
 ```
 
 
