@@ -30,3 +30,13 @@ am_rc <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (
 pm_rc <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_REDCap_csv.csv")
 ```
 
+ID's in am_qual: 
+
+ID's in a,_rc: 
+
+
+```{r}
+am_data <- merge(am_qual, am_rc, by = c("ID", "DateTime"), all = T)
+```
+
+
