@@ -65,6 +65,10 @@ pm_data <- merge(pm_qual, pm_rc, by = c("ID", "DateTime"), all = T)
 ```{r}
 intersect(am_data$ID, pm_data$ID)
 setdiff(am_data$ID, pm_data$ID)
+
+am_pm_part <- intersect(am_data$ID, pm_data$ID)
+
+length(am_pm_part)
 ```
 
 #IDs in both am and pm datasets: 
