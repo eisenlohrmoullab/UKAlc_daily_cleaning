@@ -88,7 +88,8 @@ length(pm_part.u.n)
 
 #After correcting for duplicates, we have n = 83 for am data and n = 82 for pm data 
 ```{r}
-strsplit(am_data, )
+strsplit(am_data$DateTime, " +")
+strsplit(pm_data$DateTime, " +") 
 ```
 
 
