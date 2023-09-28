@@ -98,15 +98,23 @@ strsplit(pm_data$DateTime, " +")
 library(dplyr)
 library(tidyr)
 library(stringr)
+knitr::opts_chunk$set(echo = TRUE)
 
 
-am_data[c('Date', 'Time')] <- str_split_fixed(am_data$DateTime, ' ', 2)
-pm_data[c('Date', 'Time')] <- str_split_fixed(pm_data$DateTime, ' ', 2)
+am_data[c('daterated', 'Time')] <- str_split_fixed(am_data$DateTime, ' ', 2)
+pm_data[c('daterated', 'Time')] <- str_split_fixed(pm_data$DateTime, ' ', 2)
 
-df = subset(am_data, select = -c(DateTime) )
-df = subset(pm_data, select = -c(DateTime))
+
 ```
 
+```{r}
+am_data$daterated <- lubridate::mdy(am_data$daterated)
+pm_data$daterated <- lubridate::mdy(pm_data$daterated)
+
+
+am_data = subset(am_data, select = -c(DateTime))
+pm_data = subset(pm_data, select = -c(DateTime))
+```
 
 #IDs in both am and pm datasets: 
 [1] "101"       "102"       "103"       "104"       "105"       "106"       "107"       "108"       "109"      
