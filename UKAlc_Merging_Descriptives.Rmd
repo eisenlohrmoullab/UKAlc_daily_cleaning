@@ -20,12 +20,13 @@ pm_rc <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data 
 
 #Anna's Paths
 
-am_qual <- read.csv("C:/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_Qualtrics_csv.csv")
+am_qual <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_Qualtrics_csv.csv")
 
-pm_qual <- read.csv("C:/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_Qualtrics_csv.csv")
 
-am_rc <- read.csv("C:/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_REDCap_csv.csv")
+pm_qual <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_Qualtrics_csv.csv")
 
-pm_rc <- read.csv("C:/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_REDCap_csv.csv")
+am_rc <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_REDCap_csv.csv")
+
+pm_rc <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_REDCap_csv.csv")
 ```
 
