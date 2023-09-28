@@ -64,12 +64,33 @@ pm_data <- merge(pm_qual, pm_rc, by = c("ID", "DateTime"), all = T)
 
 ```{r}
 intersect(am_data$ID, pm_data$ID)
+
 setdiff(am_data$ID, pm_data$ID)
 
 am_pm_part <- intersect(am_data$ID, pm_data$ID)
-
 length(am_pm_part)
+
+gsub("[^0-9.-]", "", pm_data$ID)
+gsub("[^0-9.-]", "", am_data$ID)
+
+am_part.u <- gsub("[^0-9.-]", "", am_data$ID)
+pm_part.u <- gsub("[^0-9.-]", "", pm_data$ID)
+
+unique(am_part.u)
+unique(pm_part.u)
+
+am_part.u.n <- unique(am_part.u)
+pm_part.u.n <- unique(pm_part.u)
+
+length(am_part.u.n)
+length(pm_part.u.n)
 ```
+
+#After correcting for duplicates, we have n = 83 for am data and n = 82 for pm data 
+```{r}
+strsplit(am_data, )
+```
+
 
 #IDs in both am and pm datasets: 
 [1] "101"       "102"       "103"       "104"       "105"       "106"       "107"       "108"       "109"      
