@@ -118,34 +118,50 @@ pm_data = subset(pm_data, select = -c(DateTime))
 
 #Remove rows where everything is NA except daterated 
 ```{r}
+na_rows_am <- rowSums(is.na(am_data[, .SD, .SDcols = !c('Date', 'ID')]) > 0
+na_rows_am
+
+na_rows_pm <- rowSums(is.na(pm_data[, .SD, .SDcols = !c('Date', 'ID')]) > 0
+na_rows_pm 
+```
+
+#Find Duplicates in Dates per ID 
+```{r}
 dupsID = am_data %>%
   group_by(ID, daterated) %>%
   distinct(.keep_all = TRUE) %>%
   group_by(ID) %>%
   filter(n() == 1)  
 
-result <- am_data %>%
+result.am <- am_data %>%
   group_by(ID, daterated) %>%
   summarise(observations = n())
 
-na_rows <- rowSums(is.na(am_data[, .SD, .SDcols = !c('Date', 'ID')]) > 0
-na_rows
+dupsID = pm_data %>%
+  group_by(ID, daterated) %>%
+  distinct(.keep_all = TRUE) %>%
+  group_by(ID) %>%
+  filter(n() == 1)  
+
+result.pm <- pm_data %>%
+  group_by(ID, daterated) %>%
+  summarise(observations = n())
 
 dupdate <- subset(result, observations != 1)
-```
-
-#Find Duplicates in Dates per ID 
-```{r}
-dupdate <- subset(result, observations != 1)
-
 dupdate
-am_data$check = am_data$ID %in% dupsID$ID
 
+am_data$check = am_data$ID %in% dupsID$ID
 am_data$check
 
 subset(am_data, id == 106 & daterated == ymd("2021-05-09"))
 
 subset(am_data, id == 110)
+
+```
+
+#Rename am_data vars with _am and pm_data vars with _pm 
+```{r}
+
 ```
 
 
