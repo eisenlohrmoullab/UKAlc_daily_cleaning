@@ -116,6 +116,39 @@ am_data = subset(am_data, select = -c(DateTime))
 pm_data = subset(pm_data, select = -c(DateTime))
 ```
 
+#Remove rows where everything is NA except daterated 
+```{r}
+dupsID = am_data %>%
+  group_by(ID, daterated) %>%
+  distinct(.keep_all = TRUE) %>%
+  group_by(ID) %>%
+  filter(n() == 1)  
+
+result <- am_data %>%
+  group_by(ID, daterated) %>%
+  summarise(observations = n())
+
+na_rows <- rowSums(is.na(am_data[, .SD, .SDcols = !c('Date', 'ID')]) > 0
+na_rows
+
+dupdate <- subset(result, observations != 1)
+```
+
+#Find Duplicates in Dates per ID 
+```{r}
+dupdate <- subset(result, observations != 1)
+
+dupdate
+am_data$check = am_data$ID %in% dupsID$ID
+
+am_data$check
+
+subset(am_data, id == 106 & daterated == ymd("2021-05-09"))
+
+subset(am_data, id == 110)
+```
+
+
 #IDs in both am and pm datasets: 
 [1] "101"       "102"       "103"       "104"       "105"       "106"       "107"       "108"       "109"      
 [10] "111"       "112"       "113"       "114"       "115"       "116"       "117"       "118"       "119"      
