@@ -116,7 +116,7 @@ am_data = subset(am_data, select = -c(DateTime))
 pm_data = subset(pm_data, select = -c(DateTime))
 ```
 
-#Remove rows where everything is NA except daterated 
+#Remove rows where everything is NA except daterated and ID
 ```{r}
 na_rows_am <- rowSums(is.na(am_data[, .SD, .SDcols = !c('Date', 'ID')]) > 0
 na_rows_am
@@ -161,7 +161,11 @@ subset(am_data, id == 110)
 
 #Rename am_data vars with _am and pm_data vars with _pm 
 ```{r}
+colnames(am_data) <- paste(colnames(am_data), sep="_am")
 
+#for some reason it seemed to work for am data but not pm data -- interrupted for Friday lit review meeting 
+colnames(pm_data) <- paste(colnames(pm_data), sep="_pm")
+pm_data 
 ```
 
 
