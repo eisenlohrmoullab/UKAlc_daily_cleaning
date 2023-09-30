@@ -118,11 +118,9 @@ pm_data = subset(pm_data, select = -c(DateTime))
 
 #Remove rows where everything is NA except daterated and ID
 ```{r}
-na_rows_am <- rowSums(is.na(am_data[, .SD, .SDcols = !c('Date', 'ID')]) > 0
-na_rows_am
+am_data <- df[!(rowSums(is.na(am_data) | am_data == "") == ncol(am_data) & !(am_data$ID != "" & am_data$daterated != "")), ]
 
-na_rows_pm <- rowSums(is.na(pm_data[, .SD, .SDcols = !c('Date', 'ID')]) > 0
-na_rows_pm 
+pm_data <- df[!(rowSums(is.na(pm_data) | pm_data == "") == ncol(pm_data) & !(pm_data$ID != "" & pm_data$daterated != "")), ]
 ```
 
 #Find Duplicates in Dates per ID 
