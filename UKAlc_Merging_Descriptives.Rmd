@@ -166,6 +166,15 @@ colnames(pm_data) <- paste(colnames(pm_data), sep="_pm")
 pm_data 
 ```
 
+#check to see if for one date, if person has more than 1 _am and 1_pm row 
+```{r}
+#changed daterated to Date because that's the column name - I feel like we should address this 
+#got the error message, `summarise()` has grouped output by 'ID'. You can override using the `.groups` argument.
+#will come back to this shortly - was interrupted to run Sat afternoon errands 
+result_am <- am_data %>% group_by(ID, Date) %>% summarise(observations = n())
+result_pm <- pm_data %>% group_by(ID, Date) %>% summarise(observations = n())
+```
+
 
 #IDs in both am and pm datasets: 
 [1] "101"       "102"       "103"       "104"       "105"       "106"       "107"       "108"       "109"      
