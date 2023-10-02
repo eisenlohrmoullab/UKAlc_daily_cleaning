@@ -194,3 +194,15 @@ result_pm <- pm_data %>%
 [91] "185"  
 
 #IDs not in both am and pm datasets: [1] "110" 
+
+#Check IDs with result_am and result_pm observations > 1 
+```{r}
+result_am
+am_data %>%
+  filter(id==[INSERT ID] & daterated==mdy("[INSERT DATE]"))
+
+result_pm
+pm_data %>%
+  filter(id==[INSERT ID] & daterated==mdy("[INSERT DATE]"))
+```
+
