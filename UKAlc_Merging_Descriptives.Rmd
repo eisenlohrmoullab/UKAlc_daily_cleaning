@@ -126,23 +126,23 @@ pm_data <- df[!(rowSums(is.na(pm_data) | pm_data == "") == ncol(pm_data) & !(pm_
 #Find Duplicates in Dates per ID 
 ```{r}
 dupsID = am_data %>%
-  group_by(ID, daterated) %>%
+  group_by(ID, Date) %>%
   distinct(.keep_all = TRUE) %>%
   group_by(ID) %>%
   filter(n() == 1)  
 
 result.am <- am_data %>%
-  group_by(ID, daterated) %>%
+  group_by(ID, Date) %>%
   summarise(observations = n())
 
 dupsID = pm_data %>%
-  group_by(ID, daterated) %>%
+  group_by(ID, Date) %>%
   distinct(.keep_all = TRUE) %>%
   group_by(ID) %>%
   filter(n() == 1)  
 
 result.pm <- pm_data %>%
-  group_by(ID, daterated) %>%
+  group_by(ID, Date) %>%
   summarise(observations = n())
 
 dupdate <- subset(result, observations != 1)
@@ -151,7 +151,7 @@ dupdate
 am_data$check = am_data$ID %in% dupsID$ID
 am_data$check
 
-subset(am_data, id == 106 & daterated == ymd("2021-05-09"))
+subset(am_data, id == 106 & Date == ymd("2021-05-09"))
 
 subset(am_data, id == 110)
 
@@ -170,9 +170,13 @@ pm_data
 ```{r}
 #changed daterated to Date because that's the column name - I feel like we should address this 
 #got the error message, `summarise()` has grouped output by 'ID'. You can override using the `.groups` argument.
-#will come back to this shortly - was interrupted to run Sat afternoon errands 
-result_am <- am_data %>% group_by(ID, Date) %>% summarise(observations = n())
-result_pm <- pm_data %>% group_by(ID, Date) %>% summarise(observations = n())
+#it appears that this message is just a friendly reminder based off my findings and when I checked the data
+result_am <- am_data %>% 
+  group_by(ID, Date) %>% 
+  summarise(observations = n())
+result_pm <- pm_data %>% 
+  group_by(ID, Date) %>% 
+  summarise(observations = n())
 ```
 
 
