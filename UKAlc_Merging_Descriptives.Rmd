@@ -170,6 +170,16 @@ colnames(pm_data) <- paste(colnames(pm_data), "pm", sep="_")
 View(pm_data)
 ```
 
+```{r}
+#rename daterated and ID to drop the _am and _pm suffixes 
+colnames(am_data)[colnames(am_data) == "daterated_am"] ="daterated"
+colnames(pm_data)[colnames(pm_data) == "daterated_pm"] ="daterated"
+
+colnames(am_data)[colnames(am_data) == "ID_am"] ="ID"
+colnames(pm_data)[colnames(am_data) == "ID_am"] ="ID"
+```
+
+
 #Remove rows where everything is NA except daterated and ID
 ```{r}
 am_data <- df[!(rowSums(is.na(am_data) | am_data == "") == ncol(am_data) & !(am_data$ID != "" & am_data$daterated != "")), ]
