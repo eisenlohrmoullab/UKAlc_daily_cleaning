@@ -105,7 +105,49 @@ pm_data$daterated <- lubridate::mdy(pm_data$daterated)
 #Remove DateTime column from df 
 am_data = subset(am_data, select = -c(DateTime))
 pm_data = subset(pm_data, select = -c(DateTime))
+```
 
+```{r}
+replace_empty_with_na <- function(data) {
+  data %>% mutate_if(is.character, ~ ifelse(. == "", NA, .))
+}
+
+# Replace empty strings with NA in your dataset
+# data1 <- replace_empty_with_na(data1)
+# data2 <- replace_empty_with_na(data2)
+
+xymerge <- function(dat) {
+  # Create a logical vector indicating which column names end in ".x"
+  x_cols <- grepl("\\.x$", names(dat))
+  
+  # Loop over each x column and apply the ifelse function
+  for (x_col in names(dat)[x_cols]) {
+    # Extract the corresponding y column name
+    y_col <- gsub("\\.x$", ".y", x_col)
+    
+    # Create a new column name by removing the .x suffix
+    new_col <- gsub("\\.x$", "", x_col)
+    
+    # Apply the ifelse function to the x and y columns and assign the result to the new column
+    dat[[new_col]] <- ifelse(is.na(dat[[x_col]]), dat[[y_col]], dat[[x_col]])
+    
+    # Remove the x and y columns from the dataframe
+    dat[[x_col]] <- NULL
+    dat[[y_col]] <- NULL
+  }
+  
+  # Return the updated data frame
+  return(dat)
+}
+
+
+  
+```
+
+
+
+
+```{r}
 #Anna Re-did this code 10/3/2023
 colnames(am_data) <- paste(colnames(am_data), "am", sep="_")
 View(am_data)
