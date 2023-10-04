@@ -78,8 +78,8 @@ am_data$ID <- gsub("[^0-9.-]", "", am_data$ID)
 pm_data$ID <- gsub("[^0-9.-]", "", pm_data$ID)
 
 #seeing how many IDs are in each data set, viewed the output and saw they included NA in the calculation, so subtracted 1 from final calculation 
-length(am_part.u.n)
-length(pm_part.u.n)
+length(unique(am_data$ID))
+length(unique(pm_data$ID))
 ```
 
 #After correcting for duplicates, we have n = 83 for am data and n = 82 for pm data 
