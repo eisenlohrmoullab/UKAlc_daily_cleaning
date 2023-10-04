@@ -5,10 +5,13 @@ date: "2023-09-28"
 output: html_document
 ---
 
+rm(list = ls())
 ```{r}
 library(tidyverse)
 
 #Anisha's Paths
+
+
 am_qual <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_Qualtrics_csv.csv")
 
 pm_qual <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_Qualtrics_csv.csv") 
@@ -20,7 +23,7 @@ pm_rc <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data 
 
 #Anna's Paths
 
-am_qual <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_Qualtrics_csv.csv")
+am_qual <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_Qualtrics_csv.csv") 
 
 
 pm_qual <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_Qualtrics_csv.csv")
@@ -54,14 +57,15 @@ ID's in pm_rc: [1] "123"       "124"       "125"       "125b"      "125c"      "
 
 
 
-#IDs in am qualtrics are numerical, IDs in rc are string form -- we are unsure if letters at end of IDs are distinct IDs or not 
+#IDs in am qualtrics are numerical, IDs in rc are string form -- letters at end of some IDs indicate different sessions of same participant 
 ```{r}
 am_data <- merge(am_qual, am_rc, by = c("ID", "DateTime"), all = T)
 
 pm_data <- merge(pm_qual, pm_rc, by = c("ID", "DateTime"), all = T)
 
 ```
-
+#view overlap between am and pm data 
+#See how many unique IDs are in each dataset 
 ```{r}
 intersect(am_data$ID, pm_data$ID)
 
@@ -100,11 +104,11 @@ library(tidyr)
 library(stringr)
 knitr::opts_chunk$set(echo = TRUE)
 
-
+#This worked last week but when I viewed the data it seemed not to? (10/03/2023)
 am_data[c('daterated', 'Time')] <- str_split_fixed(am_data$DateTime, ' ', 2)
 pm_data[c('daterated', 'Time')] <- str_split_fixed(pm_data$DateTime, ' ', 2)
 
-
+View(am_data)
 ```
 
 ```{r}
@@ -112,8 +116,15 @@ am_data$daterated <- lubridate::mdy(am_data$daterated)
 pm_data$daterated <- lubridate::mdy(pm_data$daterated)
 
 
-am_data = subset(am_data, select = -c(DateTime))
-pm_data = subset(pm_data, select = -c(DateTime))
+am_data = subset(am_data, select = -c(daterated))
+pm_data = subset(pm_data, select = -c(daterated))
+
+#Anna Re-did this code 10/3/2023
+colnames(am_data) <- paste(colnames(am_data), "am", sep="_")
+View(am_data)
+
+colnames(pm_data) <- paste(colnames(pm_data), "pm", sep="_")
+View(pm_data)
 ```
 
 #Remove rows where everything is NA except daterated and ID
@@ -126,44 +137,50 @@ pm_data <- df[!(rowSums(is.na(pm_data) | pm_data == "") == ncol(pm_data) & !(pm_
 #Find Duplicates in Dates per ID 
 ```{r}
 dupsID = am_data %>%
-  group_by(ID, Date) %>%
+  group_by(ID_am, daterated_am) %>%
   distinct(.keep_all = TRUE) %>%
-  group_by(ID) %>%
+  group_by(ID_am) %>%
   filter(n() == 1)  
 
 result.am <- am_data %>%
-  group_by(ID, Date) %>%
+  group_by(ID_am, daterated_am) %>%
   summarise(observations = n())
 
 dupsID = pm_data %>%
-  group_by(ID, Date) %>%
+  group_by(ID_pm, daterated_pm) %>%
   distinct(.keep_all = TRUE) %>%
-  group_by(ID) %>%
+  group_by(ID_pm) %>%
   filter(n() == 1)  
 
 result.pm <- pm_data %>%
-  group_by(ID, Date) %>%
+  group_by(ID_pm, daterated_pm) %>%
   summarise(observations = n())
 
 dupdate <- subset(result, observations != 1)
 dupdate
 
-am_data$check = am_data$ID %in% dupsID$ID
+am_data$check = am_data$ID_am %in% dupsID$ID_am
 am_data$check
 
-subset(am_data, id == 106 & Date == ymd("2021-05-09"))
+#Anna's investigation of IDs in which obs >1 
+subset(am_data, id_am == 106 & daterated_am == ymd("2021-05-09"))
 
-subset(am_data, id == 110)
+subset(am_data, id_am == 110)
+
+#Anisha's way to investigate IDs in result_am and result_pm in which obs >1 
+#Note that she wrote this with the old column names - will adjust based on final column naming scheme 
+pm_data %>%  
+  filter(id==[INSERT ID] & daterated==mdy("[INSERT DATE]"))
+
+am_data %>%
+  filter(id==[INSERT ID] & daterated==mdy("[INSERT DATE]"))
 
 ```
 
-#Rename am_data vars with _am and pm_data vars with _pm 
-```{r}
-colnames(am_data) <- paste(colnames(am_data), sep="_am")
 
-#for some reason it seemed to work for am data but not pm data -- interrupted for Friday lit review meeting 
-colnames(pm_data) <- paste(colnames(pm_data), sep="_pm")
-pm_data 
+
+```{r}
+
 ```
 
 #check to see if for one date, if person has more than 1 _am and 1_pm row 
