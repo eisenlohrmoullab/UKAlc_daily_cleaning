@@ -148,6 +148,16 @@ am_data <- xymerge(am_data)
 pm_data <- xymerge(pm_data)
 ```
 
+#relocate daterated to be after ID and remove time column 
+```{r}
+am_data <- am_data %>% 
+  relocate(daterated, .after = ID) 
+pm_data <- pm_data %>% 
+  relocate(daterated, .after = ID) 
+
+am_data <- subset(am_data, select = -c(time))
+pm_data <- subset(pm_data, select = -c(time))
+```
 
 
 
