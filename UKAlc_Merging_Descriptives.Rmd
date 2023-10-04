@@ -140,8 +140,12 @@ xymerge <- function(dat) {
   return(dat)
 }
 
-
-  
+#replace empty with NA so they're coded the same for subsequent functions 
+am_data <- replace_empty_with_na(am_data)
+pm_data <- replace_empty_with_na(pm_data)
+#consolidate xy variable names that existed as a byproduct of merging the two datasets with the same column names
+am_data <- xymerge(am_data)
+pm_data <- xymerge(pm_data)
 ```
 
 
