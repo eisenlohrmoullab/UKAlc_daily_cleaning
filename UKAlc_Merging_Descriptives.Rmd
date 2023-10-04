@@ -7,7 +7,12 @@ output: html_document
 
 rm(list = ls())
 ```{r}
+#libraries
 library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(stringr)
+knitr::opts_chunk$set(echo = TRUE)
 
 #Anisha's Paths
 
@@ -83,22 +88,11 @@ length(unique(pm_data$ID))
 ```
 
 #After correcting for duplicates, we have n = 83 for am data and n = 82 for pm data 
+
 ```{r}
-strsplit(am_data$DateTime, " +")
-
-strsplit(pm_data$DateTime, " +") 
-```
-```{r}
-#loadlibraries 
-
-library(dplyr)
-library(tidyr)
-library(stringr)
-knitr::opts_chunk$set(echo = TRUE)
-
 #This worked last week but when I viewed the data it seemed not to? (10/03/2023)
-am_data[c('daterated', 'Time')] <- str_split_fixed(am_data$DateTime, ' ', 2)
-pm_data[c('daterated', 'Time')] <- str_split_fixed(pm_data$DateTime, ' ', 2)
+am_data[c('daterated', 'time')] <- str_split_fixed(am_data$DateTime, ' ', 2)
+pm_data[c('daterated', 'time')] <- str_split_fixed(pm_data$DateTime, ' ', 2)
 
 View(am_data)
 ```
