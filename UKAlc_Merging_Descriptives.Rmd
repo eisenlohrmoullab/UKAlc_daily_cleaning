@@ -178,9 +178,11 @@ am_data %>%
 ```
 
 
-
+#Drop Time Variable 
 ```{r}
+am_data = subset(am_data, select=-c(time_am))
 
+pm_data = subset(pm_data, select=-c(time_pm))
 ```
 
 #check to see if for one date, if person has more than 1 _am and 1_pm row 
