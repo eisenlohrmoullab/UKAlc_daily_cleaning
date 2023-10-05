@@ -90,7 +90,7 @@ length(unique(pm_data$ID))
 #After correcting for duplicates, we have n = 83 for am data and n = 82 for pm data 
 
 ```{r}
-#This worked last week but when I viewed the data it seemed not to? (10/03/2023)
+#separate datetime variable 
 am_data[c('daterated', 'time')] <- str_split_fixed(am_data$DateTime, ' ', 2)
 pm_data[c('daterated', 'time')] <- str_split_fixed(pm_data$DateTime, ' ', 2)
 
@@ -164,10 +164,8 @@ pm_data <- subset(pm_data, select = -c(time))
 ```{r}
 #Anna Re-did this code 10/3/2023
 colnames(am_data) <- paste(colnames(am_data), "am", sep="_")
-View(am_data)
 
 colnames(pm_data) <- paste(colnames(pm_data), "pm", sep="_")
-View(pm_data)
 ```
 
 ```{r}
@@ -182,9 +180,7 @@ colnames(pm_data)[colnames(am_data) == "ID_pm"] ="ID"
 
 #Remove rows where everything is NA except daterated and ID
 ```{r}
-am_data <- am_data[!(rowSums(is.na(am_data) | am_data == "") == ncol(am_data) & !(am_data$ID != "" & am_data$daterated != "")), ]
 
-pm_data <- pm_data[!(rowSums(is.na(pm_data) | pm_data == "") == ncol(pm_data) & !(pm_data$ID != "" & pm_data$daterated != "")), ]
 ```
 
 #Find Duplicates in Dates per ID 
