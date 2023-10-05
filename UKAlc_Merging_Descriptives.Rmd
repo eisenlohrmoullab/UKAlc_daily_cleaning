@@ -180,6 +180,7 @@ colnames(pm_data)[colnames(am_data) == "ID_pm"] ="ID"
 
 #Remove rows where everything is NA except daterated and ID
 ```{r}
+am_data <- am_data %>% drop_na(daterated, ID)
 
 ```
 
