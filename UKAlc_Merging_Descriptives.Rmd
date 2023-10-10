@@ -17,25 +17,25 @@ knitr::opts_chunk$set(echo = TRUE)
 #Anisha's Paths
 
 
-# am_qual <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_Qualtrics_csv.csv")
-# 
-# pm_qual <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_Qualtrics_csv.csv")
-# 
-# am_rc <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_REDCap_csv.csv")
-# 
-# pm_rc <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_REDCap_csv.csv")
+am_qual <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_Qualtrics_csv.csv")
+
+pm_qual <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_Qualtrics_csv.csv")
+
+am_rc <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_REDCap_csv.csv")
+
+pm_rc <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_REDCap_csv.csv")
 
 
 #Anna's Paths
 
-am_qual <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_Qualtrics_csv.csv")
-
-
-pm_qual <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_Qualtrics_csv.csv")
-
-am_rc <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_REDCap_csv.csv")
-
-pm_rc <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_REDCap_csv.csv")
+# am_qual <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_Qualtrics_csv.csv")
+# 
+# 
+# pm_qual <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_Qualtrics_csv.csv")
+# 
+# am_rc <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_REDCap_csv.csv")
+# 
+# pm_rc <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_REDCap_csv.csv")
 ```
 
 ID's in am_qual: 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 126
@@ -93,8 +93,6 @@ length(unique(pm_data$ID))
 #separate datetime variable 
 am_data[c('daterated', 'time')] <- str_split_fixed(am_data$DateTime, ' ', 2)
 pm_data[c('daterated', 'time')] <- str_split_fixed(pm_data$DateTime, ' ', 2)
-
-View(am_data)
 ```
 
 ```{r}
@@ -155,8 +153,6 @@ am_data <- am_data %>%
 pm_data <- pm_data %>% 
   relocate(daterated, .after = ID) 
 
-am_data <- subset(am_data, select = -c(time))
-pm_data <- subset(pm_data, select = -c(time))
 ```
 
 
@@ -174,48 +170,39 @@ colnames(am_data)[colnames(am_data) == "daterated_am"] ="daterated"
 colnames(pm_data)[colnames(pm_data) == "daterated_pm"] ="daterated"
 
 colnames(am_data)[colnames(am_data) == "ID_am"] ="ID"
-colnames(pm_data)[colnames(am_data) == "ID_pm"] ="ID"
+colnames(pm_data)[colnames(pm_data) == "ID_pm"] ="ID"
 ```
 
 
 #Remove rows where everything is NA except daterated and ID
 ```{r}
-am_data <- am_data %>% drop_na(daterated, ID)
-
+# am_data <- am_data %>% drop_na(daterated, ID)
+# pm_data <- pm_data %>% drop_na(daterated, ID)
+#Anna is looking into how to remove rows that are all NA except daterated and ID
 ```
 
 #Find Duplicates in Dates per ID 
 ```{r}
-dupsID = am_data %>%
-  group_by(ID, daterated) %>%
-  distinct(.keep_all = TRUE) %>%
-  group_by(ID) %>%
-  filter(n() == 1)  
 
 result.am <- am_data %>%
   group_by(ID, daterated) %>%
   summarise(observations = n())
 
-dupsID = pm_data %>%
-  group_by(ID, daterated) %>%
-  distinct(.keep_all = TRUE) %>%
-  group_by(ID) %>%
-  filter(n() == 1)  
+dupdate_am <- subset(result.am, observations != 1)
+
 
 result.pm <- pm_data %>%
   group_by(ID, daterated) %>%
   summarise(observations = n())
 
-dupdate <- subset(result, observations != 1)
-dupdate
 
-am_data$check = am_data$ID_am %in% dupsID$ID_am
-am_data$check
+dupdate_pm <- subset(result.pm, observations != 1)
 
-#Anna's investigation of IDs in which obs >1 
-subset(am_data, id_am == 106 & daterated_am == ymd("2021-05-09"))
+```
 
-subset(am_data, id_am == 110)
+```{r}
+am_data %>%
+  filter(ID == 106 & daterated == ymd("2021-05-09"))
 
 ```
 
@@ -226,6 +213,8 @@ pm_data %>%
 
 am_data %>%
   filter(id==[INSERT ID] & daterated==mdy("[INSERT DATE]"))
+  
+Remove by time using subset. If they are exactly the same, keep the earliest one. If not, keep the most complete one. 
 
 
 #Drop Time Variable 
@@ -235,18 +224,7 @@ am_data = subset(am_data, select=-c(time_am))
 pm_data = subset(pm_data, select=-c(time_pm))
 ```
 
-#check to see if for one date, if person has more than 1 _am and 1_pm row 
-```{r}
-#changed daterated to Date because that's the column name - I feel like we should address this 
-#got the error message, `summarise()` has grouped output by 'ID'. You can override using the `.groups` argument.
-#it appears that this message is just a friendly reminder based off my findings and when I checked the data
-result_am <- am_data %>% 
-  group_by(ID, Date) %>% 
-  summarise(observations = n())
-result_pm <- pm_data %>% 
-  group_by(ID, Date) %>% 
-  summarise(observations = n())
-```
+
 
 
 #IDs in both am and pm datasets: 
@@ -262,16 +240,5 @@ result_pm <- pm_data %>%
 [82] "176"       "177"       "178"       "179"       "180"       "181"       "182"       "183"       "184"      
 [91] "185"  
 
-#IDs not in both am and pm datasets: [1] "110" 
 
-#Check IDs with result_am and result_pm observations > 1 
-```{r}
-result_am
-am_data %>%
-  filter(id==[INSERT ID] & daterated==mdy("[INSERT DATE]"))
-
-result_pm
-pm_data %>%
-  filter(id==[INSERT ID] & daterated==mdy("[INSERT DATE]"))
-```
 
