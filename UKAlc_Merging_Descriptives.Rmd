@@ -176,39 +176,25 @@ colnames(pm_data)[colnames(pm_data) == "ID_pm"] ="ID"
 
 #Remove rows where everything is NA except daterated and ID
 ```{r}
-<<<<<<< HEAD
+
 # am_data <- am_data %>% drop_na(daterated, ID)
 # pm_data <- pm_data %>% drop_na(daterated, ID)
 #Anna is looking into how to remove rows that are all NA except daterated and ID
-=======
-am_data <- am_data %>% drop_na(daterated, ID)
-pm_data <- pm_data %>% drop_na(daterated, ID)
 
-am_data <- am_data[!rowSums(is.na(am_data[, colnames(am_data) != ID, daterated])) == (ncol(am_data)
-pm_data <- pm_data[!rowSums(is.na(pm_data[, colnames(pm_data) != ID, daterated])) == (ncol(pm_data)                                                                                
->>>>>>> 836b151f09db7f0810b602920303e2629f48b48e
 ```
 
 #Find Duplicates in Dates per ID 
 ```{r}
-<<<<<<< HEAD
 
-=======
->>>>>>> 836b151f09db7f0810b602920303e2629f48b48e
 result.am <- am_data %>%
   group_by(ID, daterated) %>%
   summarise(observations = n())
 
-<<<<<<< HEAD
 dupdate_am <- subset(result.am, observations != 1)
 
-
-=======
->>>>>>> 836b151f09db7f0810b602920303e2629f48b48e
 result.pm <- pm_data %>%
   group_by(ID, daterated) %>%
   summarise(observations = n())
-
 
 dupdate_pm <- subset(result.pm, observations != 1)
 
