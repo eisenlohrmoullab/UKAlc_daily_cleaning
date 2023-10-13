@@ -213,7 +213,7 @@ dupdate_pm <- subset(result.pm, observations != 1)
 am_data %>%
   filter(ID == 106 & daterated == ymd("2021-05-09"))
 
-#remove duplicates for 106
+#remove duplicates for 106 on 2021-05-09 
 am_data <- am_data[!(am_data$ID == 106 & am_data$daterated == "2021-05-09" & am_data$time_am == "10:02"), ]
 am_data <- am_data[!(am_data$ID == 106 & am_data$daterated == "2021-05-09" & am_data$time_am == "9:59"), ]
 
@@ -237,6 +237,14 @@ am_data = subset(am_data, select=-c(time_am))
 pm_data = subset(pm_data, select=-c(time_pm))
 ```
 
+#drop ID 127 per Annie Griffith's recommendation (not much data for this ID)
+```{r}
+
+am_data <- subset(am_data, ID != 127)
+
+pm_data <- subset(pm_data, ID != 127)
+
+```
 
 
 
