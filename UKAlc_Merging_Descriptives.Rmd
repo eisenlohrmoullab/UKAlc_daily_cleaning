@@ -355,6 +355,14 @@ am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-20" & am_
 am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-20" & am_data$time_am == "7:06"), ] 
 am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-20" & am_data$time_am == "7:09"), ] 
 am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-20" & am_data$time_am == "7:13"), ] 
+
+#remove duplicates for 118 on 2021-08-08
+am_data %>%
+  filter(ID == 118 & daterated == ymd("2021-08-08"))
+
+am_data <- am_data[!(am_data$ID == 118 & am_data$daterated == "2021-08-08" & am_data$time_am == "12:29"), ] 
+
+
 ```
 
 #Anisha's way to investigate IDs in result_am and result_pm in which obs >1 
