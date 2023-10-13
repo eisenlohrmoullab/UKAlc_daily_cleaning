@@ -213,14 +213,9 @@ dupdate_pm <- subset(result.pm, observations != 1)
 am_data %>%
   filter(ID == 106 & daterated == ymd("2021-05-09"))
 
-#identify rows to remove and remove them 
-#not working :( 
-#try subset next time 
-am_data.r <- which(am_data$ID == "106" & am_data$daterated == ymd("2021-05-09") & am_data$time_am == "10:02")
-  
-am_data <- am_data[-am_data.r]
-
-
+#remove duplicates for 106
+am_data <- am_data[!(am_data$ID == 106 & am_data$daterated == "2021-05-09" & am_data$time_am == "10:02"), ]
+am_data <- am_data[!(am_data$ID == 106 & am_data$daterated == "2021-05-09" & am_data$time_am == "9:59"), ]
 
 ```
 
