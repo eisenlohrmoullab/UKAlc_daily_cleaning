@@ -266,6 +266,44 @@ am_data %>%
   filter(ID == 113 & daterated == ymd("2021-07-21"))
 
 am_data <- am_data[!(am_data$ID == 113 & am_data$daterated == "2021-07-21" & am_data$time_am == "11:12"), ] 
+
+#remove duplicates for 114 on 2021-06-29
+am_data %>%
+  filter(ID == 114 & daterated == ymd("2021-06-29"))
+
+am_data <- am_data[!(am_data$ID == 114 & am_data$daterated == "2021-06-29" & am_data$time_am == "22:00"), ] 
+
+#remove duplicates for 114 on 2021-07-01 
+am_data %>%
+  filter(ID == 114 & daterated == ymd("2021-07-01"))
+
+am_data <- am_data[!(am_data$ID == 114 & am_data$daterated == "2021-07-01 " & am_data$time_am == "9:33"), ] 
+
+#remove duplicates for 114 on 2021-07-04 
+am_data %>%
+  filter(ID == 114 & daterated == ymd("2021-07-04"))
+
+am_data <- am_data[!(am_data$ID == 114 & am_data$daterated == "2021-07-04" & am_data$time_am == "5:58"), ] 
+
+#remove duplicates for 114 on 2021-07-06
+am_data %>%
+  filter(ID == 114 & daterated == ymd("2021-07-06"))
+
+am_data <- am_data[!(am_data$ID == 114 & am_data$daterated == "2021-07-06" & am_data$time_am == "4:52"), ] 
+
+#remove duplicates for 114 on 2021-07-09 
+am_data %>%
+  filter(ID == 114 & daterated == ymd("2021-07-09"))
+
+am_data <- am_data[!(am_data$ID == 114 & am_data$daterated == "2021-07-09" & am_data$time_am == "21:44"), ] 
+am_data <- am_data[!(am_data$ID == 114 & am_data$daterated == "2021-07-09" & am_data$time_am == "21:45"), ] 
+
+#remove duplicates for 114 on 2021-07-15
+am_data %>%
+  filter(ID == 114 & daterated == ymd("2021-07-15"))
+
+am_data <- am_data[!(am_data$ID == 114 & am_data$daterated == "2021-07-15" & am_data$time_am == "7:44"), ] 
+
 ```
 
 #Anisha's way to investigate IDs in result_am and result_pm in which obs >1 
