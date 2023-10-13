@@ -217,6 +217,25 @@ am_data %>%
 am_data <- am_data[!(am_data$ID == 106 & am_data$daterated == "2021-05-09" & am_data$time_am == "10:02"), ]
 am_data <- am_data[!(am_data$ID == 106 & am_data$daterated == "2021-05-09" & am_data$time_am == "9:59"), ]
 
+#remove duplicates for 106 on 2021-05-18 
+am_data %>%
+  filter(ID == 106 & daterated == ymd("2021-05-18"))
+
+am_data <- am_data[!(am_data$ID == 106 & am_data$daterated == "2021-05-18" & am_data$time_am == "6:35"), ]
+
+#remove duplicates for 106 on 2021-05-20 
+am_data %>%
+  filter(ID == 106 & daterated == ymd("2021-05-20"))
+
+am_data <- am_data[!(am_data$ID == 106 & am_data$daterated == "2021-05-20" & am_data$time_am == "4:50"), ]
+
+#remove duplicates for 106 on 2021-05-24 
+am_data %>%
+  filter(ID == 106 & daterated == ymd("2021-05-24"))
+
+am_data <- am_data[!(am_data$ID == 106 & am_data$daterated == "2021-05-24" & am_data$time_am == "21:59"), ]
+am_data <- am_data[!(am_data$ID == 106 & am_data$daterated == "2021-05-24" & am_data$time_am == "22:00"), ]
+am_data <- am_data[!(am_data$ID == 106 & am_data$daterated == "2021-05-24" & am_data$time_am == "22:02"), ]
 ```
 
 #Anisha's way to investigate IDs in result_am and result_pm in which obs >1 
