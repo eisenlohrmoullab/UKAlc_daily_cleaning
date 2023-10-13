@@ -304,6 +304,57 @@ am_data %>%
 
 am_data <- am_data[!(am_data$ID == 114 & am_data$daterated == "2021-07-15" & am_data$time_am == "7:44"), ] 
 
+#remove duplicates for 115 on 2021-06-24 
+am_data %>%
+  filter(ID == 115 & daterated == ymd("2021-06-24"))
+
+am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-06-24" & am_data$time_am == "6:52"), ] 
+
+#remove duplicates for 115 on 2021-06-27
+am_data %>%
+  filter(ID == 115 & daterated == ymd("2021-06-27"))
+
+am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-06-27" & am_data$time_am == "8:27"), ] 
+
+#remove duplicates for 115 on 2021-07-01
+am_data %>%
+  filter(ID == 115 & daterated == ymd("2021-07-01"))
+
+am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-01" & am_data$time_am == "19:53"), ] 
+
+#remove duplicates for 115 on 2021-07-04
+am_data %>%
+  filter(ID == 115 & daterated == ymd("2021-07-04"))
+
+am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-04" & am_data$time_am == "3:00"), ] 
+
+#remove duplicates for 115 on 2021-07-09 
+am_data %>%
+  filter(ID == 115 & daterated == ymd("2021-07-09"))
+
+am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-09" & am_data$time_am == "21:49"), ] 
+am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-09" & am_data$time_am == "21:52"), ] 
+am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-09" & am_data$time_am == "21:55"), ] 
+am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-09" & am_data$time_am == "22:01"), ] 
+
+#remove duplicates for 115 on 2021-07-11
+am_data %>%
+  filter(ID == 115 & daterated == ymd("2021-07-11"))
+
+am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-11" & am_data$time_am == "8:38"), ] 
+am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-11" & am_data$time_am == "8:41"), ] 
+
+#remove duplicates for 115 on 2021-07-20 
+am_data %>%
+  filter(ID == 115 & daterated == ymd("2021-07-20"))
+
+am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-20" & am_data$time_am == "6:50"), ] 
+am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-20" & am_data$time_am == "6:57"), ] 
+am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-20" & am_data$time_am == "7:00"), ] 
+am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-20" & am_data$time_am == "7:04"), ] 
+am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-20" & am_data$time_am == "7:06"), ] 
+am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-20" & am_data$time_am == "7:09"), ] 
+am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-20" & am_data$time_am == "7:13"), ] 
 ```
 
 #Anisha's way to investigate IDs in result_am and result_pm in which obs >1 
