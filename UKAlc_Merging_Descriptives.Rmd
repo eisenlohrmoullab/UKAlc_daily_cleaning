@@ -433,6 +433,12 @@ am_data %>%
   filter(ID == 180 & daterated == ymd("2023-03-26"))
 
 am_data <- am_data[!(am_data$ID == 180 & am_data$daterated == "2023-03-26" & am_data$time_am == "2:42"), ] 
+
+#remove duplicates for 181 on 2023-03-22
+am_data %>%
+  filter(ID == 181 & daterated == ymd("2023-03-22"))
+
+am_data <- am_data[!(am_data$ID == 181 & am_data$daterated == "2023-03-22" & am_data$time_am == "13:46"), ] 
 ```
 
 #remove IDs = NA 
