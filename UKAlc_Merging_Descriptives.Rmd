@@ -403,6 +403,20 @@ am_data %>%
   filter(ID == 159 & daterated == ymd("2022-07-17"))
 
 am_data <- am_data[!(am_data$ID == 159 & am_data$daterated == "2022-07-17" & am_data$time_am == "9:59"), ] 
+
+#remove duplicates for ID 159 on 2022-08-05
+am_data %>%
+  filter(ID == 159 & daterated == ymd("2022-08-05"))
+
+am_data <- am_data[!(am_data$ID == 159 & am_data$daterated == "2022-08-05" & am_data$time_am == "9:59"), ] 
+
+#remove duplicates for ID 161 on 2022-08-12
+am_data %>%
+  filter(ID == 161 & daterated == ymd("2022-08-12"))
+
+am_data <- am_data[!(am_data$ID == 161 & am_data$daterated == "2022-08-12" & am_data$time_am == "6:30"), ] 
+
+#remove duplicates for ID 166 on 2022-09-15
 ```
 
 #remove IDs = NA 
