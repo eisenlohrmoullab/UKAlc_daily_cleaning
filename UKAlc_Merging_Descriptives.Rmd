@@ -209,11 +209,10 @@ dupdate_pm <- subset(result.pm, observations != 1)
 
 #Remove rows so that we no longer have >1 submission per am or pm data per date. Kept earliest timestamp if all submissions are identical, or kept most complete form if some are more completed than others. 
 ```{r}
-#ID 106 
+#remove duplicates for 106 on 2021-05-09 
 am_data %>%
   filter(ID == 106 & daterated == ymd("2021-05-09"))
 
-#remove duplicates for 106 on 2021-05-09 
 am_data <- am_data[!(am_data$ID == 106 & am_data$daterated == "2021-05-09" & am_data$time_am == "10:02"), ]
 am_data <- am_data[!(am_data$ID == 106 & am_data$daterated == "2021-05-09" & am_data$time_am == "9:59"), ]
 
@@ -439,6 +438,23 @@ am_data %>%
   filter(ID == 181 & daterated == ymd("2023-03-22"))
 
 am_data <- am_data[!(am_data$ID == 181 & am_data$daterated == "2023-03-22" & am_data$time_am == "13:46"), ] 
+
+#PM Duplicates 
+#ID 103 
+pm_data %>%
+  filter(ID == 103 & daterated == ymd("2021-04-20"))
+
+pm_data <- pm_data[!(pm_data$ID == 103 & pm_data$daterated == "2021-04-20" & pm_data$time_pm == ""), ] 
+
+pm_data %>%
+  filter(ID == 103 & daterated == ymd("2021-04-24"))
+
+pm_data <- pm_data[!(pm_data$ID == 103 & pm_data$daterated == "2021-04-24" & pm_data$time_pm == ""), ] 
+
+pm_data %>%
+  filter(ID == 103 & daterated == ymd("2021-04-26"))
+
+pm_data <- pm_data[!(pm_data$ID == 103 & pm_data$daterated == "2021-04-26" & pm_data$time_pm == "0:12"), ] 
 ```
 
 #remove IDs = NA 
