@@ -438,7 +438,40 @@ am_data %>%
   filter(ID == 181 & daterated == ymd("2023-03-22"))
 
 am_data <- am_data[!(am_data$ID == 181 & am_data$daterated == "2023-03-22" & am_data$time_am == "13:46"), ] 
+```
 
+#Previous Day Survey Check Before Removing PM Duplicates 
+```{r}
+#For each duplicate of completed surveys for a person, check if they completed the previous day survey. If they did not, it means they could have meant the earlier time duplicate for the previous day. Rather than excluding these from the study as duplicates, I will re-assign them to the prior day so that we can have the most robust/inclusive dataset possible. 
+
+priordaydupe <- function(pm_data){
+  pm_data$ID <- as.numeric(pm_data$ID)
+  pm_data <- pm_data%>%group_by(ID)%>%arrange(daterated)
+  y <- x
+  count = 0
+  n = unique(pm_data$ID)
+  for(i in n){
+    iddat <- subset(y, ID == i)
+    m = dim(iddat)[1]
+    for(j in 1:m){
+       if(iddat$dupe_count[j] == 2){
+        count = count +1
+        b = (iddat$daterated[j])
+          if( !( as.Date(b - 1) %in% iddat$daterated) ){
+          print(paste ('The survey does not exist for the day before', b , "for the id number", i ) )
+         }
+       }
+     }
+  }
+  print(paste('There are', count, 'surveys where the same daterated is recorded, by participant') )
+ }
+
+priordaydupe(pm_data) 
+#This will only work if the date variable is called daterated
+```
+
+#Remove PM Duplicates
+```{r}
 #PM Duplicates 
 #ID 103 
 pm_data %>%
