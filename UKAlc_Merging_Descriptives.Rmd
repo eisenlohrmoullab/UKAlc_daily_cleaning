@@ -12,29 +12,30 @@ library(tidyverse)
 library(dplyr)
 library(tidyr)
 library(stringr)
+library(janitor)
 knitr::opts_chunk$set(echo = TRUE)
 
 #Anisha's Paths
 
 
-# am_qual <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_Qualtrics_csv.csv")
-# 
-# pm_qual <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_Qualtrics_csv.csv")
-# 
-# am_rc <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_REDCap_csv.csv")
-# 
-# pm_rc <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_REDCap_csv.csv")
+am_qual <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_Qualtrics_csv.csv")
+
+pm_qual <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_Qualtrics_csv.csv")
+
+am_rc <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_REDCap_csv.csv")
+
+pm_rc <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_REDCap_csv.csv")
 
 
 #Anna's Paths
 
-am_qual <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_Qualtrics_csv.csv")
-
-pm_qual <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_Qualtrics_csv.csv")
-
-am_rc <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_REDCap_csv.csv")
-
-pm_rc <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_REDCap_csv.csv")
+# am_qual <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_Qualtrics_csv.csv")
+# 
+# pm_qual <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_Qualtrics_csv.csv")
+# 
+# am_rc <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_REDCap_csv.csv")
+# 
+# pm_rc <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_REDCap_csv.csv")
 ```
 
 ID's in am_qual: 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 126
@@ -175,18 +176,18 @@ colnames(pm_data)[colnames(pm_data) == "ID_pm"] ="ID"
 
 #Remove rows where everything is NA except daterated, time, and ID
 ```{r}
-am_data <- am_data %>%
-  filter(!is.na(ID) | !is.na(daterated) | !is.na(time_am))
-conflicts_prefer(dplyr::filter) 
-
-pm_data <- pm_data %>%
-  filter(!is.na(ID) | !is.na(daterated) | !is.na(time_pm))
-conflicts_prefer(dplyr::filter) 
+# am_data <- am_data %>%
+#   filter(!is.na(ID) | !is.na(daterated) | !is.na(time_am))
+# conflicts_prefer(dplyr::filter) 
+# 
+# pm_data <- pm_data %>%
+#   filter(!is.na(ID) | !is.na(daterated) | !is.na(time_pm))
+# conflicts_prefer(dplyr::filter) 
 
 #Anna tried the above code 10/11/23, no change to either df but perhaps no rows fit this criteria 
 
-# am_data <- am_data %>% drop_na(daterated, ID)
-# pm_data <- pm_data %>% drop_na(daterated, ID)
+am_data <- am_data %>% drop_na(daterated, ID)
+pm_data <- pm_data %>% drop_na(daterated, ID)
 
 ```
 
@@ -441,20 +442,26 @@ am_data <- am_data[!(am_data$ID == 181 & am_data$daterated == "2023-03-22" & am_
 ```
 
 #Previous Day Survey Check Before Removing PM Duplicates 
+
 ```{r}
 #For each duplicate of completed surveys for a person, check if they completed the previous day survey. If they did not, it means they could have meant the earlier time duplicate for the previous day. Rather than excluding these from the study as duplicates, I will re-assign them to the prior day so that we can have the most robust/inclusive dataset possible. 
+pm_dupes <- pm_data %>% 
+  get_dupes(ID, daterated)
+pm_data <- pm_data %>%
+  left_join(pm_dupes)
+pm_data$dupe_count[is.na(pm_data$dupe_count)] <- 0
 
-priordaydupe <- function(pm_data){
-  pm_data$ID <- as.numeric(pm_data$ID)
-  pm_data <- pm_data%>%group_by(ID)%>%arrange(daterated)
+priordaydupe <- function(x){
+  x$ID <- as.numeric(x$ID)
+  x <- x %>% group_by(ID) %>% arrange(daterated) #change StartDate to daterated
   y <- x
   count = 0
-  n = unique(pm_data$ID)
+  n = unique(x$ID)
   for(i in n){
     iddat <- subset(y, ID == i)
     m = dim(iddat)[1]
     for(j in 1:m){
-       if(iddat$dupe_count[j] == 2){
+       if(!is.na(iddat$dupe_count[j]) && iddat$dupe_count[j] == 2){
         count = count +1
         b = (iddat$daterated[j])
           if( !( as.Date(b - 1) %in% iddat$daterated) ){
@@ -469,6 +476,10 @@ priordaydupe <- function(pm_data){
 priordaydupe(pm_data) 
 #This will only work if the date variable is called daterated
 ```
+
+
+
+
 
 #Remove PM Duplicates
 ```{r}
