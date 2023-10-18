@@ -481,6 +481,12 @@ priordaydupe(pm_data)
 #This will only work if the date variable is called daterated
 ```
 
+```{r}
+pm_data%>% filter(ID == 103)%>% select(ID, daterated, time_pm)
+#changing 4/20 first dup to 4/19
+
+```
+
 1] "The survey does not exist for the day before 2021-04-20 for the id number 103"
 
 [1] "The survey does not exist for the day before 2021-04-24 for the id number 103"
