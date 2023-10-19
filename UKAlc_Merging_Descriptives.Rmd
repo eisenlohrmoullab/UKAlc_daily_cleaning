@@ -575,10 +575,12 @@ pm_data <- changedatepm(130, "8:00", "9/03/21","9/02/21")
 pm_data <- changedatepm(130, "7:21", "9/13/21","9/12/21")
 pm_data <- changedatepm(130, "9:57", "9/25/21","9/24/21")
 #ID 129
-pm_data%>% filter(ID == 129)%>% select(ID, daterated, time_pm)
 pm_data <- changedatepm(129, "2:01", "9/19/21","9/18/21")
 pm_data <- changedatepm(129, "0:22", "9/21/21","9/20/21")
 pm_data <- changedatepm(129, "0:22", "9/27/21","9/26/21")
+#ID 127
+pm_data%>% filter(ID == 127)%>% select(ID, daterated, time_pm)
+pm_data <- changedatepm(127, "10:42", "9/12/21","9/11/21")
 ```
 
 [1] "The survey does not exist for the day before 2021-04-20 for the id number 103" #changed
