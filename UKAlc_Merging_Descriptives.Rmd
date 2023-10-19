@@ -492,7 +492,7 @@ changedatepm <- function(id, time, olddate, newdate){
   
 }
 #filter each priordaydupe ID to examine duplicates and changedatepm if applicable 
-pm_data%>% filter(ID == 108)%>% select(ID, daterated, time_pm)
+pm_data%>% filter(ID == 109)%>% select(ID, daterated, time_pm)
 #changing 4/20 first dup to 4/19
 pm_data <- pm_data %>%
   mutate(daterated = case_when(
@@ -518,6 +518,11 @@ pm_data <- changedatepm(107, "5:19", "6/06/21","6/05/21")
 #ID 108
 pm_data <- changedatepm(108, "0:46", "6/16/21","6/15/21")
 pm_data <- changedatepm(108, "9:45", "6/20/21","6/19/21")
+#ID 109 
+pm_data <- changedatepm(109, "0:08", "6/07/21","6/06/21")
+pm_data <- changedatepm(109, "6:17", "6/13/21","6/12/21")
+pm_data <- changedatepm(109, "7:44", "6/15/21","6/14/21")
+pm_data <- changedatepm(109, "9:48", "6/24/21","6/23/21")
 ```
 
 [1] "The survey does not exist for the day before 2021-04-20 for the id number 103" #changed
@@ -552,16 +557,16 @@ pm_data <- changedatepm(108, "9:45", "6/20/21","6/19/21")
 
 [1] "The survey does not exist for the day before 2021-06-20 for the id number 108" #changed
 
-[1] "The survey does not exist for the day before 2021-06-07 for the id number 109"
-[1] "The survey does not exist for the day before 2021-06-07 for the id number 109"
-[1] "The survey does not exist for the day before 2021-06-13 for the id number 109"
-[1] "The survey does not exist for the day before 2021-06-13 for the id number 109"
-[1] "The survey does not exist for the day before 2021-06-15 for the id number 109"
-[1] "The survey does not exist for the day before 2021-06-15 for the id number 109"
-[1] "The survey does not exist for the day before 2021-06-24 for the id number 109"
-[1] "The survey does not exist for the day before 2021-06-24 for the id number 109"
+[1] "The survey does not exist for the day before 2021-06-07 for the id number 109" #changed
+
+[1] "The survey does not exist for the day before 2021-06-13 for the id number 109" #changed
+
+[1] "The survey does not exist for the day before 2021-06-15 for the id number 109" #changed
+
+[1] "The survey does not exist for the day before 2021-06-24 for the id number 109" #changed
+
 [1] "The survey does not exist for the day before 2021-06-20 for the id number 111"
-[1] "The survey does not exist for the day before 2021-06-20 for the id number 111"
+
 [1] "The survey does not exist for the day before 2021-06-22 for the id number 111"
 [1] "The survey does not exist for the day before 2021-06-22 for the id number 111"
 [1] "The survey does not exist for the day before 2021-06-18 for the id number 113"
