@@ -545,6 +545,12 @@ pm_data%>% filter(ID == 112)%>% select(ID, daterated, time_pm)
 pm_data <- changedatepm(112, "7:23", "6/24/21","6/23/21")
 pm_data <- changedatepm(112, "4:59", "6/28/21","6/27/21")
 pm_data <- changedatepm(112, "0:03", "7/04/21","7/03/21")
+#ID 117
+pm_data%>% filter(ID == 117)%>% select(ID, daterated, time_pm)
+pm_data <- changedatepm(117, "1:12", "7/09/21","7/08/21")
+pm_data <- changedatepm(117, "0:38", "7/16/21","7/15/21")
+pm_data <- changedatepm(117, "8:36", "7/24/21","7/23/21")
+pm_data <- changedatepm(117, "2:11", "7/26/21","7/25/21")
 ```
 
 [1] "The survey does not exist for the day before 2021-04-20 for the id number 103" #changed
@@ -631,14 +637,14 @@ pm_data <- changedatepm(112, "0:03", "7/04/21","7/03/21")
 
 [1] "The survey does not exist for the day before 2021-07-04 for the id number 112" #changed
 
-[1] "The survey does not exist for the day before 2021-07-09 for the id number 117"
-[1] "The survey does not exist for the day before 2021-07-09 for the id number 117"
-[1] "The survey does not exist for the day before 2021-07-16 for the id number 117"
-[1] "The survey does not exist for the day before 2021-07-16 for the id number 117"
-[1] "The survey does not exist for the day before 2021-07-24 for the id number 117"
-[1] "The survey does not exist for the day before 2021-07-24 for the id number 117"
-[1] "The survey does not exist for the day before 2021-07-26 for the id number 117"
-[1] "The survey does not exist for the day before 2021-07-26 for the id number 117"
+[1] "The survey does not exist for the day before 2021-07-09 for the id number 117" #changed
+
+[1] "The survey does not exist for the day before 2021-07-16 for the id number 117" #changed
+
+[1] "The survey does not exist for the day before 2021-07-24 for the id number 117" #changed
+
+[1] "The survey does not exist for the day before 2021-07-26 for the id number 117" #changed
+
 [1] "The survey does not exist for the day before 2021-08-20 for the id number 119"
 [1] "The survey does not exist for the day before 2021-08-20 for the id number 119"
 [1] "The survey does not exist for the day before 2021-08-08 for the id number 118"
