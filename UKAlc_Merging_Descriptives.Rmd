@@ -481,7 +481,7 @@ priordaydupe(pm_data)
 #This will only work if the date variable is called daterated
 ```
 
-#Changing Each priordaydup ID daterated to the day prior if one of the dup surveys was before 5:00am (indicates it was meant for day prior)
+#Changing Each priordaydup ID daterated to the day prior if one of the dup surveys was before 10:00am (indicates it was meant for day prior)
 ```{r}
 changedatepm <- function(id, time, olddate, newdate){
   pm_data %>%
@@ -492,7 +492,7 @@ changedatepm <- function(id, time, olddate, newdate){
   
 }
 #filter each priordaydupe ID to examine duplicates and changedatepm if applicable 
-pm_data%>% filter(ID == 103)%>% select(ID, daterated, time_pm)
+pm_data%>% filter(ID == 105)%>% select(ID, daterated, time_pm)
 #changing 4/20 first dup to 4/19
 pm_data <- pm_data %>%
   mutate(daterated = case_when(
@@ -500,11 +500,14 @@ pm_data <- pm_data %>%
     TRUE ~ daterated
   ))
 
-
+#ID 103 
 pm_data <- changedatepm(103, "0:05", "4/20/21","4/19/21")
 pm_data <- changedatepm(103, "1:58", "4/24/21","4/23/21")
 pm_data <- changedatepm(103, "0:12", "4/26/21","4/25/21")
 pm_data <- changedatepm(103, "1:55", "5/09/21","5/08/21")
+#ID 105
+pm_data <- changedatepm(105, "6:08", "5/09/21","5/08/21")
+pm_data <- changedatepm(105, "9:03", "5/07/21","5/06/21")
 ```
 
 1] "The survey does not exist for the day before 2021-04-20 for the id number 103"
