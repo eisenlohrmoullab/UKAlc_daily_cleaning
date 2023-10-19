@@ -492,7 +492,7 @@ changedatepm <- function(id, time, olddate, newdate){
   
 }
 #filter each priordaydupe ID to examine duplicates and changedatepm if applicable 
-pm_data%>% filter(ID == 107)%>% select(ID, daterated, time_pm)
+pm_data%>% filter(ID == 108)%>% select(ID, daterated, time_pm)
 #changing 4/20 first dup to 4/19
 pm_data <- pm_data %>%
   mutate(daterated = case_when(
@@ -515,6 +515,9 @@ pm_data <- changedatepm(106, "8:50", "5/12/21","5/11/21")
 #ID 107 
 pm_data <- changedatepm(107, "4:35", "5/25/21","5/24/21")
 pm_data <- changedatepm(107, "5:19", "6/06/21","6/05/21")
+#ID 108
+pm_data <- changedatepm(108, "0:46", "6/16/21","6/15/21")
+pm_data <- changedatepm(108, "9:45", "6/20/21","6/19/21")
 ```
 
 [1] "The survey does not exist for the day before 2021-04-20 for the id number 103" #changed
@@ -545,10 +548,10 @@ pm_data <- changedatepm(107, "5:19", "6/06/21","6/05/21")
 
 [1] "The survey does not exist for the day before 2021-06-06 for the id number 107" #changed
 
-[1] "The survey does not exist for the day before 2021-06-16 for the id number 108"
-[1] "The survey does not exist for the day before 2021-06-16 for the id number 108"
-[1] "The survey does not exist for the day before 2021-06-20 for the id number 108"
-[1] "The survey does not exist for the day before 2021-06-20 for the id number 108"
+[1] "The survey does not exist for the day before 2021-06-16 for the id number 108" #changed
+
+[1] "The survey does not exist for the day before 2021-06-20 for the id number 108" #changed
+
 [1] "The survey does not exist for the day before 2021-06-07 for the id number 109"
 [1] "The survey does not exist for the day before 2021-06-07 for the id number 109"
 [1] "The survey does not exist for the day before 2021-06-13 for the id number 109"
