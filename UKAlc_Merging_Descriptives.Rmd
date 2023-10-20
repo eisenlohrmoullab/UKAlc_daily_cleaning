@@ -481,10 +481,25 @@ priordaydupe(pm_data)
 #This will only work if the date variable is called daterated
 ```
 
-#Examine pm_data surveys that were completed before 12:00pm to potentially assign them to the day prior. 
+#Examine pm_data surveys that were completed before 12:00pm and assigned them to the day prior if no prior day survey completed and if completed before 12:00pm
 ```{r}
 pm_data%>% filter(time_pm < "12:00")%>% select(ID, daterated, time_pm)
 
+#it seems to make more sense to assign them to the date prior automatically and then examine duplicates -- write
+#code for this soon 
+changedatepm <- function(id, time, olddate, newdate){
+  pm_data %>%
+  mutate(daterated = case_when(
+    ID== id & time_pm == time & daterated == mdy(olddate) ~ mdy(newdate),
+    TRUE ~ daterated
+  ))
+  
+}
+#ID 103 
+pm_data <- changedatepm(103, "1:58", "4/24/21","4/23/21")
+pm_data <- changedatepm(103, "0:12", "4/26/21","4/25/21")
+pm_data <- changedatepm(103, "0:07", "4/29/21","4/28/21")
+pm_data <- changedatepm(103, "0:08", "5/01/21","4/31/21")
 ```
 
 
