@@ -95,11 +95,19 @@ length(unique(pm_data$ID))
 ##in progress## 
 library(lubridate)
 
+#one way I tried to change DateTime from df into date/time type 
+#I suspect maybe this isn't working because there are NAs? 
+pm_data <- pm_data %>% drop_na(DateTime)
+pm_data$DateTime <- lubridate::mdy_hms(pm_data$DateTime)
+#another way I tried to change DateTime from df into date/time type 
 pm_data <- data.frame(pm_data$DateTime = as.POSIXct(c(DateTime)))
-
+#another way I tried to change DateTime from df into date/time type 
 pm_data$DateTime <- pm_data %>% mutate(DateTime = mdy_hms(DateTime))
+#yet another way                   
+as.POSIXct(pm_data, format = "%d-%b-%y")
+pm_data <- data.frame(pm_data = c(DateTime)) 
+pm_data$DateTime_ap <- as.POSIXct(pm_data$DateTime, format = "%Y-%m-%d %H:%M:%S")
 
-pm_data$daterated <- lubridate::mdy(pm_data$daterated)
 ```
 
 #Make the pm DateTime variable the day before if survey was filled out before 12:00pm 
