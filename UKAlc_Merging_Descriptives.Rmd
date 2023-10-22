@@ -13,6 +13,7 @@ library(dplyr)
 library(tidyr)
 library(stringr)
 library(janitor)
+library(lubridate)
 knitr::opts_chunk$set(echo = TRUE)
 
 #Anisha's Paths
@@ -89,11 +90,32 @@ length(unique(pm_data$ID))
 
 #Before correcting for duplicates, we have n = 83 for am data and n = 82 for pm data 
 
+#Transform DateRated into date and time type variables 
+```{r}
+##in progress## 
+library(lubridate)
+
+pm_data <- data.frame(pm_data$DateTime = as.POSIXct(c(DateTime)))
+
+pm_data$DateTime <- pm_data %>% mutate(DateTime = mdy_hms(DateTime))
+
+pm_data$daterated <- lubridate::mdy(pm_data$daterated)
+```
+
+#Make the pm DateTime variable the day before if survey was filled out before 12:00pm 
+```{r}
+##Anna in progress## 
+library(lubridate)
+pm_data$DateTime <- ifelse(hour(pm_data$DateTime) < "12", pm_data$DateTime - days(1), pm_data$DateTime)
+```
+
+
 ```{r}
 #separate datetime variable 
 am_data[c('daterated', 'time')] <- str_split_fixed(am_data$DateTime, ' ', 2)
 pm_data[c('daterated', 'time')] <- str_split_fixed(pm_data$DateTime, ' ', 2)
 ```
+
 
 ```{r}
 #Transform daterated into a date variable so R can recognize as date variable
@@ -483,10 +505,13 @@ priordaydupe(pm_data)
 
 #Examine pm_data surveys that were completed before 12:00pm and assigned them to the day prior if no prior day survey completed and if completed before 12:00pm
 ```{r}
+##Anna in progress##
 pm_data%>% filter(time_pm < "12:00")%>% select(ID, daterated, time_pm)
 
-#it seems to make more sense to assign them to the date prior automatically and then examine duplicates -- write
-#code for this soon 
+#it seems to make more sense to assign them to the date prior automatically and then examine duplicates 
+
+
+
 changedatepm <- function(id, time, olddate, newdate){
   pm_data %>%
   mutate(daterated = case_when(
@@ -505,6 +530,7 @@ pm_data <- changedatepm(103, "0:08", "5/01/21","4/31/21")
 
 #Changing Each priordaydup ID daterated to the day prior if one of the dup surveys was before 10:00am (indicates it was meant for day prior)
 ```{r}
+##Anna in progress##
 changedatepm <- function(id, time, olddate, newdate){
   pm_data %>%
   mutate(daterated = case_when(
