@@ -95,10 +95,12 @@ length(unique(pm_data$ID))
 ##in progress## 
 library(lubridate)
 
+pm_data$DateTime <- as_datetime(pm_data$DateTime)
+#the line above also made all the DateTimes into NAs 
 #one way I tried to change DateTime from df into date/time type 
 #I suspect maybe this isn't working because there are NAs? 
-pm_data <- pm_data %>% drop_na(DateTime)
 pm_data$DateTime <- lubridate::mdy_hms(pm_data$DateTime)
+#the line above made all the DateTimes into NAs 
 #another way I tried to change DateTime from df into date/time type 
 pm_data <- data.frame(pm_data$DateTime = as.POSIXct(c(DateTime)))
 #another way I tried to change DateTime from df into date/time type 
