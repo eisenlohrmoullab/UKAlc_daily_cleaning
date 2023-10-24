@@ -473,6 +473,31 @@ am_data %>%
 am_data <- am_data[!(am_data$ID == 181 & am_data$daterated == "2023-03-22" & am_data$time_am == "13:46"), ] 
 ```
 
+#Filter out variables of interest from am_data 
+```{r}
+am_datashort <- am_data %>% select(ID,
+                          daterated,
+                          Mar_am,
+                          Alc_Amt_am,
+                          Alc_Time_am,
+                          Alc_Dur_am,
+                          Alc_Drunk_am,
+                          Alc_Drunk_txt_am)
+am_datashort
+#make histogram of alcohol amount am 
+#make Alc_Amt_am numeric first 
+am_datashort$Alc_Amt_am <- as.numeric(am_datashort$Alc_Amt_am)
+hist(am_datashort$Alc_Amt_am)
+
+#merge in date of menses/ovulation, then calculate cycle day **merge in menses start dates 
+#I can even output this smaller dataset into excel file and input menses start dates as 1s 
+#transfer menses start dates in and keep notes about people who don't have a start date, and use template for coding when 
+#you don't have the LH start day --> use this to make a graph for onset of menses 
+#create a new variable that's did you drink -> 1 not drink -> 0 
+#create new variable heavy drinking (>4) -> 1 , <4 gets 0 
+```
+
+
 #Previous Day Survey Check Before Removing PM Duplicates 
 
 ```{r}
