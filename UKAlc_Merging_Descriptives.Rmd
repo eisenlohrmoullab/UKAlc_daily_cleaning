@@ -518,9 +518,7 @@ priordaydupe(pm_data)
 ##Anna in progress##
 pm_data%>% filter(time_pm < "12:00")%>% select(ID, daterated, time_pm)
 
-#it seems to make more sense to assign them to the date prior automatically and then examine duplicates 
-
-
+#it seems to make more sense to assign them to the date prior automatically and then examine duplicates, but I can't get this to work with lubridate 
 
 changedatepm <- function(id, time, olddate, newdate){
   pm_data %>%
@@ -530,15 +528,25 @@ changedatepm <- function(id, time, olddate, newdate){
   ))
   
 }
+#make time_pm into a time variable 
+#the commented out line below didn't work for time_pm. Unsure why it worked for daterated but not time_pm? 
+#library(lubridate)
+#pm_data$time_pm <- lubridate::hms(pm_data$time_pm)
+#pm_data$daterated <- lubridate::mdy(pm_data$daterated)
 #ID 103 
+pm_data%>% filter(time_pm < "12:00")%>% select(ID, daterated, time_pm)
+pm_data <- changedatepm(103, "0:05", "4/20/21","4/19/21")
 pm_data <- changedatepm(103, "1:58", "4/24/21","4/23/21")
 pm_data <- changedatepm(103, "0:12", "4/26/21","4/25/21")
 pm_data <- changedatepm(103, "0:07", "4/29/21","4/28/21")
-pm_data <- changedatepm(103, "0:08", "5/01/21","4/31/21")
+
 ```
 
+#The below R chunk may be deleted, the above one seems preferable to me 
+```{r}
 
-#Changing Each priordaydup ID daterated to the day prior if one of the dup surveys was before 10:00am (indicates it was meant for day prior)
+
+#Changing Each priordaydup ID daterated to the day prior if one of the dup surveys was before 12:00pm (indicates it was meant for day prior)
 ```{r}
 ##Anna in progress##
 changedatepm <- function(id, time, olddate, newdate){
