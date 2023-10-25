@@ -876,8 +876,14 @@ pm_data <- changedatepm(165, "0:47", "09/08/22","09/07/22")
 #ID 166
 pm_data <- changedatepm(166, "0:53", "09/25/22","09/24/22")
 #ID 167
-pm_data <- changedatepm(166, "1:05", "10/19/22","10/18/22")
-
+pm_data <- changedatepm(167, "1:05", "10/19/22","10/18/22")
+pm_data <- changedatepm(167, "1:44", "10/07/22","10/06/22")
+pm_data <- changedatepm(167, "0:13", "09/22/22","09/21/22")
+pm_data <- changedatepm(167, "1:09", "09/23/22","09/22/22")
+pm_data <- changedatepm(167, "1:52", "09/24/22","09/23/22")
+#ID 168
+pm_data%>% filter(time_pm < "12:00")%>% select(ID, daterated, time_pm)
+pm_data <- changedatepm(168, "0:32", "10/14/22","10/13/22")
 ```
 
 #The below R chunk may be deleted, the above one seems preferable to me 
