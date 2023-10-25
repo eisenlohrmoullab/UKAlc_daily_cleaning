@@ -811,12 +811,22 @@ pm_data <- changedatepm(157, "1:02", "08/04/22","08/03/22")
 pm_data <- changedatepm(157, "1:21", "08/05/22","08/04/22")
 pm_data <- changedatepm(157, "0:44", "08/06/22","08/05/22")
 pm_data <- changedatepm(157, "1:45", "08/09/22","08/08/22")
-
 #ID 158
 pm_data%>% filter(time_pm < "12:00")%>% select(ID, daterated, time_pm)
 pm_data <- changedatepm(158, "1:21", "09/04/22","09/03/22")
 #ID 159
 pm_data <- changedatepm(159, "0:18", "07/19/22","07/18/22")
+pm_data <- changedatepm(159, "0:12", "07/20/22","07/19/22")
+pm_data <- changedatepm(159, "0:03", "07/22/22","07/21/22")
+pm_data <- changedatepm(159, "0:12", "07/23/22","07/22/22")
+pm_data <- changedatepm(159, "0:13", "07/24/22","07/23/22")
+pm_data <- changedatepm(159, "0:04", "07/26/22","07/25/22")
+pm_data <- changedatepm(159, "0:48", "07/27/22","07/26/22")
+pm_data <- changedatepm(159, "0:02", "07/28/22","07/27/22")
+pm_data <- changedatepm(159, "0:44", "08/03/22","08/02/22")
+pm_data <- changedatepm(159, "1:00", "08/04/22","08/03/22")
+pm_data <- changedatepm(159, "0:18", "08/05/22","08/04/22")
+pm_data <- changedatepm(159, "0:51", "08/06/22","08/05/22")
 ```
 
 #The below R chunk may be deleted, the above one seems preferable to me 
