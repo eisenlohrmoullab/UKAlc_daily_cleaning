@@ -655,8 +655,32 @@ pm_data <- changedatepm(134, "0:30", "11/07/21","11/06/21")
 pm_data <- changedatepm(134, "0:38", "12/17/21","12/16/21") 
 pm_data <- changedatepm(134, "1:58", "12/18/21","12/17/21") 
 pm_data <- changedatepm(134, "1:29", "12/19/21","12/18/21") 
-
+#ID 135
+pm_data <- changedatepm(135, "1:19", "11/12/21","11/11/21") 
+pm_data <- changedatepm(135, "1:52", "11/13/21","11/12/21") 
+pm_data <- changedatepm(135, "0:32", "11/16/21","11/15/21") 
+pm_data <- changedatepm(135, "0:39", "11/18/21","11/17/21") 
+pm_data <- changedatepm(135, "1:47", "11/19/21","11/18/21") 
+pm_data <- changedatepm(135, "0:27", "11/20/21","11/19/21") 
+pm_data <- changedatepm(135, "1:45", "11/22/21","11/21/21") 
+pm_data <- changedatepm(135, "0:55", "11/23/21","11/22/21") 
+pm_data <- changedatepm(135, "1:42", "11/24/21","11/23/21") 
+pm_data <- changedatepm(135, "1:33", "11/25/21","11/24/21") 
+pm_data <- changedatepm(135, "0:14", "11/26/21","11/25/21") 
+pm_data <- changedatepm(135, "1:19", "11/27/21","11/26/21") 
+pm_data <- changedatepm(135, "1:05", "11/28/21","11/27/21") 
+pm_data <- changedatepm(135, "1:38", "11/29/21","11/28/21") 
+pm_data <- changedatepm(135, "1:10", "11/30/21","11/29/21") 
+pm_data <- changedatepm(135, "1:51", "12/01/21","11/30/21") 
+#ID 136
 pm_data%>% filter(time_pm < "12:00")%>% select(ID, daterated, time_pm)
+pm_data <- changedatepm(136, "0:33", "01/02/22","01/01/22") 
+pm_data <- changedatepm(136, "0:01", "12/16/21","12/15/21") 
+pm_data <- changedatepm(136, "0:22", "12/20/21","12/19/21") 
+pm_data <- changedatepm(136, "0:08", "12/22/21","12/21/21") 
+pm_data <- changedatepm(136, "0:20", "12/25/21","12/24/21") 
+pm_data <- changedatepm(136, "0:56", "12/30/21","12/29/21") 
+pm_data <- changedatepm(136, "0:39", "12/09/21","12/08/21") 
 ```
 
 #The below R chunk may be deleted, the above one seems preferable to me 
