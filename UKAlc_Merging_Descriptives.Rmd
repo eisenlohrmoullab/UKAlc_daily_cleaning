@@ -747,14 +747,25 @@ pm_data <- changedatepm(147, "0:07", "04/07/22","04/06/22")
 pm_data <- changedatepm(147, "1:15", "04/08/22","04/07/22")
 pm_data <- changedatepm(147, "0:45", "04/09/22","04/08/22")
 #ID 148
-pm_data%>% filter(time_pm < "12:00")%>% select(ID, daterated, time_pm)
 pm_data <- changedatepm(148, "0:18", "05/21/22","05/20/22")
 pm_data <- changedatepm(148, "0:34", "05/29/22","05/28/22")
 pm_data <- changedatepm(148, "0:50", "06/11/22","06/10/22")
 pm_data <- changedatepm(148, "0:21", "06/12/22","06/11/22")
 pm_data <- changedatepm(148, "0:06", "06/20/22","06/19/22")
-
-pm_data <- changedatepm(148, "0:06", "06/20/22","06/19/22")
+#ID 148
+pm_data%>% filter(time_pm < "12:00")%>% select(ID, daterated, time_pm)
+pm_data <- changedatepm(149, "0:42", "05/26/22","05/25/22")
+pm_data <- changedatepm(149, "1:53", "05/27/22","05/26/22")
+pm_data <- changedatepm(149, "0:18", "05/28/22","05/27/22")
+pm_data <- changedatepm(149, "0:06", "05/31/22","05/30/22")
+pm_data <- changedatepm(149, "0:42", "06/11/22","06/10/22")
+pm_data <- changedatepm(149, "0:45", "06/12/22","06/11/22")
+pm_data <- changedatepm(149, "0:23", "06/14/22","06/13/22")
+pm_data <- changedatepm(149, "0:01", "06/17/22","06/16/22")
+pm_data <- changedatepm(149, "0:22", "06/18/22","06/17/22")
+pm_data <- changedatepm(149, "0:51", "06/05/22","06/04/22")
+pm_data <- changedatepm(149, "0:31", "06/06/22","06/05/22")
+pm_data <- changedatepm(149, "10:14", "06/08/22","06/07/22")
 ```
 
 #The below R chunk may be deleted, the above one seems preferable to me 
