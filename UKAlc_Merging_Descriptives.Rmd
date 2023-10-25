@@ -640,7 +640,21 @@ pm_data <- changedatepm(132, "0:05", "11/06/21","11/05/21")
 #ID 133
 pm_data <- changedatepm(133, "0:02", "11/06/21","11/05/21") 
 #ID 134
-pm_data <- changedatepm(132, "0:03", "10/28/21","10/27/21") 
+pm_data <- changedatepm(134, "0:03", "10/28/21","10/27/21") 
+pm_data <- changedatepm(134, "1:26", "10/29/21","10/28/21") 
+pm_data <- changedatepm(134, "0:36", "10/30/21","10/29/21") 
+pm_data <- changedatepm(134, "0:54", "10/31/21","10/30/21") 
+pm_data <- changedatepm(134, "0:17", "11/12/21","11/11/21") 
+pm_data <- changedatepm(134, "0:32", "11/13/21","11/12/21") 
+pm_data <- changedatepm(134, "0:05", "11/14/21","11/13/21") 
+pm_data <- changedatepm(134, "0:34", "11/19/21","11/18/21") 
+pm_data <- changedatepm(134, "0:54", "11/20/21","11/19/21") 
+pm_data <- changedatepm(134, "0:02", "11/04/21","11/03/21") 
+pm_data <- changedatepm(134, "1:15", "11/05/21","11/04/21") 
+pm_data <- changedatepm(134, "0:30", "11/07/21","11/06/21") 
+pm_data <- changedatepm(134, "0:38", "12/17/21","12/16/21") 
+pm_data <- changedatepm(134, "1:58", "12/18/21","12/17/21") 
+pm_data <- changedatepm(134, "1:29", "12/19/21","12/18/21") 
 
 pm_data%>% filter(time_pm < "12:00")%>% select(ID, daterated, time_pm)
 ```
