@@ -18,25 +18,25 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #Anisha's Paths
 
-
-am_qual <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_Qualtrics_csv.csv")
-
-pm_qual <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_Qualtrics_csv.csv")
-
-am_rc <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_REDCap_csv.csv")
-
-pm_rc <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_REDCap_csv.csv")
+# 
+# am_qual <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_Qualtrics_csv.csv")
+# 
+# pm_qual <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_Qualtrics_csv.csv")
+# 
+# am_rc <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_REDCap_csv.csv")
+# 
+# pm_rc <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_REDCap_csv.csv")
 
 
 #Anna's Paths
 
-# am_qual <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_Qualtrics_csv.csv")
-# 
-# pm_qual <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_Qualtrics_csv.csv")
-# 
-# am_rc <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_REDCap_csv.csv")
-# 
-# pm_rc <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_REDCap_csv.csv")
+am_qual <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_Qualtrics_csv.csv")
+
+pm_qual <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_Qualtrics_csv.csv")
+
+am_rc <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_REDCap_csv.csv")
+
+pm_rc <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_REDCap_csv.csv")
 ```
 
 ID's in am_qual: 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 126
@@ -92,8 +92,8 @@ length(unique(pm_data$ID))
 
 #Transform DateRated into date and time type variables 
 ```{r}
-##in progress## 
-library(lubridate)
+##What Anna tried to make DateRated into date and time variables## 
+#library(lubridate)
 
 # pm_data$DateTime <- as_datetime(pm_data$DateTime)
 # #the line above also made all the DateTimes into NAs 
@@ -151,13 +151,6 @@ pm_data %>% select(ID, daterated, time, DateTime, b4noon)
 ```
 
 ```{r}
-
-
-
-```
-
-
-```{r}
 #Transform daterated into a date variable so R can recognize as date variable
 am_data$daterated <- lubridate::mdy(am_data$daterated)
 pm_data$daterated <- lubridate::mdy(pm_data$daterated)
@@ -171,10 +164,6 @@ pm_data = subset(pm_data, select = -c(DateTime))
 replace_empty_with_na <- function(data) {
   data %>% mutate_if(is.character, ~ ifelse(. == "", NA, .))
 }
-
-# Replace empty strings with NA in your dataset
-# data1 <- replace_empty_with_na(data1)
-# data2 <- replace_empty_with_na(data2)
 
 xymerge <- function(dat) {
   # Create a logical vector indicating which column names end in ".x"
@@ -214,9 +203,7 @@ am_data <- am_data %>%
   relocate(daterated, .after = ID) 
 pm_data <- pm_data %>% 
   relocate(daterated, .after = ID) 
-
 ```
-
 
 
 ```{r}
@@ -238,24 +225,12 @@ colnames(pm_data)[colnames(pm_data) == "ID_pm"] ="ID"
 
 #Remove rows where everything is NA except daterated, time, and ID
 ```{r}
-# am_data <- am_data %>%
-#   filter(!is.na(ID) | !is.na(daterated) | !is.na(time_am))
-# conflicts_prefer(dplyr::filter) 
-# 
-# pm_data <- pm_data %>%
-#   filter(!is.na(ID) | !is.na(daterated) | !is.na(time_pm))
-# conflicts_prefer(dplyr::filter) 
-
-#Anna tried the above code 10/11/23, no change to either df but perhaps no rows fit this criteria 
-
 am_data <- am_data %>% drop_na(daterated, ID)
 pm_data <- pm_data %>% drop_na(daterated, ID)
-
 ```
 
 #Find Duplicates in Dates per ID 
 ```{r}
-
 result.am <- am_data %>%
   group_by(ID, daterated) %>%
   summarise(observations = n())
@@ -267,7 +242,6 @@ result.pm <- pm_data %>%
   summarise(observations = n())
 
 dupdate_pm <- subset(result.pm, observations != 1)
-
 ```
 
 #Remove rows so that we no longer have >1 submission per am or pm data per date. Kept earliest timestamp if all submissions are identical, or kept most complete form if some are more completed than others. 
@@ -280,226 +254,119 @@ am_data <- am_data[!(am_data$ID == 106 & am_data$daterated == "2021-05-09" & am_
 am_data <- am_data[!(am_data$ID == 106 & am_data$daterated == "2021-05-09" & am_data$time_am == "9:59"), ]
 
 #remove duplicates for 106 on 2021-05-18 
-am_data %>%
-  filter(ID == 106 & daterated == ymd("2021-05-18"))
-
 am_data <- am_data[!(am_data$ID == 106 & am_data$daterated == "2021-05-18" & am_data$time_am == "6:35"), ]
 
 #remove duplicates for 106 on 2021-05-20 
-am_data %>%
-  filter(ID == 106 & daterated == ymd("2021-05-20"))
-
 am_data <- am_data[!(am_data$ID == 106 & am_data$daterated == "2021-05-20" & am_data$time_am == "4:50"), ]
 
 #remove duplicates for 106 on 2021-05-24 
-am_data %>%
-  filter(ID == 106 & daterated == ymd("2021-05-24"))
-
 am_data <- am_data[!(am_data$ID == 106 & am_data$daterated == "2021-05-24" & am_data$time_am == "21:59"), ]
 am_data <- am_data[!(am_data$ID == 106 & am_data$daterated == "2021-05-24" & am_data$time_am == "22:00"), ]
 am_data <- am_data[!(am_data$ID == 106 & am_data$daterated == "2021-05-24" & am_data$time_am == "22:02"), ]
 
 #remove duplicates for 112 on 2021-06-28 
-am_data %>%
-  filter(ID == 112 & daterated == ymd("2021-06-28"))
-
 am_data <- am_data[!(am_data$ID == 112 & am_data$daterated == "2021-06-28" & am_data$time_am == "4:58"), ]
 
 #remove duplicates for 112 on 2021-07-11
-am_data %>%
-  filter(ID == 112 & daterated == ymd("2021-07-11"))
-
 am_data <- am_data[!(am_data$ID == 112 & am_data$daterated == "2021-07-11" & am_data$time_am == "18:38"), ] 
 
 #remove duplicates for 113 on 2021-06-23 
-am_data %>%
-  filter(ID == 113 & daterated == ymd("2021-06-23"))
-
 am_data <- am_data[!(am_data$ID == 113 & am_data$daterated == "2021-06-23" & am_data$time_am == "14:34"), ] 
 
 #remove duplicates for 113 on 2021-07-07 
-am_data %>%
-  filter(ID == 113 & daterated == ymd("2021-07-07"))
-
 am_data <- am_data[!(am_data$ID == 113 & am_data$daterated == "2021-07-07" & am_data$time_am == "11:57"), ] 
 
 #remove duplicates for 113 on 2021-07-21
-am_data %>%
-  filter(ID == 113 & daterated == ymd("2021-07-21"))
-
 am_data <- am_data[!(am_data$ID == 113 & am_data$daterated == "2021-07-21" & am_data$time_am == "11:12"), ] 
 
 #remove duplicates for 114 on 2021-06-29
-am_data %>%
-  filter(ID == 114 & daterated == ymd("2021-06-29"))
-
 am_data <- am_data[!(am_data$ID == 114 & am_data$daterated == "2021-06-29" & am_data$time_am == "22:00"), ] 
 
 #remove duplicates for 114 on 2021-07-01 
-am_data %>%
-  filter(ID == 114 & daterated == ymd("2021-07-01"))
-
 am_data <- am_data[!(am_data$ID == 114 & am_data$daterated == "2021-07-01 " & am_data$time_am == "9:33"), ] 
 
 #remove duplicates for 114 on 2021-07-04 
-am_data %>%
-  filter(ID == 114 & daterated == ymd("2021-07-04"))
-
 am_data <- am_data[!(am_data$ID == 114 & am_data$daterated == "2021-07-04" & am_data$time_am == "5:58"), ] 
 
 #remove duplicates for 114 on 2021-07-06
-am_data %>%
-  filter(ID == 114 & daterated == ymd("2021-07-06"))
-
 am_data <- am_data[!(am_data$ID == 114 & am_data$daterated == "2021-07-06" & am_data$time_am == "4:52"), ] 
 
 #remove duplicates for 114 on 2021-07-09 
-am_data %>%
-  filter(ID == 114 & daterated == ymd("2021-07-09"))
-
 am_data <- am_data[!(am_data$ID == 114 & am_data$daterated == "2021-07-09" & am_data$time_am == "21:44"), ] 
 am_data <- am_data[!(am_data$ID == 114 & am_data$daterated == "2021-07-09" & am_data$time_am == "21:45"), ] 
 
 #remove duplicates for 114 on 2021-07-15
-am_data %>%
-  filter(ID == 114 & daterated == ymd("2021-07-15"))
-
 am_data <- am_data[!(am_data$ID == 114 & am_data$daterated == "2021-07-15" & am_data$time_am == "7:44"), ] 
 
 #remove duplicates for 115 on 2021-06-24 
-am_data %>%
-  filter(ID == 115 & daterated == ymd("2021-06-24"))
-
 am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-06-24" & am_data$time_am == "6:52"), ] 
 
 #remove duplicates for 115 on 2021-06-27
-am_data %>%
-  filter(ID == 115 & daterated == ymd("2021-06-27"))
-
 am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-06-27" & am_data$time_am == "8:27"), ] 
 
 #remove duplicates for 115 on 2021-07-01
-am_data %>%
-  filter(ID == 115 & daterated == ymd("2021-07-01"))
-
 am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-01" & am_data$time_am == "19:53"), ] 
 
 #remove duplicates for 115 on 2021-07-04
-am_data %>%
-  filter(ID == 115 & daterated == ymd("2021-07-04"))
-
 am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-04" & am_data$time_am == "3:00"), ] 
-
 #remove duplicates for 115 on 2021-07-09 
-am_data %>%
-  filter(ID == 115 & daterated == ymd("2021-07-09"))
-
 am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-09" & am_data$time_am == "21:49"), ] 
 am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-09" & am_data$time_am == "21:52"), ] 
 am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-09" & am_data$time_am == "21:55"), ] 
 am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-09" & am_data$time_am == "22:01"), ] 
 
 #remove duplicates for 115 on 2021-07-11
-am_data %>%
-  filter(ID == 115 & daterated == ymd("2021-07-11"))
-
 am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-11" & am_data$time_am == "8:38"), ] 
 am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-11" & am_data$time_am == "8:41"), ] 
 
 #remove duplicates for 115 on 2021-07-20 
-am_data %>%
-  filter(ID == 115 & daterated == ymd("2021-07-20"))
-
 am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-20" & am_data$time_am == "6:50"), ] 
 am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-20" & am_data$time_am == "6:57"), ] 
 am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-20" & am_data$time_am == "7:00"), ] 
 am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-20" & am_data$time_am == "7:04"), ] 
 am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-20" & am_data$time_am == "7:06"), ] 
 am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-20" & am_data$time_am == "7:09"), ] 
-am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-20" & am_data$time_am == "7:13"), ] 
+am_data <- am_data[!(am_data$ID == 115 & am_data$daterated == "2021-07-20" & am_data$time_am == "7:13"), ]
 
 #remove duplicates for 118 on 2021-08-08
-am_data %>%
-  filter(ID == 118 & daterated == ymd("2021-08-08"))
-
 am_data <- am_data[!(am_data$ID == 118 & am_data$daterated == "2021-08-08" & am_data$time_am == "12:29"), ] 
 
 #remove duplicates for 119 on 2021-08-27
-am_data %>%
-  filter(ID == 119 & daterated == ymd("2021-08-27"))
-
 am_data <- am_data[!(am_data$ID == 119 & am_data$daterated == "2021-08-27" & am_data$time_am == "21:42"), ] 
 
 #remove duplicates for 123 on 2021-08-31
-am_data %>%
-  filter(ID == 123 & daterated == ymd("2021-08-31"))
-
 am_data <- am_data[!(am_data$ID == 123 & am_data$daterated == "2021-08-31" & am_data$time_am == "5:05"), ] 
 
 #remove duplicates for 131 on 2021-10-17 
-am_data %>%
-  filter(ID == 131 & daterated == ymd("2021-10-17 "))
-
 am_data <- am_data[!(am_data$ID == 131 & am_data$daterated == "2021-10-17" & am_data$time_am == "22:16"), ] 
 
 #remove duplicates for ID 136 on 2021-11-29 
-am_data %>%
-  filter(ID == 136 & daterated == ymd("2021-11-29"))
-
 am_data <- am_data[!(am_data$ID == 136 & am_data$daterated == "2021-11-29" & am_data$time_am == "12:56"), ] 
 
 #remove duplicates for ID 141 on 2022-02-01
-am_data %>%
-  filter(ID == 141 & daterated == ymd("2022-02-01"))
-
 am_data <- am_data[!(am_data$ID == 141 & am_data$daterated == "2022-02-01" & am_data$time_am == "7:30"), ] 
-
 #remove duplicates for ID 149 on 2022-06-13
-am_data %>%
-  filter(ID == 149 & daterated == ymd("2022-06-13"))
-
 am_data <- am_data[!(am_data$ID == 149 & am_data$daterated == "2022-06-13" & am_data$time_am == "13:57"), ] 
 
 #remove duplicates for ID 159 on 2022-07-17
-am_data %>%
-  filter(ID == 159 & daterated == ymd("2022-07-17"))
-
 am_data <- am_data[!(am_data$ID == 159 & am_data$daterated == "2022-07-17" & am_data$time_am == "9:59"), ] 
 
 #remove duplicates for ID 159 on 2022-08-05
-am_data %>%
-  filter(ID == 159 & daterated == ymd("2022-08-05"))
-
 am_data <- am_data[!(am_data$ID == 159 & am_data$daterated == "2022-08-05" & am_data$time_am == "9:59"), ] 
 
 #remove duplicates for ID 161 on 2022-08-12
-am_data %>%
-  filter(ID == 161 & daterated == ymd("2022-08-12"))
-
 am_data <- am_data[!(am_data$ID == 161 & am_data$daterated == "2022-08-12" & am_data$time_am == "6:30"), ] 
 
 #remove duplicates for ID 166 on 2022-09-15
-am_data %>%
-  filter(ID == 166 & daterated == ymd("2022-09-15"))
-
 am_data <- am_data[!(am_data$ID == 166 & am_data$daterated == "2022-09-15" & am_data$time_am == "10:52"), ] 
 
 #remove duplicates for 171 on 2022-10-21 
-am_data %>%
-  filter(ID == 171 & daterated == ymd("2022-10-21"))
-
 am_data <- am_data[!(am_data$ID == 171 & am_data$daterated == "2022-10-21" & am_data$time_am == "13:03"), ] 
 
 #remove duplicates for 180 on 2023-03-26
-am_data %>%
-  filter(ID == 180 & daterated == ymd("2023-03-26"))
-
 am_data <- am_data[!(am_data$ID == 180 & am_data$daterated == "2023-03-26" & am_data$time_am == "2:42"), ] 
 
 #remove duplicates for 181 on 2023-03-22
-am_data %>%
-  filter(ID == 181 & daterated == ymd("2023-03-22"))
-
 am_data <- am_data[!(am_data$ID == 181 & am_data$daterated == "2023-03-22" & am_data$time_am == "13:46"), ] 
 ```
 
@@ -983,12 +850,6 @@ pm_data <- changedatepm(179, "1:20", "04/19/23","04/18/23")
 pm_data <- changedatepm(179, "0:12", "04/10/23","04/09/23")
 ```
 
-#The below R chunk may be deleted, the above one seems preferable to me 
-```{r}
-
-
-#Changing Each priordaydup ID daterated to the day prior if one of the dup surveys was before 12:00pm (indicates it was meant for day prior)
-```
 
 ```{r}
 ##Anna in progress##
