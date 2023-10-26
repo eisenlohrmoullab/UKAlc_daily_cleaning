@@ -229,6 +229,15 @@ am_data <- am_data %>% drop_na(daterated, ID)
 pm_data <- pm_data %>% drop_na(daterated, ID)
 ```
 
+#drop ID 127 per Annie Griffith's recommendation (not much data for this ID)
+```{r}
+
+am_data <- subset(am_data, ID != 127)
+
+pm_data <- subset(pm_data, ID != 127)
+
+```
+
 #Find Duplicates in Dates per ID 
 ```{r}
 result.am <- am_data %>%
@@ -400,36 +409,35 @@ hist(am_datashort$Alc_Amt_am)
 ```{r}
 #For each duplicate of completed surveys for a person, check if they completed the previous day survey. If they did not, it means they could have meant the earlier time duplicate for the previous day. Rather than excluding these from the study as duplicates, I will re-assign them to the prior day so that we can have the most robust/inclusive dataset possible.
 
-pm_dupes <- pm_data %>% 
-  get_dupes(ID, daterated)
-pm_data <- pm_data %>%
-  left_join(pm_dupes)
-pm_data$dupe_count[is.na(pm_data$dupe_count)] <- 0
+#Anna: I don't think I need this part anymore, but will double-check before deleting. 
 
-priordaydupe <- function(x) {
-  x$ID <- as.numeric(x$ID)
-  x <- x %>% group_by(ID) %>% arrange(daterated)
-  y <- x
-  count = 0
-  n = unique(x$ID)
-  for (i in n) {
-    iddat <- subset(y, ID == i)
-    m = dim(iddat)[1]
-    for (j in 1:m) {
-      if (!is.na(iddat$dupe_count[j]) && iddat$dupe_count[j] == 2) {
-        count = count + 1
-        b = (iddat$daterated[j])
-        if (!(as.Date(b - 1) %in% iddat$daterated)) {
-          print(paste('The survey does not exist for the day before', b, "for the id number", i))
-        }
-      }
-    }
-  }
-  print(paste('There are', count, 'surveys where the same daterated is recorded, by participant'))
-}
-
-
-
+# pm_dupes <- pm_data %>% 
+#   get_dupes(ID, daterated)
+# pm_data <- pm_data %>%
+#   left_join(pm_dupes)
+# pm_data$dupe_count[is.na(pm_data$dupe_count)] <- 0
+# 
+# priordaydupe <- function(x) {
+#   x$ID <- as.numeric(x$ID)
+#   x <- x %>% group_by(ID) %>% arrange(daterated)
+#   y <- x
+#   count = 0
+#   n = unique(x$ID)
+#   for (i in n) {
+#     iddat <- subset(y, ID == i)
+#     m = dim(iddat)[1]
+#     for (j in 1:m) {
+#       if (!is.na(iddat$dupe_count[j]) && iddat$dupe_count[j] == 2) {
+#         count = count + 1
+#         b = (iddat$daterated[j])
+#         if (!(as.Date(b - 1) %in% iddat$daterated)) {
+#           print(paste('The survey does not exist for the day before', b, "for the id number", i))
+#         }
+#       }
+#     }
+#   }
+#   print(paste('There are', count, 'surveys where the same daterated is recorded, by participant'))
+# }
 
 #priordaydupe(pm_data) 
 #This will only work if the date variable is called daterated
@@ -438,182 +446,181 @@ priordaydupe <- function(x) {
 
 ```{r}
 ##Anna in progress##
-changedatepm <- function(id, time, olddate, newdate){
-  pm_data %>%
-  mutate(daterated = case_when(
-    ID== id & time_pm == time & daterated == mdy(olddate) ~ mdy(newdate),
-    TRUE ~ daterated
-  ))
-  
-}
-#filter each priordaydupe ID to examine duplicates and changedatepm if applicable 
-pm_data%>% filter(ID == 109)%>% select(ID, daterated, time_pm)
-#changing 4/20 first dup to 4/19
-pm_data <- pm_data %>%
-  mutate(daterated = case_when(
-    ID== 103 & time_pm == "0:05" & daterated == mdy("4/20/21") ~ mdy("4/19/21"),
-    TRUE ~ daterated
-  ))
-
-#ID 103 
-pm_data <- changedatepm(103, "0:05", "4/20/21","4/19/21")
-pm_data <- changedatepm(103, "1:58", "4/24/21","4/23/21")
-pm_data <- changedatepm(103, "0:12", "4/26/21","4/25/21")
-pm_data <- changedatepm(103, "1:55", "5/09/21","5/08/21")
-#ID 105
-pm_data <- changedatepm(105, "6:08", "5/09/21","5/08/21")
-pm_data <- changedatepm(105, "9:03", "5/07/21","5/06/21")
-pm_data <- changedatepm(105, "7:11", "5/13/21","5/12/21")
-pm_data <- changedatepm(105, "7:09", "5/18/21","5/17/21")
-#ID 106
-pm_data <- changedatepm(106, "8:50", "5/12/21","5/11/21")
-#ID 107 
-pm_data <- changedatepm(107, "4:35", "5/25/21","5/24/21")
-pm_data <- changedatepm(107, "5:19", "6/06/21","6/05/21")
-#ID 108
-pm_data <- changedatepm(108, "0:46", "6/16/21","6/15/21")
-pm_data <- changedatepm(108, "9:45", "6/20/21","6/19/21")
-#ID 109 
-pm_data <- changedatepm(109, "0:08", "6/07/21","6/06/21")
-pm_data <- changedatepm(109, "6:17", "6/13/21","6/12/21")
-pm_data <- changedatepm(109, "7:44", "6/15/21","6/14/21")
-pm_data <- changedatepm(109, "9:48", "6/24/21","6/23/21")
-#ID 111
-pm_data <- changedatepm(111, "7:11", "6/20/21","6/19/21")
-pm_data <- changedatepm(111, "6:34", "6/22/21","6/21/21")
-#ID 113 
-pm_data <- changedatepm(113, "8:22", "6/18/21","6/17/21")
-pm_data <- changedatepm(113, "5:32", "6/20/21","6/19/21")
-pm_data <- changedatepm(113, "5:52", "6/23/21","6/22/21")
-pm_data <- changedatepm(113, "0:17", "7/06/21","7/05/21")
-pm_data <- changedatepm(113, "10:50", "7/11/21","7/10/21")
-pm_data <- changedatepm(113, "3:41", "7/14/21","7/13/21")
-#ID 114
-pm_data <- changedatepm(114, "8:24", "6/20/21","6/19/21")
-pm_data <- changedatepm(114, "9:36", "6/25/21","6/24/21")
-pm_data <- changedatepm(114, "5:57", "7/04/21","7/03/21")
-pm_data <- changedatepm(114, "5:59", "7/04/21","7/03/21")
-pm_data <- changedatepm(114, "4:46", "7/06/21","7/05/21")
-pm_data <- changedatepm(114, "4:51", "7/06/21","7/05/21")
-#ID 112
-pm_data <- changedatepm(112, "7:23", "6/24/21","6/23/21")
-pm_data <- changedatepm(112, "4:59", "6/28/21","6/27/21")
-pm_data <- changedatepm(112, "0:03", "7/04/21","7/03/21")
-#ID 117
-pm_data <- changedatepm(117, "1:12", "7/09/21","7/08/21")
-pm_data <- changedatepm(117, "0:38", "7/16/21","7/15/21")
-pm_data <- changedatepm(117, "8:36", "7/24/21","7/23/21")
-pm_data <- changedatepm(117, "2:11", "7/26/21","7/25/21")
-#ID 118
-pm_data <- changedatepm(118, "10:36", "8/13/21","8/12/21")
-pm_data <- changedatepm(118, "6:03", "8/15/21","8/14/21")
-pm_data <- changedatepm(118, "7:42", "8/21/21","8/20/21")
-pm_data <- changedatepm(118, "6:18", "8/25/21","8/24/21")
-pm_data <- changedatepm(118, "8:21", "9/01/21","8/31/21")
-pm_data <- changedatepm(118, "9:11", "9/05/21","9/04/21")
-#ID 124
-pm_data <- changedatepm(124, "0:05", "9/02/21","9/01/21")
-pm_data <- changedatepm(124, "0:01", "9/05/21","9/04/21")
-#ID 125
-pm_data <- changedatepm(125, "10:02", "8/26/21","8/25/21")
-pm_data <- changedatepm(125, "9:49", "8/28/21","8/27/21")
-pm_data <- changedatepm(125, "9:49", "8/28/21","8/27/21")
-pm_data <- changedatepm(125, "4:57", "1/20/22","1/19/22")
-#ID 128
-pm_data <- changedatepm(128, "7:35", "8/27/21","8/26/21")
-pm_data <- changedatepm(128, "0:26", "9/04/21","9/03/21")
-pm_data <- changedatepm(128, "1:04", "9/11/21","9/10/21")
-#ID 130
-pm_data%>% filter(ID == 130)%>% select(ID, daterated, time_pm)
-pm_data <- changedatepm(130, "9:02", "9/11/21","9/10/21")
-pm_data <- changedatepm(130, "8:00", "9/03/21","9/02/21")
-pm_data <- changedatepm(130, "7:21", "9/13/21","9/12/21")
-pm_data <- changedatepm(130, "9:57", "9/25/21","9/24/21")
-#ID 129
-pm_data <- changedatepm(129, "2:01", "9/19/21","9/18/21")
-pm_data <- changedatepm(129, "0:22", "9/21/21","9/20/21")
-pm_data <- changedatepm(129, "0:22", "9/27/21","9/26/21")
-#ID 127
-pm_data <- changedatepm(127, "10:42", "9/12/21","9/11/21")
-#ID 132
-pm_data <- changedatepm(132, "0:09", "10/21/21","10/20/21")
-pm_data <- changedatepm(132, "0:21", "10/23/21","10/22/21")
-pm_data <- changedatepm(132, "0:02", "11/04/21","11/03/21")
-pm_data <- changedatepm(132, "0:05", "11/06/21","11/05/21")
-#ID 133
-pm_data <- changedatepm(133, "0:02", "11/06/21","11/05/21")
-pm_data <- changedatepm(133, "8:26", "11/18/21","11/17/21")
-pm_data <- changedatepm(133, "8:26", "11/18/21","11/17/21")
-#ID 136
-pm_data%>% filter(ID == 136)%>% select(ID, daterated, time_pm)
-pm_data <- changedatepm(136, "0:39", "12/09/21","12/08/21")
-pm_data <- changedatepm(136, "0:01", "12/16/21","12/15/21")
-pm_data <- changedatepm(136, "0:22", "12/20/21","12/19/21")
-pm_data <- changedatepm(136, "0:08", "12/22/21","12/21/21")
-pm_data <- changedatepm(136, "0:20", "12/25/21","12/24/21")
-pm_data <- changedatepm(136, "0:56", "12/30/21","12/29/21")
-#ID 138
-pm_data <- changedatepm(138, "7:02", "2/11/22","2/10/22")
-#ID 140
-pm_data <- changedatepm(140, "5:33", "2/10/22","2/09/22")
-#ID 139
-pm_data <- changedatepm(139, "4:08", "2/06/22","2/05/22")
-pm_data <- changedatepm(139, "4:33", "2/14/22","2/13/22")
-pm_data <- changedatepm(139, "0:46", "2/21/22","2/20/22")
-pm_data <- changedatepm(139, "1:52", "2/24/22","2/23/22")
-#ID 143
-pm_data <- changedatepm(143, "2:04", "2/12/22","2/11/22")
-#ID 141
-pm_data <- changedatepm(141, "7:45", "2/02/22","2/01/22")
-pm_data <- changedatepm(141, "0:01", "2/04/22","2/03/22")
-pm_data <- changedatepm(141, "0:13", "2/06/22","2/05/22")
-pm_data <- changedatepm(141, "7:24", "2/09/22","2/08/22")
-pm_data <- changedatepm(141, "6:56", "2/21/22","2/20/22")
-pm_data <- changedatepm(141, "0:02", "2/25/22","2/24/22")
-#ID 146
-pm_data <- changedatepm(146, "0:04", "3/07/22","3/06/22")
-pm_data <- changedatepm(146, "10:26", "3/27/22","3/26/22")
-#ID 145
-pm_data <- changedatepm(145, "0:08", "3/14/22","3/13/22")
-#ID 147
-pm_data <- changedatepm(147, "0:14", "4/24/22","4/23/22")
-#ID 148
-pm_data <- changedatepm(148, "0:18", "5/21/22","5/20/22")
-pm_data <- changedatepm(148, "0:34", "5/29/22","5/28/22")
-pm_data <- changedatepm(148, "0:06", "6/20/22","6/19/22")
-#ID 149
-pm_data <- changedatepm(149, "0:06", "5/31/22","5/30/22")
-#ID 150
-pm_data <- changedatepm(150, "0:34", "5/31/22","5/30/22")
-pm_data <- changedatepm(150, "12:10", "6/07/22","6/06/22")
-pm_data <- changedatepm(150, "10:53", "6/17/22","6/16/22")
-#ID 152
-pm_data <- changedatepm(152, "6:38", "7/11/22","7/10/22")
-pm_data <- changedatepm(152, "7:41", "7/14/22","7/13/22")
-#ID 154
-pm_data <- changedatepm(154, "0:00", "6/26/22","6/25/22")
-pm_data <- changedatepm(154, "0:02", "6/30/22","6/29/22")
-pm_data <- changedatepm(154, "0:36", "7/06/22","7/05/22")
-pm_data <- changedatepm(154, "1:19", "7/09/22","7/08/22")
-pm_data <- changedatepm(154, "0:24", "7/13/22","7/12/22")
-#ID 153
-pm_data <- changedatepm(153, "0:07", "6/28/22","6/27/22")
-#ID 155
-pm_data <- changedatepm(155, "0:44", "7/17/22","7/16/22")
-pm_data <- changedatepm(155, "0:19", "7/22/22","7/21/22")
-pm_data <- changedatepm(155, "3:05", "7/24/22","7/23/22")
-pm_data <- changedatepm(155, "5:20", "7/26/22","7/25/22")
-#ID 156
-pm_data <- changedatepm(156, "0:23", "7/15/22","7/14/22")
-#ID 157
-pm_data <- changedatepm(156, "1:24", "7/21/22","7/20/22")
-#ID 160
-pm_data%>% filter(ID == 160)%>% select(ID, daterated, time_pm)
-pm_data <- changedatepm(160, "0:01", "7/28/22","7/27/22")
-#ID 161
-pm_data%>% filter(ID == 161)%>% select(ID, daterated, time_pm)
-pm_data <- changedatepm(161, "0:21", "7/31/22","7/30/22")
-
+# changedatepm <- function(id, time, olddate, newdate){
+#   pm_data %>%
+#   mutate(daterated = case_when(
+#     ID== id & time_pm == time & daterated == mdy(olddate) ~ mdy(newdate),
+#     TRUE ~ daterated
+#   ))
+#   
+# }
+# #filter each priordaydupe ID to examine duplicates and changedatepm if applicable 
+# pm_data%>% filter(ID == 109)%>% select(ID, daterated, time_pm)
+# #changing 4/20 first dup to 4/19
+# pm_data <- pm_data %>%
+#   mutate(daterated = case_when(
+#     ID== 103 & time_pm == "0:05" & daterated == mdy("4/20/21") ~ mdy("4/19/21"),
+#     TRUE ~ daterated
+#   ))
+# 
+# #ID 103 
+# pm_data <- changedatepm(103, "0:05", "4/20/21","4/19/21")
+# pm_data <- changedatepm(103, "1:58", "4/24/21","4/23/21")
+# pm_data <- changedatepm(103, "0:12", "4/26/21","4/25/21")
+# pm_data <- changedatepm(103, "1:55", "5/09/21","5/08/21")
+# #ID 105
+# pm_data <- changedatepm(105, "6:08", "5/09/21","5/08/21")
+# pm_data <- changedatepm(105, "9:03", "5/07/21","5/06/21")
+# pm_data <- changedatepm(105, "7:11", "5/13/21","5/12/21")
+# pm_data <- changedatepm(105, "7:09", "5/18/21","5/17/21")
+# #ID 106
+# pm_data <- changedatepm(106, "8:50", "5/12/21","5/11/21")
+# #ID 107 
+# pm_data <- changedatepm(107, "4:35", "5/25/21","5/24/21")
+# pm_data <- changedatepm(107, "5:19", "6/06/21","6/05/21")
+# #ID 108
+# pm_data <- changedatepm(108, "0:46", "6/16/21","6/15/21")
+# pm_data <- changedatepm(108, "9:45", "6/20/21","6/19/21")
+# #ID 109 
+# pm_data <- changedatepm(109, "0:08", "6/07/21","6/06/21")
+# pm_data <- changedatepm(109, "6:17", "6/13/21","6/12/21")
+# pm_data <- changedatepm(109, "7:44", "6/15/21","6/14/21")
+# pm_data <- changedatepm(109, "9:48", "6/24/21","6/23/21")
+# #ID 111
+# pm_data <- changedatepm(111, "7:11", "6/20/21","6/19/21")
+# pm_data <- changedatepm(111, "6:34", "6/22/21","6/21/21")
+# #ID 113 
+# pm_data <- changedatepm(113, "8:22", "6/18/21","6/17/21")
+# pm_data <- changedatepm(113, "5:32", "6/20/21","6/19/21")
+# pm_data <- changedatepm(113, "5:52", "6/23/21","6/22/21")
+# pm_data <- changedatepm(113, "0:17", "7/06/21","7/05/21")
+# pm_data <- changedatepm(113, "10:50", "7/11/21","7/10/21")
+# pm_data <- changedatepm(113, "3:41", "7/14/21","7/13/21")
+# #ID 114
+# pm_data <- changedatepm(114, "8:24", "6/20/21","6/19/21")
+# pm_data <- changedatepm(114, "9:36", "6/25/21","6/24/21")
+# pm_data <- changedatepm(114, "5:57", "7/04/21","7/03/21")
+# pm_data <- changedatepm(114, "5:59", "7/04/21","7/03/21")
+# pm_data <- changedatepm(114, "4:46", "7/06/21","7/05/21")
+# pm_data <- changedatepm(114, "4:51", "7/06/21","7/05/21")
+# #ID 112
+# pm_data <- changedatepm(112, "7:23", "6/24/21","6/23/21")
+# pm_data <- changedatepm(112, "4:59", "6/28/21","6/27/21")
+# pm_data <- changedatepm(112, "0:03", "7/04/21","7/03/21")
+# #ID 117
+# pm_data <- changedatepm(117, "1:12", "7/09/21","7/08/21")
+# pm_data <- changedatepm(117, "0:38", "7/16/21","7/15/21")
+# pm_data <- changedatepm(117, "8:36", "7/24/21","7/23/21")
+# pm_data <- changedatepm(117, "2:11", "7/26/21","7/25/21")
+# #ID 118
+# pm_data <- changedatepm(118, "10:36", "8/13/21","8/12/21")
+# pm_data <- changedatepm(118, "6:03", "8/15/21","8/14/21")
+# pm_data <- changedatepm(118, "7:42", "8/21/21","8/20/21")
+# pm_data <- changedatepm(118, "6:18", "8/25/21","8/24/21")
+# pm_data <- changedatepm(118, "8:21", "9/01/21","8/31/21")
+# pm_data <- changedatepm(118, "9:11", "9/05/21","9/04/21")
+# #ID 124
+# pm_data <- changedatepm(124, "0:05", "9/02/21","9/01/21")
+# pm_data <- changedatepm(124, "0:01", "9/05/21","9/04/21")
+# #ID 125
+# pm_data <- changedatepm(125, "10:02", "8/26/21","8/25/21")
+# pm_data <- changedatepm(125, "9:49", "8/28/21","8/27/21")
+# pm_data <- changedatepm(125, "9:49", "8/28/21","8/27/21")
+# pm_data <- changedatepm(125, "4:57", "1/20/22","1/19/22")
+# #ID 128
+# pm_data <- changedatepm(128, "7:35", "8/27/21","8/26/21")
+# pm_data <- changedatepm(128, "0:26", "9/04/21","9/03/21")
+# pm_data <- changedatepm(128, "1:04", "9/11/21","9/10/21")
+# #ID 130
+# pm_data%>% filter(ID == 130)%>% select(ID, daterated, time_pm)
+# pm_data <- changedatepm(130, "9:02", "9/11/21","9/10/21")
+# pm_data <- changedatepm(130, "8:00", "9/03/21","9/02/21")
+# pm_data <- changedatepm(130, "7:21", "9/13/21","9/12/21")
+# pm_data <- changedatepm(130, "9:57", "9/25/21","9/24/21")
+# #ID 129
+# pm_data <- changedatepm(129, "2:01", "9/19/21","9/18/21")
+# pm_data <- changedatepm(129, "0:22", "9/21/21","9/20/21")
+# pm_data <- changedatepm(129, "0:22", "9/27/21","9/26/21")
+# #ID 127
+# pm_data <- changedatepm(127, "10:42", "9/12/21","9/11/21")
+# #ID 132
+# pm_data <- changedatepm(132, "0:09", "10/21/21","10/20/21")
+# pm_data <- changedatepm(132, "0:21", "10/23/21","10/22/21")
+# pm_data <- changedatepm(132, "0:02", "11/04/21","11/03/21")
+# pm_data <- changedatepm(132, "0:05", "11/06/21","11/05/21")
+# #ID 133
+# pm_data <- changedatepm(133, "0:02", "11/06/21","11/05/21")
+# pm_data <- changedatepm(133, "8:26", "11/18/21","11/17/21")
+# pm_data <- changedatepm(133, "8:26", "11/18/21","11/17/21")
+# #ID 136
+# pm_data%>% filter(ID == 136)%>% select(ID, daterated, time_pm)
+# pm_data <- changedatepm(136, "0:39", "12/09/21","12/08/21")
+# pm_data <- changedatepm(136, "0:01", "12/16/21","12/15/21")
+# pm_data <- changedatepm(136, "0:22", "12/20/21","12/19/21")
+# pm_data <- changedatepm(136, "0:08", "12/22/21","12/21/21")
+# pm_data <- changedatepm(136, "0:20", "12/25/21","12/24/21")
+# pm_data <- changedatepm(136, "0:56", "12/30/21","12/29/21")
+# #ID 138
+# pm_data <- changedatepm(138, "7:02", "2/11/22","2/10/22")
+# #ID 140
+# pm_data <- changedatepm(140, "5:33", "2/10/22","2/09/22")
+# #ID 139
+# pm_data <- changedatepm(139, "4:08", "2/06/22","2/05/22")
+# pm_data <- changedatepm(139, "4:33", "2/14/22","2/13/22")
+# pm_data <- changedatepm(139, "0:46", "2/21/22","2/20/22")
+# pm_data <- changedatepm(139, "1:52", "2/24/22","2/23/22")
+# #ID 143
+# pm_data <- changedatepm(143, "2:04", "2/12/22","2/11/22")
+# #ID 141
+# pm_data <- changedatepm(141, "7:45", "2/02/22","2/01/22")
+# pm_data <- changedatepm(141, "0:01", "2/04/22","2/03/22")
+# pm_data <- changedatepm(141, "0:13", "2/06/22","2/05/22")
+# pm_data <- changedatepm(141, "7:24", "2/09/22","2/08/22")
+# pm_data <- changedatepm(141, "6:56", "2/21/22","2/20/22")
+# pm_data <- changedatepm(141, "0:02", "2/25/22","2/24/22")
+# #ID 146
+# pm_data <- changedatepm(146, "0:04", "3/07/22","3/06/22")
+# pm_data <- changedatepm(146, "10:26", "3/27/22","3/26/22")
+# #ID 145
+# pm_data <- changedatepm(145, "0:08", "3/14/22","3/13/22")
+# #ID 147
+# pm_data <- changedatepm(147, "0:14", "4/24/22","4/23/22")
+# #ID 148
+# pm_data <- changedatepm(148, "0:18", "5/21/22","5/20/22")
+# pm_data <- changedatepm(148, "0:34", "5/29/22","5/28/22")
+# pm_data <- changedatepm(148, "0:06", "6/20/22","6/19/22")
+# #ID 149
+# pm_data <- changedatepm(149, "0:06", "5/31/22","5/30/22")
+# #ID 150
+# pm_data <- changedatepm(150, "0:34", "5/31/22","5/30/22")
+# pm_data <- changedatepm(150, "12:10", "6/07/22","6/06/22")
+# pm_data <- changedatepm(150, "10:53", "6/17/22","6/16/22")
+# #ID 152
+# pm_data <- changedatepm(152, "6:38", "7/11/22","7/10/22")
+# pm_data <- changedatepm(152, "7:41", "7/14/22","7/13/22")
+# #ID 154
+# pm_data <- changedatepm(154, "0:00", "6/26/22","6/25/22")
+# pm_data <- changedatepm(154, "0:02", "6/30/22","6/29/22")
+# pm_data <- changedatepm(154, "0:36", "7/06/22","7/05/22")
+# pm_data <- changedatepm(154, "1:19", "7/09/22","7/08/22")
+# pm_data <- changedatepm(154, "0:24", "7/13/22","7/12/22")
+# #ID 153
+# pm_data <- changedatepm(153, "0:07", "6/28/22","6/27/22")
+# #ID 155
+# pm_data <- changedatepm(155, "0:44", "7/17/22","7/16/22")
+# pm_data <- changedatepm(155, "0:19", "7/22/22","7/21/22")
+# pm_data <- changedatepm(155, "3:05", "7/24/22","7/23/22")
+# pm_data <- changedatepm(155, "5:20", "7/26/22","7/25/22")
+# #ID 156
+# pm_data <- changedatepm(156, "0:23", "7/15/22","7/14/22")
+# #ID 157
+# pm_data <- changedatepm(156, "1:24", "7/21/22","7/20/22")
+# #ID 160
+# pm_data%>% filter(ID == 160)%>% select(ID, daterated, time_pm)
+# pm_data <- changedatepm(160, "0:01", "7/28/22","7/27/22")
+# #ID 161
+# pm_data%>% filter(ID == 161)%>% select(ID, daterated, time_pm)
+# pm_data <- changedatepm(161, "0:21", "7/31/22","7/30/22")
 ```
 
 [1] "The survey does not exist for the day before 2021-04-20 for the id number 103" #changed
@@ -1044,16 +1051,6 @@ am_data = subset(am_data, select=-c(time_am))
 
 pm_data = subset(pm_data, select=-c(time_pm))
 ```
-
-#drop ID 127 per Annie Griffith's recommendation (not much data for this ID)
-```{r}
-
-am_data <- subset(am_data, ID != 127)
-
-pm_data <- subset(pm_data, ID != 127)
-
-```
-
 
 
 #IDs in both am and pm datasets: 
