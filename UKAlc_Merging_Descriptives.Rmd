@@ -624,13 +624,14 @@ result.pm <- pm_data %>%
   summarise(observations = n())
 
 dupdate_pm <- subset(result.pm, observations != 1)
+View(dupdate_pm)
 
 #PM Duplicates 
-#ID 103 
+#ID 106
+##Anna: start here and don't run this 
 pm_data %>%
-  filter(ID == 103 & daterated == ymd("2021-04-20"))
-
-pm_data <- pm_data[!(pm_data$ID == 103 & pm_data$daterated == "2021-04-20" & pm_data$time_pm == ""), ] 
+  filter(ID == 106 & daterated == ymd("2021-04-24"))
+pm_data <- pm_data[!(pm_data$ID == 106 & pm_data$daterated == "" & pm_data$time_pm == ""), ] 
 
 pm_data %>%
   filter(ID == 103 & daterated == ymd("2021-04-24"))
