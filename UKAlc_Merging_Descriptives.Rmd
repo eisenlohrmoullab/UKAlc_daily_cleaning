@@ -624,11 +624,7 @@ result.pm <- pm_data %>%
   summarise(observations = n())
 
 dupdate_pm <- subset(result.pm, observations != 1)
-```
 
-
-#Remove PM Duplicates
-```{r}
 #PM Duplicates 
 #ID 103 
 pm_data %>%
