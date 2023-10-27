@@ -133,7 +133,10 @@ pm_data$time <- lubridate::hm(pm_data$time)
 pm_data$daterated <- lubridate::mdy(pm_data$daterated)
 
 #flag observations that were done before 12pm 
-pm_data <- pm_data %>% mutate(pm_data, b4noon = ifelse(time < lubridate::hm("12:00"),1, 0))%>% select(ID, daterated, time, DateTime, b4noon) 
+pm_data <- pm_data %>% mutate(pm_data, b4noon = ifelse(time < lubridate::hm("12:00"),1, 0)) 
+
+  #this below here was initially a pipe with line 136  
+#select(ID, daterated, time, DateTime, b4noon) 
 
 #if b4noon = 1, change pm_data$daterated - 1
 
@@ -256,7 +259,7 @@ dupdate_pm <- subset(result.pm, observations != 1)
 dupdate_pm
 ```
 
-#Remove rows so that we no longer have >1 submission per am or pm data per date. Kept earliest timestamp if all submissions are identical, or kept most complete form if some are more completed than others. 
+#Remove am_data rows so that we no longer have >1 submission per am or pm data per date. Kept earliest timestamp if all submissions are identical, or kept most complete form if some are more completed than others. 
 ```{r}
 #remove duplicates for 106 on 2021-05-09 
 am_data %>%
@@ -381,6 +384,15 @@ am_data <- am_data[!(am_data$ID == 180 & am_data$daterated == "2023-03-26" & am_
 #remove duplicates for 181 on 2023-03-22
 am_data <- am_data[!(am_data$ID == 181 & am_data$daterated == "2023-03-22" & am_data$time_am == "13:46"), ] 
 ```
+
+#Remove pm_data rows so that we no longer have >1 submission per am or pm data per date. Kept earliest timestamp if all submissions are identical, or kept most complete form if some are more completed than others.
+```{r}
+pm_data %>%
+  filter(ID == 106 & daterated == ymd("2021-05-08"))
+
+pm_data <- pm_data[!(pm_data$ID == 106 & pm_data$daterated == "2021-05-09" & pm_data$time_pm == "10:02"), ]
+```
+
 
 #Filter out variables of interest from am_data 
 ```{r}
