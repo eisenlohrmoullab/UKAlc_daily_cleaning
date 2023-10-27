@@ -145,19 +145,20 @@ pm_data <- pm_data %>%
 
  
 
-pm_data %>% select(ID, daterated, time, DateTime, b4noon) 
+#pm_data %>% select(ID, daterated, time, DateTime, b4noon) 
 
-
+#daterated variable still here after running above line without line 148 
 ```
 
 ```{r}
 #Transform daterated into a date variable so R can recognize as date variable
+
 am_data$daterated <- lubridate::mdy(am_data$daterated)
-pm_data$daterated <- lubridate::mdy(pm_data$daterated)
+#pm_data$daterated <- lubridate::mdy(pm_data$daterated) #the issue with daterated variable dissappearing when looking for duplicates appears to be this line. When I ran the code with this line and the other line on this R chunk commented out, the dupdate function worked. 
 
 #Remove DateTime column from df 
 am_data = subset(am_data, select = -c(DateTime))
-pm_data = subset(pm_data, select = -c(DateTime))
+#pm_data = subset(pm_data, select = -c(DateTime))
 ```
 
 ```{r}
