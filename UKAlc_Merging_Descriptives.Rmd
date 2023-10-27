@@ -245,6 +245,14 @@ result.am <- am_data %>%
   summarise(observations = n())
 
 dupdate_am <- subset(result.am, observations != 1)
+dupdate_am
+
+result.pm <- pm_data %>%
+  group_by(ID, daterated) %>%
+  summarise(observations = n())
+
+dupdate_pm <- subset(result.pm, observations != 1)
+dupdate_pm
 ```
 
 #Remove rows so that we no longer have >1 submission per am or pm data per date. Kept earliest timestamp if all submissions are identical, or kept most complete form if some are more completed than others. 
