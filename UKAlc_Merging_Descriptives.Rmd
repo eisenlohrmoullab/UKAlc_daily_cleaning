@@ -387,10 +387,19 @@ am_data <- am_data[!(am_data$ID == 181 & am_data$daterated == "2023-03-22" & am_
 
 #Remove pm_data rows so that we no longer have >1 submission per am or pm data per date. Kept earliest timestamp if all submissions are identical, or kept most complete form if some are more completed than others.
 ```{r}
+#use this code to filter data pm_data %>%
+  #filter(ID == x & daterated == ymd("x"))
+#ID 106
+pm_data <- pm_data[!(pm_data$ID == 106 & pm_data$daterated == "2021-05-08" & pm_data$time_pm == "10H 0M 0S"), ]
+pm_data <- pm_data[!(pm_data$ID == 106 & pm_data$daterated == "2021-05-13" & pm_data$time_pm == "4H 57M 0S"), ]
+pm_data <- pm_data[!(pm_data$ID == 106 & pm_data$daterated == "2021-05-19" & pm_data$time_pm == "4H 52M 0S"), ]
+pm_data <- pm_data[!(pm_data$ID == 106 & pm_data$daterated == "2021-05-22" & pm_data$time_pm == "10H 32M 0S"), ]
+pm_data <- pm_data[!(pm_data$ID == 106 & pm_data$daterated == "2021-05-23" & pm_data$time_pm == "13H 8M 0S"), ]
+pm_data <- pm_data[!(pm_data$ID == 106 & pm_data$daterated == "2021-05-24" & pm_data$time_pm == "7H 18M 0S"), ]
+#ID 107
 pm_data %>%
-  filter(ID == 106 & daterated == ymd("2021-05-08"))
+  filter(ID == 107 & daterated == ymd("2021-05-29"))
 
-pm_data <- pm_data[!(pm_data$ID == 106 & pm_data$daterated == "2021-05-09" & pm_data$time_pm == "10:02"), ]
 ```
 
 
