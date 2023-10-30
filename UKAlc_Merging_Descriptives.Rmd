@@ -233,6 +233,12 @@ am_data <- am_data %>% drop_na(daterated, ID)
 pm_data <- pm_data %>% drop_na(daterated, ID)
 ```
 
+#Remove X_pm column from pm_data 
+```{r}
+pm_data = subset(pm_data, select=-c(X_pm))
+```
+
+
 #drop ID 127 per Annie Griffith's recommendation (not much data for this ID)
 ```{r}
 
@@ -559,6 +565,22 @@ hist(am_datashort$Alc_Amt_am)
 #create a new variable that's did you drink -> 1 not drink -> 0 
 #create new variable heavy drinking (>4) -> 1 , <4 gets 0 
 ```
+#Filter out variables of interest from pm_data 
+```{r}
+pm_datashort <- pm_data %>% select(ID,
+                          daterated,
+                          Mar_am,
+                          Alc_Amt_am,
+                          Alc_Time_am,
+                          Alc_Dur_am,
+                          Alc_Drunk_am,
+                          Alc_Drunk_txt_am)
+am_datashort
+#make histogram of alcohol amount am 
+#make Alc_Amt_am numeric first 
+am_datashort$Alc_Amt_am <- as.numeric(am_datashort$Alc_Amt_am)
+hist(am_datashort$Alc_Amt_am)
+```
 
 
 #Previous Day Survey Check Before Removing PM Duplicates 
@@ -782,29 +804,29 @@ hist(am_datashort$Alc_Amt_am)
 
 #Remove pm duplicates
 ```{r}
-result.pm <- pm_data %>%
-  group_by(ID, daterated) %>%
-  summarise(observations = n())
+#result.pm <- pm_data %>%
+  #group_by(ID, daterated) %>%
+  #summarise(observations = n())
 
-dupdate_pm <- subset(result.pm, observations != 1)
-View(dupdate_pm)
+#dupdate_pm <- subset(result.pm, observations != 1)
+#View(dupdate_pm)
 
 #PM Duplicates 
 #ID 106
 ##Anna: start here 
-pm_data %>%
-  filter(ID == 106 & daterated == ymd("2021-04-24"))
-pm_data <- pm_data[!(pm_data$ID == 106 & pm_data$daterated == "" & pm_data$time_pm == ""), ] 
-
-pm_data %>%
-  filter(ID == 103 & daterated == ymd("2021-04-24"))
-
-pm_data <- pm_data[!(pm_data$ID == 103 & pm_data$daterated == "2021-04-24" & pm_data$time_pm == ""), ] 
-
-pm_data %>%
-  filter(ID == 103 & daterated == ymd("2021-04-26"))
-
-pm_data <- pm_data[!(pm_data$ID == 103 & pm_data$daterated == "2021-04-26" & pm_data$time_pm == "0:12"), ] 
+# pm_data %>%
+#   filter(ID == 106 & daterated == ymd("2021-04-24"))
+# pm_data <- pm_data[!(pm_data$ID == 106 & pm_data$daterated == "" & pm_data$time_pm == ""), ] 
+# 
+# pm_data %>%
+#   filter(ID == 103 & daterated == ymd("2021-04-24"))
+# 
+# pm_data <- pm_data[!(pm_data$ID == 103 & pm_data$daterated == "2021-04-24" & pm_data$time_pm == ""), ] 
+# 
+# pm_data %>%
+#   filter(ID == 103 & daterated == ymd("2021-04-26"))
+# 
+# pm_data <- pm_data[!(pm_data$ID == 103 & pm_data$daterated == "2021-04-26" & pm_data$time_pm == "0:12"), ] 
 ```
 
 #remove IDs = NA 
@@ -832,9 +854,9 @@ Remove by time using subset. If they are exactly the same, keep the earliest one
 
 #Drop Time Variable 
 ```{r}
-am_data = subset(am_data, select=-c(time_am))
+#am_data = subset(am_data, select=-c(time_am))
 
-pm_data = subset(pm_data, select=-c(time_pm))
+#pm_data = subset(pm_data, select=-c(time_pm))
 ```
 
 
