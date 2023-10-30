@@ -520,6 +520,10 @@ pm_data <- pm_data[!(pm_data$ID == 171 & pm_data$daterated == "2022-10-13" & pm_
 pm_data %>%
   filter(ID == 171 & daterated == ymd("2022-10-31"))
 pm_data <- pm_data[!(pm_data$ID == 171 & pm_data$daterated == "2022-10-31" & pm_data$time_pm == "20H 36M 0S"), ]
+#ID 180
+pm_data %>%
+  filter(ID == 180 & daterated == ymd("2023-04-15"))
+pm_data <- pm_data[!(pm_data$ID == 180 & pm_data$daterated == "2023-04-15" & pm_data$time_pm == "22H 7M 0S"), ]
 
 ```
 
