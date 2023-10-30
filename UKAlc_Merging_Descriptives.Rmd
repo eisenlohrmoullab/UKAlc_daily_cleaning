@@ -569,17 +569,19 @@ hist(am_datashort$Alc_Amt_am)
 ```{r}
 pm_datashort <- pm_data %>% select(ID,
                           daterated,
-                          Mar_am,
-                          Alc_Amt_am,
-                          Alc_Time_am,
-                          Alc_Dur_am,
-                          Alc_Drunk_am,
-                          Alc_Drunk_txt_am)
-am_datashort
-#make histogram of alcohol amount am 
-#make Alc_Amt_am numeric first 
-am_datashort$Alc_Amt_am <- as.numeric(am_datashort$Alc_Amt_am)
-hist(am_datashort$Alc_Amt_am)
+                          Urg_Alc_pm,
+                          Urg_Mar_pm,
+                          Urg_Nic_pm,
+                          Sp_Food_Crav_pm,
+                          OverEat_pm,
+                          Diff_Inhib_pm,
+                          Diff_Stop_pm,
+                          Loss_Control_pm,
+                          )
+pm_datashort
+#makae variables of interest numberic before making histograms 
+pm_datashort$Urg_Alc_pm <- as.numeric(pm_datashort$Urg_Alc_pm)
+hist(pm_datashort$Urg_Alc_pm)
 ```
 
 
