@@ -524,6 +524,14 @@ pm_data <- pm_data[!(pm_data$ID == 171 & pm_data$daterated == "2022-10-31" & pm_
 pm_data %>%
   filter(ID == 180 & daterated == ymd("2023-04-15"))
 pm_data <- pm_data[!(pm_data$ID == 180 & pm_data$daterated == "2023-04-15" & pm_data$time_pm == "22H 7M 0S"), ]
+#ID 181
+pm_data %>%
+  filter(ID == 181 & daterated == ymd("2023-03-22"))
+pm_data <- pm_data[!(pm_data$ID == 181 & pm_data$daterated == "2023-03-22" & pm_data$time_pm == "19H 13M 0S"), ]
+#ID 185
+pm_data %>%
+  filter(ID == 185 & daterated == ymd("2023-05-29"))
+pm_data <- pm_data[!(pm_data$ID == 185 & pm_data$daterated == "2023-05-29" & pm_data$time_pm == "23H 34M 0S"), ]
 
 ```
 
