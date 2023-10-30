@@ -495,6 +495,10 @@ pm_data <- pm_data[!(pm_data$ID == 149 & pm_data$daterated == "2022-06-10" & pm_
 pm_data %>%
   filter(ID == 150 & daterated == ymd("2022-06-07"))
 pm_data <- pm_data[!(pm_data$ID == 150 & pm_data$daterated == "2022-06-07" & pm_data$time_pm == "21H 34M 0S"), ]
+#ID 153
+pm_data %>%
+  filter(ID == 153 & daterated == ymd("2022-06-23"))
+pm_data <- pm_data[!(pm_data$ID == 153 & pm_data$daterated == "2022-06-23" & pm_data$time_pm == "8H 24M 0S"), ]
 
 ```
 
