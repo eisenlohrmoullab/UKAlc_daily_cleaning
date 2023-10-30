@@ -584,6 +584,14 @@ pm_datashort$Urg_Alc_pm <- as.numeric(pm_datashort$Urg_Alc_pm)
 hist(pm_datashort$Urg_Alc_pm)
 ```
 
+#Add in cycle day 
+```{r}
+#menses.dates <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/01_raw_data/Period Start Dates.csv")
+ 
+menses.dates <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/01_raw_data/Period Start Dates.csv")
+```
+
+
 
 #Previous Day Survey Check Before Removing PM Duplicates 
 
