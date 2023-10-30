@@ -414,7 +414,21 @@ pm_data %>%
 pm_data <- pm_data[!(pm_data$ID == 113 & pm_data$daterated == "2021-07-05" & pm_data$time_pm == "0H 21M 0S"), ]
 #ID 114
 pm_data %>%
-  filter(ID == 113 & daterated == ymd("2021-07-05"))
+  filter(ID == 114 & daterated == ymd("2021-07-03"))
+pm_data <- pm_data[!(pm_data$ID == 114 & pm_data$daterated == "2021-07-03" & pm_data$time_pm == "5H 57M 0S"), ]
+pm_data %>%
+  filter(ID == 114 & daterated == ymd("2021-07-05"))
+pm_data <- pm_data[!(pm_data$ID == 114 & pm_data$daterated == "2021-07-05" & pm_data$time_pm == "4H 46M 0S"), ]
+pm_data %>%
+  filter(ID == 114 & daterated == ymd("2021-07-09"))
+pm_data <- pm_data[!(pm_data$ID == 114 & pm_data$daterated == "2021-07-09" & pm_data$time_pm == "21H 43M 0S"), ]
+pm_data <- pm_data[!(pm_data$ID == 114 & pm_data$daterated == "2021-07-09" & pm_data$time_pm == "21H 44M 0S"), ]
+pm_data %>%
+  filter(ID == 114 & daterated == ymd("2021-07-11"))
+pm_data <- pm_data[!(pm_data$ID == 114 & pm_data$daterated == "2021-07-11" & pm_data$time_pm == "20H 46M 0S"), ]
+pm_data %>%
+  filter(ID == 114 & daterated == ymd("2021-07-14"))
+pm_data <- pm_data[!(pm_data$ID == 114 & pm_data$daterated == "2021-07-14" & pm_data$time_pm == "7H 48M 0S"), ]
 
 ```
 
