@@ -450,6 +450,28 @@ pm_data <- pm_data[!(pm_data$ID == 115 & pm_data$daterated == "2021-07-19" & pm_
 pm_data %>%
   filter(ID == 118 & daterated == ymd("2021-08-08"))
 pm_data <- pm_data[!(pm_data$ID == 118 & pm_data$daterated == "2021-08-08" & pm_data$time_pm == "12H 26M 0S"), ]
+#ID 119 
+pm_data %>%
+  filter(ID == 119 & daterated == ymd("2021-08-03"))
+pm_data <- pm_data[!(pm_data$ID == 119 & pm_data$daterated == "2021-08-03" & pm_data$time_pm == "21H 58M 0S"), ]
+pm_data %>%
+  filter(ID == 119 & daterated == ymd("2021-08-08"))
+pm_data <- pm_data[!(pm_data$ID == 119 & pm_data$daterated == "2021-08-08" & pm_data$time_pm == "20H 50M 0S"), ]
+pm_data %>%
+  filter(ID == 119 & daterated == ymd("2021-08-13"))
+pm_data <- pm_data[!(pm_data$ID == 119 & pm_data$daterated == "2021-08-13" & pm_data$time_pm == "5H 37M 0S"), ]
+pm_data %>%
+  filter(ID == 119 & daterated == ymd("2021-08-20"))
+pm_data <- pm_data[!(pm_data$ID == 119 & pm_data$daterated == "2021-08-20" & pm_data$time_pm == "23H 28M 0S"), ]
+pm_data %>%
+  filter(ID == 119 & daterated == ymd("2021-08-22"))
+pm_data <- pm_data[!(pm_data$ID == 119 & pm_data$daterated == "2021-08-22" & pm_data$time_pm == "5H 40M 0S"), ]
+pm_data %>%
+  filter(ID == 119 & daterated == ymd("2021-08-24"))
+pm_data <- pm_data[!(pm_data$ID == 119 & pm_data$daterated == "2021-08-24" & pm_data$time_pm == "16H 23M 0S"), ]
+pm_data %>%
+  filter(ID == 119 & daterated == ymd("2021-08-27"))
+pm_data <- pm_data[!(pm_data$ID == 119 & pm_data$daterated == "2021-08-27" & pm_data$time_pm == "21H 40M 0S"), ]
 
 ```
 
