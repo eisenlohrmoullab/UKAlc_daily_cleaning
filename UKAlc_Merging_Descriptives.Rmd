@@ -503,6 +503,13 @@ pm_data <- pm_data[!(pm_data$ID == 153 & pm_data$daterated == "2022-06-23" & pm_
 pm_data %>%
   filter(ID == 159 & daterated == ymd("2022-07-17"))
 pm_data <- pm_data[!(pm_data$ID == 159 & pm_data$daterated == "2022-07-17" & pm_data$time_pm == "6H 40M 0S"), ]
+#ID 168
+pm_data %>%
+  filter(ID == 168 & daterated == ymd("2022-09-25"))
+pm_data <- pm_data[!(pm_data$ID == 168 & pm_data$daterated == "2022-09-25" & pm_data$time_pm == "20H 23M 0S"), ]
+pm_data %>%
+  filter(ID == 168 & daterated == ymd("2022-10-09"))
+pm_data <- pm_data[!(pm_data$ID == 168 & pm_data$daterated == "2022-10-09" & pm_data$time_pm == "18H 47M 0S"), ]
 
 ```
 
