@@ -18,17 +18,57 @@ LH.Count <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR La
 
 #Rename LH test and ovulation date columns 
 ```{r pressure, echo=FALSE}
+LH.Count$ovpos <- 1 
+
 #Parse Ovulation.Date into mdy 
 LH.Count$Ovulation.Date <- mdy(LH.Count$Ovulation.Date)
 
 #Add new column for ovpos (extrapolating from LH pos test date)
-LH.Count$ovpos <- c(LH.Count$Ovulation.Date) + 1 
+LH.Count$daterated <- c(LH.Count$Ovulation.Date) + 1 
 
 #Rename Ovulation Date 
 LH.Count$LH.test <- LH.Count$Ovulation.Date
 
 #Remove Ovulation Date Column 
 LH.Count <- subset(LH.Count, select = -Ovulation.Date)
+
+#Remove NAs for ovday 
+LH.Count <- LH.Count[complete.cases(LH.Count), ]                   
 ```
 
+#create daycountLH: count from -7 to +10 surrounding ovulation as day 0
+```{r}
+
+#make A a new temp column where pt received pos ov test
+LH.Count$A <- LH.Count$ovpos
+
+#Fill in missing days by ID 
+LH.Count <- LH.Count %>% group_by(ID) %>%
+  complete(daterated = seq.Date((daterated)-7, max(daterated)+15, by = "day"))
+
+#Change NAs to 0 for ovpos column 
+LH.Count$ovpos[is.na(LH.Count$ovpos)] <- 0
+
+#FUNCTION for calculating the sequence
+LHCount <- function(x) {
+  #Get the index of 1
+  inds <- which(x == 1)
+  if(!length(inds)) return(0) 
+  #Create a sequence with that index as 0
+  num <- lapply(inds, function(i) {
+    num <- seq_along(x) - i
+    num[num < -7 | num > 15] <- NA 
+    num
+  })
+  #Select the first non-NA values from the sequence
+  do.call(coalesce, num)
+}
+
+#run the LHCount function and save it as as a new column called daycountLH
+LH.Count <- LH.Count %>% group_by(ID) %>% 
+  mutate(daycountLH = LHCount(A))
+#remove the temp column A
+LH.Count <- LH.Count %>% select(!A)
+
+```
 
