@@ -873,6 +873,7 @@ cycleday.am.merge %>% write.csv("Cycleday.am.LH.menses.data.csv")
 #as factor for each variable, then rename levels as factors - update data dictionary so you know max/min when factoring. Then do as numeric. It may automatically do numeric but double-check. 
 #Calculate luteal phase by subtracting the period start date column by posov_pred column but group by person first! 
 
+####do person means centered code and then make histogram of all the data regardless of what time is. Don't do time or cycle phase. 
 
 
 #Code below is potentially all going to be deleted. These were things I was trying out while cleaning the data. 
