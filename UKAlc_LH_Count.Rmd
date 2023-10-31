@@ -18,22 +18,21 @@ LH.Count <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR La
 
 #Rename LH test and ovulation date columns 
 ```{r pressure, echo=FALSE}
-LH.Count$ovpos <- 1 
-
 #Parse Ovulation.Date into mdy 
 LH.Count$Ovulation.Date <- mdy(LH.Count$Ovulation.Date)
 
 #Add new column for ovpos (extrapolating from LH pos test date)
 LH.Count$daterated <- c(LH.Count$Ovulation.Date) + 1 
 
-#Rename Ovulation Date 
-LH.Count$LH.test <- LH.Count$Ovulation.Date
+LH.Count$ovpos <- 1 
 
 #Remove Ovulation Date Column 
 LH.Count <- subset(LH.Count, select = -Ovulation.Date)
 
 #Remove NAs for ovday 
-LH.Count <- LH.Count[complete.cases(LH.Count), ]                   
+LH.Count <- LH.Count[complete.cases(LH.Count), ]    
+
+LH.Count$posov_pred <- LH.Count$daterated
 ```
 
 #create daycountLH: count from -7 to +10 surrounding ovulation as day 0
@@ -69,6 +68,8 @@ LH.Count <- LH.Count %>% group_by(ID) %>%
   mutate(daycountLH = LHCount(A))
 #remove the temp column A
 LH.Count <- LH.Count %>% select(!A)
+
+write_csv(LH.Count, "UKAlc.LH.Data.csv")
 
 ```
 
