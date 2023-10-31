@@ -656,7 +656,7 @@ cycleday.pm.merge <- cycleday.pm.merge %>% mutate(cyclephase_count = case_when(p
 
 
 ```
-
+#This LH cyclephase code is adapted from github repository: code_templates/prep_Cycle Phase Coding 5 phase - ADHD-KY.Rmd starting at step 5a 
 ```{r cyclephase_LH}
 
 cycleday.am.merge <- cycleday.am.merge %>% 
@@ -760,8 +760,111 @@ cycleday.pm.merge <- cycleday.pm.merge %>% mutate(cyclephase_LH = case_when(peri
                                                      TRUE ~ as.numeric(NA)))
 
 ```
-                                                                        
-                                                                        
+  
+```{r}
+
+#check overlaps: goal is to only have 6 possible group combinations here (1 row per dummy coded phase, then a row where ALL are NA)
+cycleday.am.merge %>%
+  group_by(periov_LH, earlylut_LH, midluteal_LH, perimenstrual_LH, midfol_LH) %>%
+  summarize(n=n())
+#make note of errors
+
+
+#example code to review midfol_LH and perimenstrual_LH overlaps, if they exist
+cycleday.am.merge %>%
+  filter(midfol_LH==1) %>%
+  filter(perimenstrual_LH==1) %>%
+  select(id, daterated, posLHtoday, daycountLH,
+         menstrualbleeding,
+         firstdayofperiod, cycleday,
+         midfol_LH, periov_LH, earlylut_LH,
+         midluteal_LH, perimenstrual_LH) %>%
+  View()
+
+
+
+```                                                                        
+
+```{r}
+
+#check overlaps: goal is to only have 6 possible group combinations here (1 row per dummy coded phase, then a row where ALL are NA)
+cycleday.pm.merge %>%
+  group_by(periov_LH, earlylut_LH, midluteal_LH, perimenstrual_LH, midfol_LH) %>%
+  summarize(n=n())
+#make note of errors
+
+
+#example code to review midfol_LH and perimenstrual_LH overlaps, if they exist
+cycleday.pm.merge %>%
+  filter(midfol_LH==1) %>%
+  filter(perimenstrual_LH==1) %>%
+  select(id, daterated, posLHtoday, daycountLH,
+         menstrualbleeding,
+         firstdayofperiod, cycleday,
+         midfol_LH, periov_LH, earlylut_LH,
+         midluteal_LH, perimenstrual_LH) %>%
+  View()
+
+
+
+```    
+     
+#edit days that got double-counted
+```{r}
+
+cycleday.am.merge  <- cycleday.am.merge  %>%
+  #if perimenstrual by firstdayofperiod and midfol by pre-LH count are both 1, perimen wins, make midfol=0
+  mutate(midfol_LH = case_when(perimenstrual_LH==1 ~ 0,
+                                        TRUE ~ midfol_LH)) 
+
+#review midlut and perimens overlaps - can override midluteal with perimens IF luteal phase is short but still seems normal (such as 9-10 days)
+## make notes of any SUPER short luteal phases (like 4-5 days) that you might want to flag for anovulation
+cycleday.am.merge %>% filter(midluteal_LH==1 & perimenstrual_LH==1) %>% 
+  select(ID, daterated, daycountLH, cycleday, midluteal_LH, perimenstrual_LH)
+
+#code for if you are ready to override midluteals with perimens
+cycleday.am.merge  <- cycleday.am.merge  %>%
+  #if perimenstrual by firstdayofperiod and midlut by count after LH test are both 1, perimen wins, make midlut=0
+  mutate(midluteal_LH = case_when(perimenstrual_LH==1 ~ 0,
+                                        TRUE ~ midluteal_LH)) 
+
+## ANY OTHER COMBOS need hand review!!
+
+#good practice to review again and ensure that dummy code is fixed
+cycleday.am.merge %>%
+  group_by(periov_LH, earlylut_LH, midluteal_LH, perimenstrual_LH, midfol_LH) %>%
+  summarize(n=n())
+
+```                                                                        
+
+```{r}
+
+cycleday.pm.merge  <- cycleday.pm.merge  %>%
+  #if perimenstrual by firstdayofperiod and midfol by pre-LH count are both 1, perimen wins, make midfol=0
+  mutate(midfol_LH = case_when(perimenstrual_LH==1 ~ 0,
+                                        TRUE ~ midfol_LH)) 
+
+#review midlut and perimens overlaps - can override midluteal with perimens IF luteal phase is short but still seems normal (such as 9-10 days)
+## make notes of any SUPER short luteal phases (like 4-5 days) that you might want to flag for anovulation
+cycleday.pm.merge %>% filter(midluteal_LH==1 & perimenstrual_LH==1) %>% 
+  select(ID, daterated, daycountLH, cycleday, midluteal_LH, perimenstrual_LH)
+
+#code for if you are ready to override midluteals with perimens
+cycleday.pm.merge  <- cycleday.pm.merge  %>%
+  #if perimenstrual by firstdayofperiod and midlut by count after LH test are both 1, perimen wins, make midlut=0
+  mutate(midluteal_LH = case_when(perimenstrual_LH==1 ~ 0,
+                                        TRUE ~ midluteal_LH)) 
+
+## ANY OTHER COMBOS need hand review!!
+
+#good practice to review again and ensure that dummy code is fixed
+cycleday.pm.merge %>%
+  group_by(periov_LH, earlylut_LH, midluteal_LH, perimenstrual_LH, midfol_LH) %>%
+  summarize(n=n())
+
+```    
+
+
 #Code below is potentially all going to be deleted. These were things I was trying out while cleaning the data. 
 #Previous Day Survey Check Before Removing PM Duplicates 
 
