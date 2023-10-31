@@ -602,52 +602,24 @@ cycle.day <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR L
 ```{r}
 #use janitor package to make sure the 2 datasets can be merged
 #return=mismatch will return only columns that cannot merge
-menses.data <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/01_raw_data/Period Start Dates.csv")
 
-menses.am.merge <- merge(menses.data, am_data, by = "ID")
-menses.pm.merge <- merge(menses.data, pm_data, by = "ID")
+cycle.day$daterated <- mdy(cycle.day$daterated)
 
-#compare df 
-#Github from clear3 cleaning daily had this -> compare_df_cols(clear1daily, clear2daily, return = "mismatch") but I got an error message that compare_df_cols wasn't a function, so I did the below using setdiff instead 
-diff.am.menses <- setdiff(menses.data, am_data)
-diff.pm.menses <- setdiff(menses.data, pm_data)
+cycleday.am.merge <- merge(cycle.day, am_data, by = c("ID", "daterated"), all = T)
+cycleday.pm.merge <- merge(cycle.day, pm_data, by = c("ID", "daterated"), all = T)
 
-#address mismatches
-#examples from git: clear2daily$angrum <- as.numeric(clear2daily$angrum)
-#clear2daily <- clear2daily %>% mutate(across(starts_with("study"),as.numeric))
-
-#run compare df again
-compare_df_cols(menses.data, am_data, return = "mismatch")
-compare_df_cols(menses.data, pm_data, return = "mismatch")
 
 #MERGE!
-combineddaily.am <- bind_rows(menses.data, am_data)
-combineddaily.pm <- bind_rows(menses.data, pm_data)
-
-#delete column if all values are NA (ex: survey opened and nothing entered)
-not_all_NA <- function(x) any(!is.na(x))
-combineddaily.am <- combineddaily.am %>% select_if(not_all_NA)
-combineddaily.pm <- combineddaily.pm %>% select_if(not_all_NA)
-
-
+combineddaily.am <- bind_rows(cycle.day, am_data)
+combineddaily.pm <- bind_rows(cycle.day, pm_data)
 ```
-
-#create STUDY SAMPLE variable
+#Add in LH Data
 ```{r}
+LH.Count <- read.csv("/Users/apatte21/Documents/CLEAR Lab Repositories/UKAlc_daily_cleaning/UKAlc.LH.Data.csv")
 
-combineddaily <- combineddaily %>% mutate(CLEARstudysample = ifelse(id<100,1,2))
-
+cycleday.am.merge <- merge(LH.Count, am_data, by = c("ID", "daterated"), all = T)
+cycleday.pm.merge <- merge(LH.Count, pm_data, by = c("ID", "daterated"), all = T)
 ```
-
-
-### save file, run as its own chunk so you remember to rename!
-```{r}
-#CHANGE FILE NAME BELOW, then save!
-write_csv(combineddaily, "2021-08-30_CLEARCombinedDaily.csv")
-write_sav(combineddaily, "2021-08-30_CLEARCombinedDaily.sav")
-
-```
-
 
 #Previous Day Survey Check Before Removing PM Duplicates 
 
