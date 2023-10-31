@@ -624,6 +624,145 @@ write_csv(cycleday.am.merge, "Cycle_Day_LH_menses_am.csv")
 write_csv(cycleday.pm.merge, "Cycle_Day_LH_menses_pm.csv")
 ```
 
+
+```{r cyclephase_count}
+
+cycleday.am.merge <- cycleday.am.merge %>% 
+  mutate(midluteal_count = ifelse(cycleday >= -9 & cycleday <= -5, 1, 0),
+         perimenstrual_count = ifelse(cycleday >=-3 & cycleday <=2, 1, 0),
+         midfol_count = ifelse(cycleday >=4 & cycleday <=7, 1, 0),
+         periov_count = ifelse(cycleday >= -15 & cycleday <= -12, 1, 0))
+
+#add a non-dummy coded variable with all of cycle phase info above, which will be useful for future visualizations and summaries
+cycleday.am.merge <- cycleday.am.merge %>% mutate(cyclephase_count = case_when(periov_count==1 ~ 1,
+                                                     midluteal_count==1 ~ 2,
+                                                     perimenstrual_count==1 ~ 3,
+                                                     midfol_count==1 ~ 4,
+                                                     TRUE ~ as.numeric(NA)))
+
+cycleday.pm.merge <- cycleday.pm.merge %>% 
+  mutate(midluteal_count = ifelse(cycleday >= -9 & cycleday <= -5, 1, 0),
+         perimenstrual_count = ifelse(cycleday >=-3 & cycleday <=2, 1, 0),
+         midfol_count = ifelse(cycleday >=4 & cycleday <=7, 1, 0),
+         periov_count = ifelse(cycleday >= -15 & cycleday <= -12, 1, 0))
+
+#add a non-dummy coded variable with all of cycle phase info above, which will be useful for future visualizations and summaries
+cycleday.pm.merge <- cycleday.pm.merge %>% mutate(cyclephase_count = case_when(periov_count==1 ~ 1,
+                                                     midluteal_count==1 ~ 2,
+                                                     perimenstrual_count==1 ~ 3,
+                                                     midfol_count==1 ~ 4,
+                                                     TRUE ~ as.numeric(NA)))
+
+
+
+```
+
+```{r cyclephase_LH}
+
+cycleday.am.merge <- cycleday.am.merge %>% 
+  mutate(midluteal_LH = ifelse(daycountLH >= 6 & daycountLH <= 10, 1, 0),
+         perimenstrual_LH = ifelse(cycleday >=-3 & cycleday <=2, 1, 0), #note perimenstrual is based on cycleday
+         midfol_LH = ifelse(daycountLH >=-7 & daycountLH <=-3, 1, 0),
+         periov_LH = ifelse(daycountLH >= -2 & daycountLH <= 1, 1, 0),
+         earlylut_LH = ifelse(daycountLH >= 2 & daycountLH <= 5, 1, 0))
+
+#fill out the dummy code, so that if any phase is 1, all others should be 0 (not NA)
+cycleday.am.merge <- cycleday.am.merge %>%
+  rowwise() %>%
+  mutate(sumdummy = sum(midfol_LH,
+                        periov_LH,
+                        earlylut_LH,
+                        perimenstrual_LH,
+                        midluteal_LH, na.rm = T)) %>% 
+  #if all phases=0, make the midluteal_LH variable NA instead of 0,
+  #if perimenstrual by menses count = 1, change midluteal_LH to 0 instead of NA to fill out structural set,
+  #otherwise, keep as is
+  mutate(midluteal_LH = case_when(sumdummy==0 ~ as.numeric(NA),
+                                  sumdummy==1 & perimenstrual_LH==1 ~ 0,
+                                  TRUE ~ midluteal_LH), 
+         #same for midfol
+         midfol_LH = case_when(sumdummy==0 ~ as.numeric(NA),
+                               sumdummy==1 & perimenstrual_LH==1 ~ 0,
+                               TRUE ~ midfol_LH), 
+          #same for periov
+         periov_LH = case_when(sumdummy==0 ~ as.numeric(NA),
+                               sumdummy==1 & perimenstrual_LH==1 ~ 0,
+                               TRUE ~ periov_LH),
+         earlylut_LH = case_when(sumdummy==0 ~ as.numeric(NA),
+                                  sumdummy==1 & perimenstrual_LH==1 ~ 0,
+                                  TRUE ~ earlylut_LH), 
+         #if any other phase is 1, fill out perimenstrual to be 0
+         perimenstrual_LH = case_when(sumdummy==0 ~ as.numeric(NA), 
+                                        sumdummy==1 & midfol_LH==1 ~ 0,
+                                        sumdummy==1 & periov_LH==1 ~ 0,
+                                      sumdummy==1 & earlylut_LH==1 ~ 0,
+                                        sumdummy==1 & midluteal_LH==1 ~ 0,
+                                        TRUE ~ perimenstrual_LH))
+
+#add a non-dummy coded variable with all of cycle phase info above, which will be useful for future visualizations and summaries
+cycleday.am.merge <- cycleday.am.merge %>% mutate(cyclephase_LH = case_when(periov_LH==1 ~ 1,
+                                                                        earlylut_LH==1 ~ 2,
+                                                     midluteal_LH==1 ~ 3,
+                                                     perimenstrual_LH==1 ~ 4,
+                                                     midfol_LH==1 ~ 5,
+                                                     TRUE ~ as.numeric(NA)))
+
+```
+
+```{r cyclephase_LH}
+
+cycleday.pm.merge <- cycleday.pm.merge %>% 
+  mutate(midluteal_LH = ifelse(daycountLH >= 6 & daycountLH <= 10, 1, 0),
+         perimenstrual_LH = ifelse(cycleday >=-3 & cycleday <=2, 1, 0), #note perimenstrual is based on cycleday
+         midfol_LH = ifelse(daycountLH >=-7 & daycountLH <=-3, 1, 0),
+         periov_LH = ifelse(daycountLH >= -2 & daycountLH <= 1, 1, 0),
+         earlylut_LH = ifelse(daycountLH >= 2 & daycountLH <= 5, 1, 0))
+
+#fill out the dummy code, so that if any phase is 1, all others should be 0 (not NA)
+cycleday.pm.merge <- cycleday.pm.merge %>%
+  rowwise() %>%
+  mutate(sumdummy = sum(midfol_LH,
+                        periov_LH,
+                        earlylut_LH,
+                        perimenstrual_LH,
+                        midluteal_LH, na.rm = T)) %>% 
+  #if all phases=0, make the midluteal_LH variable NA instead of 0,
+  #if perimenstrual by menses count = 1, change midluteal_LH to 0 instead of NA to fill out structural set,
+  #otherwise, keep as is
+  mutate(midluteal_LH = case_when(sumdummy==0 ~ as.numeric(NA),
+                                  sumdummy==1 & perimenstrual_LH==1 ~ 0,
+                                  TRUE ~ midluteal_LH), 
+         #same for midfol
+         midfol_LH = case_when(sumdummy==0 ~ as.numeric(NA),
+                               sumdummy==1 & perimenstrual_LH==1 ~ 0,
+                               TRUE ~ midfol_LH), 
+          #same for periov
+         periov_LH = case_when(sumdummy==0 ~ as.numeric(NA),
+                               sumdummy==1 & perimenstrual_LH==1 ~ 0,
+                               TRUE ~ periov_LH),
+         earlylut_LH = case_when(sumdummy==0 ~ as.numeric(NA),
+                                  sumdummy==1 & perimenstrual_LH==1 ~ 0,
+                                  TRUE ~ earlylut_LH), 
+         #if any other phase is 1, fill out perimenstrual to be 0
+         perimenstrual_LH = case_when(sumdummy==0 ~ as.numeric(NA), 
+                                        sumdummy==1 & midfol_LH==1 ~ 0,
+                                        sumdummy==1 & periov_LH==1 ~ 0,
+                                      sumdummy==1 & earlylut_LH==1 ~ 0,
+                                        sumdummy==1 & midluteal_LH==1 ~ 0,
+                                        TRUE ~ perimenstrual_LH))
+
+#add a non-dummy coded variable with all of cycle phase info above, which will be useful for future visualizations and summaries
+cycleday.pm.merge <- cycleday.pm.merge %>% mutate(cyclephase_LH = case_when(periov_LH==1 ~ 1,
+                                                                        earlylut_LH==1 ~ 2,
+                                                     midluteal_LH==1 ~ 3,
+                                                     perimenstrual_LH==1 ~ 4,
+                                                     midfol_LH==1 ~ 5,
+                                                     TRUE ~ as.numeric(NA)))
+
+```
+                                                                        
+                                                                        
+#Code below is potentially all going to be deleted. These were things I was trying out while cleaning the data. 
 #Previous Day Survey Check Before Removing PM Duplicates 
 
 ```{r}
