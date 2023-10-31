@@ -589,44 +589,39 @@ hist(pm_datashort$Urg_Alc_pm)
 #menses.dates <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/01_raw_data/Period Start Dates.csv")
  
 menses.dates <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/01_raw_data/Period Start Dates.csv")
+
 ```
 
 #Merge in cycle day data 
 ```{r}
 #use janitor package to make sure the 2 datasets can be merged
 #return=mismatch will return only columns that cannot merge
+menses.data <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/01_raw_data/Period Start Dates.csv")
 
-merged_data <- merge(menses.data, am_data, by = "ID")
-merged_data <- merge(menses.data, pm_data, by = "ID")
+menses.am.merge <- merge(menses.data, am_data, by = "ID")
+menses.pm.merge <- merge(menses.data, pm_data, by = "ID")
 
-compare_df_cols(clear1daily, clear2daily, return = "mismatch")
+#compare df 
+#Github from clear3 cleaning daily had this -> compare_df_cols(clear1daily, clear2daily, return = "mismatch") but I got an error message that compare_df_cols wasn't a function, so I did the below using setdiff instead 
+diff.am.menses <- setdiff(menses.data, am_data)
+diff.pm.menses <- setdiff(menses.data, pm_data)
+
 #address mismatches
-clear2daily$angrum <- as.numeric(clear2daily$angrum)
-clear2daily$BAM2_stirredupscream <- as.numeric(clear2daily$BAM2_stirredupscream)
-clear2daily$belonging <- as.numeric(clear2daily$belonging)
-clear2daily$mastery <- as.numeric(clear2daily$mastery)
-clear2daily$menstrualbleeding <- as.numeric(clear2daily$menstrualbleeding)
-clear2daily$notenjoy <- as.numeric(clear2daily$notenjoy)
-clear2daily$numdrinks_yest <- as.numeric(clear2daily$numdrinks_yest)
-clear2daily$PANAS_happy <- as.numeric(clear2daily$PANAS_happy)
-clear2daily$panicattack <- as.numeric(clear2daily$panicattack)
-clear2daily$perceivedburden <- as.numeric(clear2daily$perceivedburden)
-clear2daily$posLHtoday <- as.numeric(clear2daily$posLHtoday)
-clear2daily$sawMHP <- as.numeric(clear2daily$sawMHP)
-clear2daily$usedPRN <- as.numeric(clear2daily$usedPRN)
-clear2daily$wanteddrunk <- as.numeric(clear2daily$wanteddrunk)
-clear2daily <- clear2daily %>% mutate(across(starts_with("study"),as.numeric))
-clear2daily <- clear2daily %>% mutate(across(starts_with("DRSP"),as.numeric))
-clear2daily <- clear2daily %>% mutate(across(starts_with("imp_"),as.numeric))
+#examples from git: clear2daily$angrum <- as.numeric(clear2daily$angrum)
+#clear2daily <- clear2daily %>% mutate(across(starts_with("study"),as.numeric))
+
 #run compare df again
-compare_df_cols(clear1daily, clear2daily, return = "mismatch")
+compare_df_cols(menses.data, am_data, return = "mismatch")
+compare_df_cols(menses.data, pm_data, return = "mismatch")
 
 #MERGE!
-combineddaily <- bind_rows(clear1daily, clear2daily)
+combineddaily.am <- bind_rows(menses.data, am_data)
+combineddaily.pm <- bind_rows(menses.data, pm_data)
 
 #delete column if all values are NA (ex: survey opened and nothing entered)
 not_all_NA <- function(x) any(!is.na(x))
-combineddaily <- combineddaily %>% select_if(not_all_NA)
+combineddaily.am <- combineddaily.am %>% select_if(not_all_NA)
+combineddaily.pm <- combineddaily.pm %>% select_if(not_all_NA)
 
 
 ```
