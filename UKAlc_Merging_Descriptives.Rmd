@@ -613,7 +613,7 @@ cycleday.pm.merge <- merge(cycle.day, pm_data, by = c("ID", "daterated"), all = 
 ```
 #Add in LH Data
 ```{r}
-LH.Count <- read.csv("/Users/apatte21/Documents/CLEAR Lab Repositories/UKAlc_daily_cleaning/UKAlc.LH.Data.csv")
+LH.Count <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/UKAlc.LH.Data.csv")
 
 LH.Count$daterated <- ymd(LH.Count$daterated)
 
