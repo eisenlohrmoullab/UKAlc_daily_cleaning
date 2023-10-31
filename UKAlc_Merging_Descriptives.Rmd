@@ -541,7 +541,7 @@ pm_data <- pm_data[!(pm_data$ID == 185 & pm_data$daterated == "2023-05-29" & pm_
 
 ```
 
-#Save cleaned files as csv 
+#Save cleaned files as csv files
 ```{r}
 write.csv(am_data, "/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/am_data_cleaned.csv", row.names=TRUE)
 
