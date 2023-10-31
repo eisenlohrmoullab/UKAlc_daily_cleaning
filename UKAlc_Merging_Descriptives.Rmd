@@ -609,16 +609,16 @@ cycleday.am.merge <- merge(cycle.day, am_data, by = c("ID", "daterated"), all = 
 cycleday.pm.merge <- merge(cycle.day, pm_data, by = c("ID", "daterated"), all = T)
 
 
-#MERGE!
-combineddaily.am <- bind_rows(cycle.day, am_data)
-combineddaily.pm <- bind_rows(cycle.day, pm_data)
+
 ```
 #Add in LH Data
 ```{r}
 LH.Count <- read.csv("/Users/apatte21/Documents/CLEAR Lab Repositories/UKAlc_daily_cleaning/UKAlc.LH.Data.csv")
 
-cycleday.am.merge <- merge(LH.Count, am_data, by = c("ID", "daterated"), all = T)
-cycleday.pm.merge <- merge(LH.Count, pm_data, by = c("ID", "daterated"), all = T)
+LH.Count$daterated <- ymd(LH.Count$daterated)
+
+cycleday.am.merge <- merge(LH.Count, cycleday.am.merge, by = c("ID", "daterated"), all = T)
+cycleday.pm.merge <- merge(LH.Count, cycleday.pm.merge, by = c("ID", "daterated"), all = T)
 ```
 
 #Previous Day Survey Check Before Removing PM Duplicates 
