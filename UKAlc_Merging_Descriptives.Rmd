@@ -408,92 +408,43 @@ pm_data <- pm_data[!(pm_data$ID == 115 & pm_data$daterated == "2021-07-19" & pm_
 pm_data <- pm_data[!(pm_data$ID == 115 & pm_data$daterated == "2021-07-19" & pm_data$time_pm == "7H 12M 0S"), ]
 
 #ID 118 
-pm_data %>%
-  filter(ID == 118 & daterated == ymd("2021-08-08"))
 pm_data <- pm_data[!(pm_data$ID == 118 & pm_data$daterated == "2021-08-08" & pm_data$time_pm == "12H 26M 0S"), ]
 #ID 119 
-pm_data %>%
-  filter(ID == 119 & daterated == ymd("2021-08-03"))
 pm_data <- pm_data[!(pm_data$ID == 119 & pm_data$daterated == "2021-08-03" & pm_data$time_pm == "21H 58M 0S"), ]
-pm_data %>%
-  filter(ID == 119 & daterated == ymd("2021-08-08"))
 pm_data <- pm_data[!(pm_data$ID == 119 & pm_data$daterated == "2021-08-08" & pm_data$time_pm == "20H 50M 0S"), ]
-pm_data %>%
-  filter(ID == 119 & daterated == ymd("2021-08-13"))
 pm_data <- pm_data[!(pm_data$ID == 119 & pm_data$daterated == "2021-08-13" & pm_data$time_pm == "5H 37M 0S"), ]
-pm_data %>%
-  filter(ID == 119 & daterated == ymd("2021-08-20"))
 pm_data <- pm_data[!(pm_data$ID == 119 & pm_data$daterated == "2021-08-20" & pm_data$time_pm == "23H 28M 0S"), ]
-pm_data %>%
-  filter(ID == 119 & daterated == ymd("2021-08-22"))
 pm_data <- pm_data[!(pm_data$ID == 119 & pm_data$daterated == "2021-08-22" & pm_data$time_pm == "5H 40M 0S"), ]
-pm_data %>%
-  filter(ID == 119 & daterated == ymd("2021-08-24"))
 pm_data <- pm_data[!(pm_data$ID == 119 & pm_data$daterated == "2021-08-24" & pm_data$time_pm == "16H 23M 0S"), ]
-pm_data %>%
-  filter(ID == 119 & daterated == ymd("2021-08-27"))
 pm_data <- pm_data[!(pm_data$ID == 119 & pm_data$daterated == "2021-08-27" & pm_data$time_pm == "21H 40M 0S"), ]
 #ID 136
-pm_data %>%
-  filter(ID == 136 & daterated == ymd("2021-11-29"))
 pm_data <- pm_data[!(pm_data$ID == 136 & pm_data$daterated == "2021-11-29" & pm_data$time_pm == "17H 10M 0S"), ]
 #ID 138
-pm_data %>%
-  filter(ID == 138 & daterated == ymd("2022-02-06"))
 pm_data <- pm_data[!(pm_data$ID == 138 & pm_data$daterated == "2022-02-06" & pm_data$time_pm == "12H 21M 0S"), ]
 #ID 143
-pm_data %>%
-  filter(ID == 143 & daterated == ymd("2022-01-31"))
 pm_data <- pm_data[!(pm_data$ID == 143 & pm_data$daterated == "2022-01-31" & pm_data$time_pm == "17H 04M 0S"), ]
 #ID 149
-pm_data %>%
-  filter(ID == 149 & daterated == ymd("2022-05-25"))
 pm_data <- pm_data[!(pm_data$ID == 149 & pm_data$daterated == "2022-05-25" & pm_data$time_pm == "0H 42M 0S"), ]
-pm_data %>%
-  filter(ID == 149 & daterated == ymd("2022-06-10"))
 pm_data <- pm_data[!(pm_data$ID == 149 & pm_data$daterated == "2022-06-10" & pm_data$time_pm == "12H 20M 0S"), ]
 #ID 150
-pm_data %>%
-  filter(ID == 150 & daterated == ymd("2022-06-07"))
 pm_data <- pm_data[!(pm_data$ID == 150 & pm_data$daterated == "2022-06-07" & pm_data$time_pm == "21H 34M 0S"), ]
 #ID 153
-pm_data %>%
-  filter(ID == 153 & daterated == ymd("2022-06-23"))
 pm_data <- pm_data[!(pm_data$ID == 153 & pm_data$daterated == "2022-06-23" & pm_data$time_pm == "8H 24M 0S"), ]
 #ID 159
-pm_data %>%
-  filter(ID == 159 & daterated == ymd("2022-07-17"))
 pm_data <- pm_data[!(pm_data$ID == 159 & pm_data$daterated == "2022-07-17" & pm_data$time_pm == "6H 40M 0S"), ]
 #ID 168
-pm_data %>%
-  filter(ID == 168 & daterated == ymd("2022-09-25"))
 pm_data <- pm_data[!(pm_data$ID == 168 & pm_data$daterated == "2022-09-25" & pm_data$time_pm == "20H 23M 0S"), ]
-pm_data %>%
-  filter(ID == 168 & daterated == ymd("2022-10-09"))
 pm_data <- pm_data[!(pm_data$ID == 168 & pm_data$daterated == "2022-10-09" & pm_data$time_pm == "18H 47M 0S"), ]
 #ID 171
-pm_data %>%
-  filter(ID == 171 & daterated == ymd("2022-10-07"))
 pm_data <- pm_data[!(pm_data$ID == 171 & pm_data$daterated == "2022-10-07" & pm_data$time_pm == "0H 10M 0S"), ]
-pm_data %>%
-  filter(ID == 171 & daterated == ymd("2022-10-13"))
 pm_data <- pm_data[!(pm_data$ID == 171 & pm_data$daterated == "2022-10-13" & pm_data$time_pm == "12H 34M 0S"), ]
-pm_data %>%
-  filter(ID == 171 & daterated == ymd("2022-10-31"))
 pm_data <- pm_data[!(pm_data$ID == 171 & pm_data$daterated == "2022-10-31" & pm_data$time_pm == "20H 36M 0S"), ]
 #ID 180
-pm_data %>%
-  filter(ID == 180 & daterated == ymd("2023-04-15"))
 pm_data <- pm_data[!(pm_data$ID == 180 & pm_data$daterated == "2023-04-15" & pm_data$time_pm == "22H 7M 0S"), ]
 #ID 181
-pm_data %>%
-  filter(ID == 181 & daterated == ymd("2023-03-22"))
 pm_data <- pm_data[!(pm_data$ID == 181 & pm_data$daterated == "2023-03-22" & pm_data$time_pm == "19H 13M 0S"), ]
 #ID 185
-pm_data %>%
-  filter(ID == 185 & daterated == ymd("2023-05-29"))
 pm_data <- pm_data[!(pm_data$ID == 185 & pm_data$daterated == "2023-05-29" & pm_data$time_pm == "23H 34M 0S"), ]
-
 ```
 
 #Save cleaned files as csv files
