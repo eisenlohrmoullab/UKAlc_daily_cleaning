@@ -469,10 +469,14 @@ am_datashort
 #make Alc_Amt_am numeric first 
 am_datashort$Alc_Amt_am <- as.numeric(am_datashort$Alc_Amt_am)
 hist(am_datashort$Alc_Amt_am)
-
+am_datashort$Alc_Drunk_am <- as.numeric(am_datashort$Alc_Drunk_am)
+hist(am_datashort$Alc_Drunk_am)
 
 #create a new variable that's did you drink -> 1 not drink -> 0 
 #create new variable heavy drinking (>4) -> 1 , <4 gets 0 
+#how many people used alcohol at all 
+#raincloud plots for each variable 
+#calculate interclass correlations within person for each possible outcome (0 means all w/in person variance, 1 is between person variance)
 ```
 #Filter out variables of interest from pm_data 
 ```{r}
