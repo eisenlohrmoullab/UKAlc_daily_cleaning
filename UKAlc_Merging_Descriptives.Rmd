@@ -457,13 +457,17 @@ pm_data <- pm_data[!(pm_data$ID == 185 & pm_data$daterated == "2023-05-29" & pm_
 ### functions to create person means and person deviations
 ```{r echo=T}
 #function to create person means
+
 create.person.mean <- function(df, var, ...) {
   df %>%
     group_by(...) %>%
     mutate("{{var}}.m" := mean({{var}}, na.rm=T))
 }
+
+create.person.mean(am_data, Urge_Alc_am)
+
 #function to create person deviations (note, must have person means already made)
-create.deviation <- function(df, var, var.m) {
+create.deviation <- function(am_data, var, var.m) {
   df <- df %>%
     rowwise() %>%
     mutate("{{var}}.d" := {{var}} - {{var.m}})
