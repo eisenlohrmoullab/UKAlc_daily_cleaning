@@ -458,11 +458,22 @@ pm_data <- pm_data[!(pm_data$ID == 185 & pm_data$daterated == "2023-05-29" & pm_
 ```{r echo=T}
 #function to create person means
 
+create.person.mean <- function(am_data, Urge_Alc_am, Urg_Nic_am, Urg_Mar_am, Alc_Amt_am) {
+  am_data %>%
+    group_by(ID) %>%
+    mutate("{{Urge_Alc_am, Urg_Nic_am, Urg_Mar_am, Alc_Amt_am}}.m" := mean({{Urge_Alc_am, Urg_Nic_am, Urg_Mar_am, Alc_Amt_am}}, na.rm=T))
+}
+create.person.mean
+
 create.person.mean <- function(df, var, ...) {
   df %>%
     group_by(...) %>%
     mutate("{{var}}.m" := mean({{var}}, na.rm=T))
 }
+
+#simplified the process below 
+am_data <- am_data %>% group_by(ID) %>% mutate(Urg_Alc_am.m = mean(Urg_Alc_am, na.rm = T),
+                                               )
 
 create.person.mean(am_data, Urge_Alc_am)
 
