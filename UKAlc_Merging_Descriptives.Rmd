@@ -473,6 +473,10 @@ create.person.mean <- function(df, var, ...) {
 
 #simplified the process below 
 am_data <- am_data %>% group_by(ID) %>% mutate(Urg_Alc_am.m = mean(Urg_Alc_am, na.rm = T),
+                                               Urg_Nic_am.m = mean(Urg_Nic_am, na.rm = T),
+                                               Urg_Mar_am.m = mean(Urg_Mar_am, na.rm = T),
+                                               Urg_Coc_am.m = mean(Urg_Coc_am, na.rm = T),
+                                               Urg_Oth_am.m = mean(Urg_Oth_am, na.rm = T)
                                                )
 
 create.person.mean(am_data, Urge_Alc_am)
