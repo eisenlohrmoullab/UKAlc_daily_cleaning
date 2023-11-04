@@ -493,8 +493,6 @@ create.3day.rolling.avg <- function(df, var, num) {
     group_by(id) %>%
     mutate("{{var}}.roll" := rollapply({{var}}, 3,  mean, align="center", fill=NA))
 }
-
-
 ```
 
 ## create outcome lists to loop through functions
