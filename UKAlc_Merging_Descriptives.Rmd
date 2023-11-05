@@ -792,14 +792,26 @@ model6 <- lmer(DMQsocial_today~legalage+age.z+covidrestrictions+
                                  control=lmerControl(optimizer="optimx",
                                                      optCtrl=list(method='nlminb')),
                                  data = etoh_data_motives)
-#Create ICC for each variable of interest from am_data 
+#Create ICC for each variable that showed high variability on rainclouds from am_data 
 ```{r}
+#calculate interclass correlations within person for each possible outcome (0 means all w/in person variance, 1 is between person variance) 
 #Alc Urg ICC 0.266 
 Urg_Alc_am_model <- lmer(Urg_Alc_am~ (1 | ID),
                                  data = am_data)
-
 summary(Urg_Alc_am_model)
 icc(Urg_Alc_am_model) 
+#Alc Amt ICC 0.742
+Alc_Drunk_am_model <- lmer(Alc_Drunk_am~ (1 | ID),
+                                 data = am_data)
+summary(Alc_Drunk_am_model)
+icc(Alc_Drunk_am_model) 
+#Alc Crav ICC 0.617 
+Crav_Alc_am_model <- lmer(Crav_Alc_am~ (1 | ID),
+                                 data = am_data)
+summary(Crav_Alc_am_model)
+icc(Crav_Alc_am_model) 
+
+
 
 
 ```
