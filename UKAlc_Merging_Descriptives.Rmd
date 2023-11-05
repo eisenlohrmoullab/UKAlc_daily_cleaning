@@ -489,7 +489,8 @@ am_data <- am_data %>% group_by(ID) %>% mutate(Urg_Alc_am.m = mean(Urg_Alc_am, n
                                                Crav_Benz_am.m = mean(Crav_Benz_am, na.rm = T),
                                                Crav_Hall_am.m = mean(Crav_Hall_am, na.rm = T),
                                                Crav_Opiate_am.m = mean(Crav_Opiate_am, na.rm = T),
-                                               Alc_Amt_am.m = mean(Alc_Amt_am, na.rm = T))
+                                               Alc_Amt_am.m = mean(Alc_Amt_am, na.rm = T),
+                                              Alc_Drunk_am.m = mean(Alc_Drunk_am, na.rm = T))
 
 #Create person deviations    
 am_data <- am_data %>% group_by(ID) %>% mutate(Urg_Alc_am.d = sd(Urg_Alc_am, na.rm = T),
@@ -503,7 +504,8 @@ am_data <- am_data %>% group_by(ID) %>% mutate(Urg_Alc_am.d = sd(Urg_Alc_am, na.
                                                Crav_Benz_am.d = sd(Crav_Benz_am, na.rm = T),
                                                Crav_Hall_am.d = sd(Crav_Hall_am, na.rm = T),
                                                Crav_Opiate_am.d = sd(Crav_Opiate_am, na.rm = T),
-                                               Alc_Amt_am.d = sd(Alc_Amt_am, na.rm = T)) 
+                                               Alc_Amt_am.d = sd(Alc_Amt_am, na.rm = T),
+                                               Alc_Drunk_am.d = sd(Alc_Drunk_am, na.rm = T)) 
 
 
 
@@ -641,7 +643,13 @@ ggplot(am_data, aes(1, Alc_Amt_am)) +
   geom_rain() +
   theme_classic() +
   theme(axis.title.x = element_blank(), 
-        axis.text.x = element_blank(), axis.ticks.x = element_blank())        
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())   
+#Feel Drunk - potentially interesting 
+ggplot(am_data, aes(1, Alc_Drunk_am)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())  
 #Alc urge - not interesting
 ggplot(am_data, aes(1, Urg_Alc_am)) +
   geom_rain() +
@@ -717,7 +725,13 @@ ggplot(am_data, aes(1, Alc_Amt_am.d)) +
   geom_rain() +
   theme_classic() +
   theme(axis.title.x = element_blank(), 
-        axis.text.x = element_blank(), axis.ticks.x = element_blank())        
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())
+#Feel Drunk - interesting 
+ggplot(am_data, aes(1, Alc_Drunk_am.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())   
 #Alc urge - interesting
 ggplot(am_data, aes(1, Urg_Alc_am.d)) +
   geom_rain() +
