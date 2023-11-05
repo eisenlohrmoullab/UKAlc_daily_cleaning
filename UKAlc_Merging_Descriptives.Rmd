@@ -458,7 +458,7 @@ pm_data <- pm_data[!(pm_data$ID == 181 & pm_data$daterated == "2023-03-22" & pm_
 pm_data <- pm_data[!(pm_data$ID == 185 & pm_data$daterated == "2023-05-29" & pm_data$time_pm == "23H 34M 0S"), ]
 ```
 
-### functions to create person means and person deviations
+### create person means and person deviations for am_data
 ```{r echo=T}
 #create person means
 
@@ -826,6 +826,19 @@ Urg_Mar_am_model <- lmer(Urg_Mar_am~ (1 | ID),
                                  data = am_data)
 summary(Urg_Mar_am_model)
 icc(Urg_Mar_am_model) 
+```
+
+### pm data means and sd's 
+```{r}
+#Anna process 
+
+#step 1: make variables numeric that aren't already 
+pm_data$Diff_Inhib_pm <- as.numeric(pm_data$Diff_Inhib_pm)
+##the above code seemed to make them all NA - figure out how to remove statement portion of column so that you can code the responses as numerics 
+
+
+#Create person means   
+am_data <- am_data %>% group_by(ID) %>% mutate(Urg_Alc_am.m = mean(Urg_Alc_am, na.rm = T),
 ```
 
 
