@@ -792,15 +792,14 @@ model6 <- lmer(DMQsocial_today~legalage+age.z+covidrestrictions+
                                  control=lmerControl(optimizer="optimx",
                                                      optCtrl=list(method='nlminb')),
                                  data = etoh_data_motives)
-
+#Create ICC for each variable of interest from am_data 
 ```{r}
-
-
-nullmodel <- lmer(Urg_Alc_am~ (1 | ID),
+#Alc Urg ICC 0.266 
+Urg_Alc_am_model <- lmer(Urg_Alc_am~ (1 | ID),
                                  data = am_data)
 
-summary(nullmodel)
-icc(nullmodel)
+summary(Urg_Alc_am_model)
+icc(Urg_Alc_am_model) 
 
 
 ```
