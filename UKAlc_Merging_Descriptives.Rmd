@@ -517,14 +517,14 @@ am_data <- am_data %>% group_by(ID) %>% mutate(Urg_Alc_am.d = sd(Urg_Alc_am, na.
   #am_data %>%
     #group_by(ID) %>%
     #mutate("{{Urge_Alc_am, Urg_Nic_am, Urg_Mar_am, Alc_Amt_am}}.m" := mean({{Urge_Alc_am, Urg_Nic_am, Urg_Mar_am, Alc_Amt_am}}, na.rm=T))
-}
+#}
 #create.person.mean
 
 #create.person.mean <- function(df, var, ...) {
   #df %>%
     #group_by(...) %>%
     #mutate("{{var}}.m" := mean({{var}}, na.rm=T))
-}
+#}
 #create.person.mean(am_data, Urge_Alc_am) 
 
 #create.deviation <- function(am_data, Urg_Alc_am, Urg_Alc_am.m,
@@ -560,54 +560,59 @@ am_data <- am_data %>% group_by(ID) %>% mutate(Urg_Alc_am.d = sd(Urg_Alc_am, na.
 #                  am_data, Alc_Amt_am, Alc_Amt_am.m)
 
 #Do I need to do rolling average? 
-#create.3day.rolling.avg <- function(df, var, num) {
-  #df %>%
-    #group_by(id) %>%
-   # mutate("{{var}}.roll" := rollapply({{var}}, 3,  mean, align="center", fill=NA))
-#}
+# install.packages("zoo")
+# library(zoo)
+# create.3day.rolling.avg <- function(df, var, num) {
+#   df %>%
+#     group_by(ID) %>%
+#     mutate("{{var}}.roll" := rollapply({{var}}, 3,  mean, align="center", fill=NA))
+# }
+# ###I'm not sure why this below isn't making a new column? 
+# am_data$Alc_Amt_am.roll <- create.3day.rolling.avg(am_data, Alc_Amt_am, 3)
+# View(am_data$Alc_Amt_am.roll)
 ```
 
 ## create outcome lists to loop through functions
 ```{r echo=T}
 
 #raw outcomes
-suimed_varlist <- suimeddata %>%
-  select(c(BAM2_stirredupscream,
-           DRSP7_angirr,
-           DRSP4_anxious,
-           perceivedburden,
-           DRSP8_intconflict,
-           DRSP1_depblue,
-           DRSP2_hopeless,
-           DRSP16_overwhelm,
-           DRSP6_rejsens,
-           DRSP9_lessintmot,
-           DRSP3_worthguilt,
-           ASIQ9_wishdead,
-           SI,
-           SI_Final)) %>% 
-  colnames() %>% 
-  noquote()
-#suimed_varlist <- suimed_varlist[-1]
-
-#person-centered deviations
-suimed_varlist.d <- c("BAM2_stirredupscream.d",
-           "DRSP7_angirr.d",
-           "DRSP4_anxious.d",
-           "perceivedburden.d",
-           "DRSP8_intconflict.d",
-           "DRSP1_depblue.d",
-           "DRSP2_hopeless.d",
-           "DRSP16_overwhelm.d",
-           "DRSP6_rejsens.d",
-           "DRSP9_lessintmot.d",
-           "DRSP3_worthguilt.d",
-           "ASIQ9_wishdead.d",
-           "SI.d",
-           "SI_Final.d") %>% noquote()
+# suimed_varlist <- suimeddata %>%
+#   select(c(BAM2_stirredupscream,
+#            DRSP7_angirr,
+#            DRSP4_anxious,
+#            perceivedburden,
+#            DRSP8_intconflict,
+#            DRSP1_depblue,
+#            DRSP2_hopeless,
+#            DRSP16_overwhelm,
+#            DRSP6_rejsens,
+#            DRSP9_lessintmot,
+#            DRSP3_worthguilt,
+#            ASIQ9_wishdead,
+#            SI,
+#            SI_Final)) %>% 
+#   colnames() %>% 
+#   noquote()
+# #suimed_varlist <- suimed_varlist[-1]
+# 
+# #person-centered deviations
+# suimed_varlist.d <- c("BAM2_stirredupscream.d",
+#            "DRSP7_angirr.d",
+#            "DRSP4_anxious.d",
+#            "perceivedburden.d",
+#            "DRSP8_intconflict.d",
+#            "DRSP1_depblue.d",
+#            "DRSP2_hopeless.d",
+#            "DRSP16_overwhelm.d",
+#            "DRSP6_rejsens.d",
+#            "DRSP9_lessintmot.d",
+#            "DRSP3_worthguilt.d",
+#            "ASIQ9_wishdead.d",
+#            "SI.d",
+#            "SI_Final.d") %>% noquote()
 
 #rolling averages
-suimed_varlist.roll <- c("BAM2_stirredupscream.roll",
+am_data.roll <- c("BAM2_stirredupscream.roll",
            "DRSP7_angirr.roll",
            "DRSP4_anxious.roll",
            "perceivedburden.roll",
