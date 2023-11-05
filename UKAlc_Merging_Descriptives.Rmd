@@ -458,28 +458,40 @@ pm_data <- pm_data[!(pm_data$ID == 185 & pm_data$daterated == "2023-05-29" & pm_
 ```{r echo=T}
 #function to create person means
 
-create.person.mean <- function(am_data, Urge_Alc_am, Urg_Nic_am, Urg_Mar_am, Alc_Amt_am) {
-  am_data %>%
-    group_by(ID) %>%
-    mutate("{{Urge_Alc_am, Urg_Nic_am, Urg_Mar_am, Alc_Amt_am}}.m" := mean({{Urge_Alc_am, Urg_Nic_am, Urg_Mar_am, Alc_Amt_am}}, na.rm=T))
+#Jordan's code below 
+#create.person.mean <- function(am_data, Urge_Alc_am, Urg_Nic_am, Urg_Mar_am, Alc_Amt_am) {
+  #am_data %>%
+    #group_by(ID) %>%
+    #mutate("{{Urge_Alc_am, Urg_Nic_am, Urg_Mar_am, Alc_Amt_am}}.m" := mean({{Urge_Alc_am, Urg_Nic_am, Urg_Mar_am, Alc_Amt_am}}, na.rm=T))
 }
-create.person.mean
+#create.person.mean
 
-create.person.mean <- function(df, var, ...) {
-  df %>%
-    group_by(...) %>%
-    mutate("{{var}}.m" := mean({{var}}, na.rm=T))
+#create.person.mean <- function(df, var, ...) {
+  #df %>%
+    #group_by(...) %>%
+    #mutate("{{var}}.m" := mean({{var}}, na.rm=T))
 }
-
+#create.person.mean(am_data, Urge_Alc_am) 
 #simplified the process below 
+
+#step 1: make variables numeric that aren't already 
+
 am_data <- am_data %>% group_by(ID) %>% mutate(Urg_Alc_am.m = mean(Urg_Alc_am, na.rm = T),
                                                Urg_Nic_am.m = mean(Urg_Nic_am, na.rm = T),
                                                Urg_Mar_am.m = mean(Urg_Mar_am, na.rm = T),
                                                Urg_Coc_am.m = mean(Urg_Coc_am, na.rm = T),
-                                               Urg_Oth_am.m = mean(Urg_Oth_am, na.rm = T)
-                                               )
+                                               Urg_Oth_am.m = mean(Urg_Oth_am, na.rm = T),
+                                               Urg_Oth_am.m = mean(Urg_Oth_am, na.rm = T),
+                                               Crav_Alc_am.m = mean(Crav_Alc_am, na.rm = T),
+                                               Crav_Nic_am.m = mean(Crav_Nic_am, na.rm = T),
+                                               Crav_Mar_am.m = mean(Crav_Mar_am, na.rm = T),
+                                               Crav_Mar_am.m = mean(Crav_Mar_am, na.rm = T),
+                                               Crav_Coc_am.m = mean(Crav_Coc_am, na.rm = T),
+                                               Crav_Benz_am.m = mean(Crav_Benz_am, na.rm = T),
+                                               Crav_Hall_am.m = mean(Crav_Hall_am, na.rm = T),
+                                               Crav_Opiate_am.m = mean(Crav_Opiate_am, na.rm = T))
 
-create.person.mean(am_data, Urge_Alc_am)
+
 
 #function to create person deviations (note, must have person means already made)
 create.deviation <- function(am_data, var, var.m) {
