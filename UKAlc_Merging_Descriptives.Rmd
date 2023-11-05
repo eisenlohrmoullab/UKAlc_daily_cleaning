@@ -634,6 +634,82 @@ am_data <- am_data %>% group_by(ID) %>% mutate(Urg_Alc_am.d = sd(Urg_Alc_am, na.
 
 ```
 
+#raincloud plots on raw variables on interest from am_data
+```{r}
+#Alc amt - interesting
+ggplot(am_data, aes(1, Alc_Amt_am)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())        
+#Alc urge - not interesting
+ggplot(am_data, aes(1, Urg_Alc_am)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Nic urge - not interesting
+ggplot(am_data, aes(1, Urg_Nic_am)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Mar urge - not interesting
+ggplot(am_data, aes(1, Urg_Mar_am)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Coc urge - not interesting 
+ggplot(am_data, aes(1, Urg_Coc_am)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Oth urge - not interesting 
+ggplot(am_data, aes(1, Urg_Oth_am)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Alc Crave - interesting 
+ggplot(am_data, aes(1, Crav_Alc_am)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Mar Crave - interesting 
+ggplot(am_data, aes(1, Crav_Mar_am)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Coc Crave - not interesting 
+ggplot(am_data, aes(1, Crav_Coc_am)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Benz Crave - not interesting 
+ggplot(am_data, aes(1, Crav_Benz_am)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Hall Crave - not interesting 
+ggplot(am_data, aes(1, Crav_Hall_am)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Opiate Crav - not interesting 
+ggplot(am_data, aes(1, Crav_Opiate_am)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+```
+
 #raincloud plots on person-centered variables on interest from am_data
 ```{r}
 #Alc amt - interesting
