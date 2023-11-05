@@ -456,84 +456,163 @@ pm_data <- pm_data[!(pm_data$ID == 185 & pm_data$daterated == "2023-05-29" & pm_
 
 ### functions to create person means and person deviations
 ```{r echo=T}
-#function to create person means
+#create person means
 
-create.person.mean <- function(am_data, Urge_Alc_am, Urg_Nic_am, Urg_Mar_am, Alc_Amt_am) {
-  am_data %>%
-    group_by(ID) %>%
-    mutate("{{Urge_Alc_am, Urg_Nic_am, Urg_Mar_am, Alc_Amt_am}}.m" := mean({{Urge_Alc_am, Urg_Nic_am, Urg_Mar_am, Alc_Amt_am}}, na.rm=T))
-}
-create.person.mean
+#Anna process below 
 
-create.person.mean <- function(df, var, ...) {
-  df %>%
-    group_by(...) %>%
-    mutate("{{var}}.m" := mean({{var}}, na.rm=T))
-}
+#step 1: make variables numeric that aren't already 
+am_data$Alc_Drunk_am <- as.numeric(am_data$Alc_Drunk_am)
+am_data$Crav_Alc_am <- as.numeric(am_data$Crav_Alc_am)
+am_data$Crav_Nic_am <- as.numeric(am_data$Crav_Nic_am)
+am_data$Crav_Mar_am <- as.numeric(am_data$Crav_Mar_am)
+am_data$Crav_Coc_am <- as.numeric(am_data$Crav_Coc_am)
+am_data$Crav_Benz_am <- as.numeric(am_data$Crav_Benz_am)
+am_data$Crav_Hall_am <- as.numeric(am_data$Crav_Hall_am)
+am_data$Crav_Opiate_am <- as.numeric(am_data$Crav_Opiate_am)
+am_data$Alc_Amt_am <- as.numeric(am_data$Alc_Amt_am)
 
-#simplified the process below 
+
+#Create person means   
 am_data <- am_data %>% group_by(ID) %>% mutate(Urg_Alc_am.m = mean(Urg_Alc_am, na.rm = T),
-                                               )
+                                              Urg_Nic_am.m = mean(Urg_Nic_am, na.rm = T),
+                                               Urg_Mar_am.m = mean(Urg_Mar_am, na.rm = T),
+                                               Urg_Coc_am.m = mean(Urg_Coc_am, na.rm = T),
+                                               Urg_Oth_am.m = mean(Urg_Oth_am, na.rm = T),
+                                               Crav_Alc_am.m = mean(Crav_Alc_am, na.rm = T),
+                                               Crav_Nic_am.m = mean(Crav_Nic_am, na.rm = T),
+                                               Crav_Mar_am.m = mean(Crav_Mar_am, na.rm = T),
+                                               Crav_Coc_am.m = mean(Crav_Coc_am, na.rm = T),
+                                               Crav_Benz_am.m = mean(Crav_Benz_am, na.rm = T),
+                                               Crav_Hall_am.m = mean(Crav_Hall_am, na.rm = T),
+                                               Crav_Opiate_am.m = mean(Crav_Opiate_am, na.rm = T),
+                                               Alc_Amt_am.m = mean(Alc_Amt_am, na.rm = T))
 
-create.person.mean(am_data, Urge_Alc_am)
+#Create person deviations    
+am_data <- am_data %>% group_by(ID) %>% mutate(Urg_Alc_am.d = sd(Urg_Alc_am, na.rm = T),
+                                               Urg_Nic_am.d = sd(Urg_Nic_am, na.rm = T),
+                                               Urg_Mar_am.d = sd(Urg_Mar_am, na.rm = T),
+                                               Urg_Coc_am.d = sd(Urg_Coc_am, na.rm = T),
+                                               Urg_Oth_am.d = sd(Urg_Oth_am, na.rm = T),
+                                               Crav_Alc_am.d = sd(Crav_Alc_am, na.rm = T),
+                                               Crav_Mar_am.d = sd(Crav_Mar_am, na.rm = T),
+                                               Crav_Coc_am.d = sd(Crav_Coc_am, na.rm = T),
+                                               Crav_Benz_am.d = sd(Crav_Benz_am, na.rm = T),
+                                               Crav_Hall_am.d = sd(Crav_Hall_am, na.rm = T),
+                                               Crav_Opiate_am.d = sd(Crav_Opiate_am, na.rm = T),
+                                               Alc_Amt_am.d = sd(Alc_Amt_am, na.rm = T)) 
+
+
 
 #function to create person deviations (note, must have person means already made)
-create.deviation <- function(am_data, var, var.m) {
-  df <- df %>%
-    rowwise() %>%
-    mutate("{{var}}.d" := {{var}} - {{var.m}})
-}
+#create.deviation <- function(df, var, var.m) {
+  #df <- df %>%
+    #rowwise() %>%
+    #mutate("{{var}}.d" := {{var}} - {{var.m}})
+#}
 
-create.3day.rolling.avg <- function(df, var, num) {
-  df %>%
-    group_by(id) %>%
-    mutate("{{var}}.roll" := rollapply({{var}}, 3,  mean, align="center", fill=NA))
-}
+#function to create person means
 
+#Jordan's code below 
+#create.person.mean <- function(am_data, Urge_Alc_am, Urg_Nic_am, Urg_Mar_am, Alc_Amt_am) {
+  #am_data %>%
+    #group_by(ID) %>%
+    #mutate("{{Urge_Alc_am, Urg_Nic_am, Urg_Mar_am, Alc_Amt_am}}.m" := mean({{Urge_Alc_am, Urg_Nic_am, Urg_Mar_am, Alc_Amt_am}}, na.rm=T))
+#}
+#create.person.mean
 
+#create.person.mean <- function(df, var, ...) {
+  #df %>%
+    #group_by(...) %>%
+    #mutate("{{var}}.m" := mean({{var}}, na.rm=T))
+#}
+#create.person.mean(am_data, Urge_Alc_am) 
+
+#create.deviation <- function(am_data, Urg_Alc_am, Urg_Alc_am.m,
+#                              Urg_Nic_am, Urg_Nic_am.m, 
+#                              Urg_Mar_am, Urg_Mar_am.m,
+#                              Urg_Coc_am, Urg_Coc_am.m,
+#                              Urg_Oth_am, Urg_Oth_am.m,
+#                              Crav_Alc_am, Crav_Alc_am.m,
+#                              Crav_Nic_am, Crav_Nic_am.m,
+#                              Crav_Mar_am, Crav_Mar_am.m,
+#                              Crav_Coc_am, Crav_Coc_am.m,
+#                              Crav_Benz_am, Crav_Benz_am.m,
+#                              Crav_Hall_am, Crav_Hall_am.m,
+#                              Crav_Opiate_am, Crav_Opiate_am.m,
+#                              Alc_Amt_am, Alc_Amt_am.m) {
+#   am_data <- am_data %>%
+#     rowwise() %>%
+#     mutate("{{Urg_Nic_am}}.d" := {{Urg_Alc_am}} - {{Urg_Alc_am.m}})
+# }
+# 
+# create.deviation(am_data, Urg_Alc_am, Urg_Alc_am.m,
+#                  am_data, Urg_Nic_am, Urg_Nic_am.m,
+#                  am_data, Urg_Mar_am, Urg_Mar_am.m,
+#                  am_data, Urg_Coc_am, Urg_Coc_am.m,
+#                  am_data, Urg_Oth_am, Urg_Oth_am.m,
+#                  am_data, Crav_Alc_am, Crav_Alc_am.m,
+#                  am_data, Crav_Nic_am, Crav_Nic_am.m,
+#                  am_data, Crav_Mar_am, Crav_Mar_am.m,
+#                  am_data, Crav_Coc_am, Crav_Coc_am.m,
+#                  am_data, Crav_Benz_am, Crav_Benz_am.m,
+#                  am_data, Crav_Hall_am, Crav_Hall_am.m,
+#                  am_data, Crav_Opiate_am, Crav_Opiate_am.m,
+#                  am_data, Alc_Amt_am, Alc_Amt_am.m)
+
+#Do I need to do rolling average? 
+# install.packages("zoo")
+# library(zoo)
+# create.3day.rolling.avg <- function(df, var, num) {
+#   df %>%
+#     group_by(ID) %>%
+#     mutate("{{var}}.roll" := rollapply({{var}}, 3,  mean, align="center", fill=NA))
+# }
+# ###I'm not sure why this below isn't making a new column? 
+# am_data$Alc_Amt_am.roll <- create.3day.rolling.avg(am_data, Alc_Amt_am, 3)
+# View(am_data$Alc_Amt_am.roll)
 ```
 
 ## create outcome lists to loop through functions
 ```{r echo=T}
 
 #raw outcomes
-suimed_varlist <- suimeddata %>%
-  select(c(BAM2_stirredupscream,
-           DRSP7_angirr,
-           DRSP4_anxious,
-           perceivedburden,
-           DRSP8_intconflict,
-           DRSP1_depblue,
-           DRSP2_hopeless,
-           DRSP16_overwhelm,
-           DRSP6_rejsens,
-           DRSP9_lessintmot,
-           DRSP3_worthguilt,
-           ASIQ9_wishdead,
-           SI,
-           SI_Final)) %>% 
-  colnames() %>% 
-  noquote()
-#suimed_varlist <- suimed_varlist[-1]
-
-#person-centered deviations
-suimed_varlist.d <- c("BAM2_stirredupscream.d",
-           "DRSP7_angirr.d",
-           "DRSP4_anxious.d",
-           "perceivedburden.d",
-           "DRSP8_intconflict.d",
-           "DRSP1_depblue.d",
-           "DRSP2_hopeless.d",
-           "DRSP16_overwhelm.d",
-           "DRSP6_rejsens.d",
-           "DRSP9_lessintmot.d",
-           "DRSP3_worthguilt.d",
-           "ASIQ9_wishdead.d",
-           "SI.d",
-           "SI_Final.d") %>% noquote()
+# suimed_varlist <- suimeddata %>%
+#   select(c(BAM2_stirredupscream,
+#            DRSP7_angirr,
+#            DRSP4_anxious,
+#            perceivedburden,
+#            DRSP8_intconflict,
+#            DRSP1_depblue,
+#            DRSP2_hopeless,
+#            DRSP16_overwhelm,
+#            DRSP6_rejsens,
+#            DRSP9_lessintmot,
+#            DRSP3_worthguilt,
+#            ASIQ9_wishdead,
+#            SI,
+#            SI_Final)) %>% 
+#   colnames() %>% 
+#   noquote()
+# #suimed_varlist <- suimed_varlist[-1]
+# 
+# #person-centered deviations
+# suimed_varlist.d <- c("BAM2_stirredupscream.d",
+#            "DRSP7_angirr.d",
+#            "DRSP4_anxious.d",
+#            "perceivedburden.d",
+#            "DRSP8_intconflict.d",
+#            "DRSP1_depblue.d",
+#            "DRSP2_hopeless.d",
+#            "DRSP16_overwhelm.d",
+#            "DRSP6_rejsens.d",
+#            "DRSP9_lessintmot.d",
+#            "DRSP3_worthguilt.d",
+#            "ASIQ9_wishdead.d",
+#            "SI.d",
+#            "SI_Final.d") %>% noquote()
 
 #rolling averages
-suimed_varlist.roll <- c("BAM2_stirredupscream.roll",
+am_data.roll <- c("BAM2_stirredupscream.roll",
            "DRSP7_angirr.roll",
            "DRSP4_anxious.roll",
            "perceivedburden.roll",
