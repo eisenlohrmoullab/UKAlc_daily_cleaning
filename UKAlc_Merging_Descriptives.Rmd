@@ -22,6 +22,10 @@ library(lmerTest) #to extract P values when lmer doesnt feel like showing them
 library(performance) #to extract ICCs
 library(emmeans) #for plotting interactions
 knitr::opts_chunk$set(echo = TRUE)
+install.packages( c( "dplyr", "ggplot2", "plyr" ) )
+library(ggplot2)
+library(ggdist)
+
 
 #Anisha's Paths
 
@@ -630,15 +634,19 @@ am_data <- am_data %>% group_by(ID) %>% mutate(Urg_Alc_am.d = sd(Urg_Alc_am, na.
 
 ```
 
-#test 2/10/23: create rolling average BEFORE means and deviations
+#raincloud plots on person-centered variables on interest from am_data
+```{r}
+##Anna's way to make raincloud plots 
+    
+ggplot(am_data, aes(1, Alc_Amt_am.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())        
+        
+```
 
-### *execute functions* \n
-#to get a list of all person means: \n
-paste0(outcomelist,".m") \n
-# to run create.deviation() one at a time. \n
-c2d <- create.deviation(c2d, wishsleep, wishsleep.m) \n
-#to run create.person.mean() one at a time. \n
- c2d <- create.person.mean(c2d, ASIQ4_thoughtwhen, id)
+
 ```{r}
 
 #create rolling averages on RAW variables
