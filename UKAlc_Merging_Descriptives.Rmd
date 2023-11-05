@@ -612,20 +612,20 @@ am_data <- am_data %>% group_by(ID) %>% mutate(Urg_Alc_am.d = sd(Urg_Alc_am, na.
 #            "SI_Final.d") %>% noquote()
 
 #rolling averages
-am_data.roll <- c("BAM2_stirredupscream.roll",
-           "DRSP7_angirr.roll",
-           "DRSP4_anxious.roll",
-           "perceivedburden.roll",
-           "DRSP8_intconflict.roll",
-           "DRSP1_depblue.roll",
-           "DRSP2_hopeless.roll",
-           "DRSP16_overwhelm.roll",
-           "DRSP6_rejsens.roll",
-           "DRSP9_lessintmot.roll",
-           "DRSP3_worthguilt.roll",
-           "ASIQ9_wishdead.roll",
-           "SI.roll",
-           "SI_Final.roll") %>% noquote()
+# am_data.roll <- c("BAM2_stirredupscream.roll",
+#            "DRSP7_angirr.roll",
+#            "DRSP4_anxious.roll",
+#            "perceivedburden.roll",
+#            "DRSP8_intconflict.roll",
+#            "DRSP1_depblue.roll",
+#            "DRSP2_hopeless.roll",
+#            "DRSP16_overwhelm.roll",
+#            "DRSP6_rejsens.roll",
+#            "DRSP9_lessintmot.roll",
+#            "DRSP3_worthguilt.roll",
+#            "ASIQ9_wishdead.roll",
+#            "SI.roll",
+#            "SI_Final.roll") %>% noquote()
 
 
 ```
