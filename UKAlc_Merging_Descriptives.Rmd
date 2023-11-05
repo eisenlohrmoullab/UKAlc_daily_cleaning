@@ -475,6 +475,15 @@ pm_data <- pm_data[!(pm_data$ID == 185 & pm_data$daterated == "2023-05-29" & pm_
 #simplified the process below 
 
 #step 1: make variables numeric that aren't already 
+am_data$Alc_Drunk_am <- as.numeric(am_data$Alc_Drunk_am)
+am_data$Crav_Alc_am <- as.numeric(am_data$Crav_Alc_am)
+am_data$Crav_Nic_am <- as.numeric(am_data$Crav_Nic_am)
+am_data$Crav_Mar_am <- as.numeric(am_data$Crav_Mar_am)
+am_data$Crav_Coc_am <- as.numeric(am_data$Crav_Coc_am)
+am_data$Crav_Benz_am <- as.numeric(am_data$Crav_Benz_am)
+am_data$Crav_Hall_am <- as.numeric(am_data$Crav_Hall_am)
+am_data$Crav_Opiate_am <- as.numeric(am_data$Crav_Opiate_am)
+am_data$Alc_Amt_am <- as.numeric(am_data$Alc_Amt_am)
 
 am_data <- am_data %>% group_by(ID) %>% mutate(Urg_Alc_am.m = mean(Urg_Alc_am, na.rm = T),
                                                Urg_Nic_am.m = mean(Urg_Nic_am, na.rm = T),
@@ -485,11 +494,11 @@ am_data <- am_data %>% group_by(ID) %>% mutate(Urg_Alc_am.m = mean(Urg_Alc_am, n
                                                Crav_Alc_am.m = mean(Crav_Alc_am, na.rm = T),
                                                Crav_Nic_am.m = mean(Crav_Nic_am, na.rm = T),
                                                Crav_Mar_am.m = mean(Crav_Mar_am, na.rm = T),
-                                               Crav_Mar_am.m = mean(Crav_Mar_am, na.rm = T),
                                                Crav_Coc_am.m = mean(Crav_Coc_am, na.rm = T),
                                                Crav_Benz_am.m = mean(Crav_Benz_am, na.rm = T),
                                                Crav_Hall_am.m = mean(Crav_Hall_am, na.rm = T),
-                                               Crav_Opiate_am.m = mean(Crav_Opiate_am, na.rm = T))
+                                               Crav_Opiate_am.m = mean(Crav_Opiate_am, na.rm = T),
+                                               Alc_Amt_am.m = mean(Alc_Amt_am, na.rm = T))
 
 
 
