@@ -800,7 +800,7 @@ Urg_Alc_am_model <- lmer(Urg_Alc_am~ (1 | ID),
                                  data = am_data)
 summary(Urg_Alc_am_model)
 icc(Urg_Alc_am_model) 
-#Alc Amt ICC 0.742
+#Alc Drunk ICC 0.742
 Alc_Drunk_am_model <- lmer(Alc_Drunk_am~ (1 | ID),
                                  data = am_data)
 summary(Alc_Drunk_am_model)
@@ -810,6 +810,16 @@ Crav_Alc_am_model <- lmer(Crav_Alc_am~ (1 | ID),
                                  data = am_data)
 summary(Crav_Alc_am_model)
 icc(Crav_Alc_am_model) 
+#Alc Amt ICC 0.069 (!!!!) 
+Alc_Amt_am_model <- lmer(Alc_Amt_am~ (1 | ID),
+                                 data = am_data)
+summary(Alc_Amt_am_model)
+icc(Alc_Amt_am_model) 
+#Mar crav ICC 0.741
+Crav_Mar_am_model <- lmer(Crav_Mar_am~ (1 | ID),
+                                 data = am_data)
+summary(Crav_Mar_am_model)
+icc(Crav_Mar_am_model) 
 
 
 
