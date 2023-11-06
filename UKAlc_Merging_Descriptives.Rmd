@@ -943,11 +943,8 @@ pm_data <- pm_data %>% group_by(ID) %>% mutate(Urg_Alc_pm.d = sd(Urg_Alc_pm, na.
                                                Headache_pm.d = sd(Headache_pm, na.rm = T),
                                                JM_Pain_pm.d = sd(JM_Pain_pm, na.rm = T),
                                                Loss_Prod_pm.d = sd(Loss_Prod_pm, na.rm = T),
-                                               Int_Relat_pm.d = sd(Int_Relat_pm, na.rm = T),
-                                               Urg_Alc_pm.d = sd(Urg_Alc_pm, na.rm = T),
-                                               Urg_Nic_pm.d = sd(Urg_Nic_pm, na.rm = T),
-                                               Urg_Mar_pm.d = sd(Urg_Mar_pm, na.rm = T),
-                                               Urg_Coc_pm.d = sd(Urg_Coc_pm, na.rm = T))
+                                               Int_Relat_pm.d = sd(Int_Relat_pm, na.rm = T))
+                                               
 ```
 
 ICCs for pm_data
@@ -1042,6 +1039,41 @@ Angry_pm_model <- lmer(Angry_pm~ (1 | ID),
                                  data = pm_data)
 summary(Angry_pm_model)
 icc(Angry_pm_model) 
+#Conflicts icc 0.120
+Conflicts_pm_model <- lmer(Conflicts_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Conflicts_pm_model)
+icc(Conflicts_pm_model) 
+#Loss interest 0.259 
+Loss_Interest_pm_model <- lmer(Loss_Interest_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Loss_Interest_pm_model)
+icc(Loss_Interest_pm_model) 
+#Diff Conc icc 0.237 
+Diff_Conc_pm_model <- lmer(Diff_Conc_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Diff_Conc_pm_model)
+icc(Diff_Conc_pm_model) 
+#Tired icc 0.370
+Tired_pm_model <- lmer(Tired_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Tired_pm_model)
+icc(Tired_pm_model)
+#overeat icc 0.205 
+OverEat_pm_model <- lmer(OverEat_pm~ (1 | ID),
+                                 data = pm_data)
+summary(OverEat_pm_model)
+icc(OverEat_pm_model)
+#spec food craving 0.147 
+Sp_Food_Crav_pm_model <- lmer(Sp_Food_Crav_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Sp_Food_Crav_pm_model)
+icc(Sp_Food_Crav_pm_model)
+#high sleep icc 0.195 
+High_Sleep_pm_model <- lmer(High_Sleep_pm~ (1 | ID),
+                                 data = pm_data)
+summary(High_Sleep_pm_model)
+icc(High_Sleep_pm_model)
 ```
 
 
