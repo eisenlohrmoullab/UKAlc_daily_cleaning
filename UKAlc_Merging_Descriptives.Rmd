@@ -835,12 +835,23 @@ icc(Urg_Mar_am_model)
 #step 1: make variables numeric that aren't already 
 pm_data$Diff_Inhib_pm <- as.numeric(pm_data$Diff_Inhib_pm)
 ##the above code seemed to make them all NA - figure out how to remove statement portion of column so that you can code the responses as numerics 
-
+pm_data$Urg_Alc_pm <- as.numeric(pm_data$Urg_Alc_pm)
+pm_data$Urg_Nic_pm <- as.numeric(pm_data$Urg_Nic_pm)
+pm_data$Urg_Mar_pm <- as.numeric(pm_data$Urg_Mar_pm)
+pm_data$Urg_Coc_pm <- as.numeric(pm_data$Urg_Coc_pm)
 #Create person means   
+#make numerical if not already 
+
 pm_data <- pm_data %>% group_by(ID) %>% mutate(Urg_Alc_pm.m = mean(Urg_Alc_pm, na.rm = T),
                                                Urg_Nic_pm.m = mean(Urg_Nic_pm, na.rm = T),
                                                Urg_Mar_pm.m = mean(Urg_Mar_pm, na.rm = T),
                                                Urg_Coc_pm.m = mean(Urg_Coc_pm, na.rm = T))
+#create person sd's 
+pm_data <- pm_data %>% group_by(ID) %>% mutate(Urg_Alc_pm.d = sd(Urg_Alc_pm, na.rm = T),
+                                               Urg_Nic_pm.d = sd(Urg_Nic_pm, na.rm = T),
+                                               Urg_Mar_pm.d = sd(Urg_Mar_pm, na.rm = T),
+                                               Urg_Coc_pm.d = sd(Urg_Coc_pm, na.rm = T))
+
                                                
 ```
 
