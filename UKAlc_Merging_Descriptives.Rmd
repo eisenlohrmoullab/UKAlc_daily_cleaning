@@ -706,6 +706,7 @@ ggplot(am_data, aes(1, Urg_Oth_am.d)) +
   theme(axis.title.x = element_blank(), 
         axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
 #Alc Crave - interesting 
+#Would be interesting to compare difference between crav_alc and urg_alc? 
 ggplot(am_data, aes(1, Crav_Alc_am.d)) +
   geom_rain() +
   theme_classic() +
