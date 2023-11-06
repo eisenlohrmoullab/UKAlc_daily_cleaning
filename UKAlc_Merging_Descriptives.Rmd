@@ -508,7 +508,22 @@ am_data <- am_data %>% group_by(ID) %>% mutate(Urg_Alc_am.d = sd(Urg_Alc_am, na.
                                                Crav_Opiate_am.d = sd(Crav_Opiate_am, na.rm = T),
                                                Alc_Amt_am.d = sd(Alc_Amt_am, na.rm = T),
                                                Alc_Drunk_am.d = sd(Alc_Drunk_am, na.rm = T)) 
+#create person-centered deviations
+am_data <- am_data %>% rowwise() %>% mutate(Urg_Alc_am.d = Urg_Alc_am - Urg_Alc_am.m, na.rm = T,
+                                            Urg_Nic_am.d = Urg_Nic_am - Urg_Nic_am.m, na.rm = T,
+                                            Urg_Mar_am.d = Urg_Mar_am - Urg_Mar_am.m, na.rm = T,
+                                            Urg_Coc_am.d = Urg_Coc_am - Urg_Coc_am.m, na.rm = T,
+                                            Urg_Oth_am.d = Urg_Oth_am - Urg_Oth_am.m, na.rm = T,
+                                            Crav_Alc_am.d = Crav_Alc_am - Crav_Alc_am.m, na.rm = T,
+                                            Crav_Mar_am.d = Crav_Mar_am - Crav_Mar_am.m, na.rm = T,
+                                            Crav_Coc_am.d = Crav_Coc_am - Crav_Coc_am.m, na.rm = T,
+                                            Crav_Benz_am.d = Crav_Benz_am - Crav_Benz_am.m, na.rm = T,
+                                            Crav_Hall_am.d = Crav_Hall_am - Crav_Hall_am.m, na.rm = T,
+                                            Crav_Opiate_am.d = Crav_Opiate_am - Crav_Opiate_am.m, na.rm = T,
+                                            Alc_Amt_am.d = Alc_Amt_am - Alc_Amt_am.m, na.rm = T,
+                                            Alc_Drunk_am.d = Alc_Drunk_am - Alc_Drunk_am.m, na.rm = T)
 
+pm_data <- pm_data %>% rowwise() %>% mutate(Urg_Alc_pm.d = Urg_Alc_pm - Urg_Alc_pm.m, na.rm = T)
 
 
 #function to create person deviations (note, must have person means already made)
