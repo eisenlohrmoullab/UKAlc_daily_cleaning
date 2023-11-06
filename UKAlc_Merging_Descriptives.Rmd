@@ -834,7 +834,37 @@ icc(Urg_Mar_am_model)
 #Anna process 
 
 #step 1: make variables numeric that aren't already 
-pm_data$Diff_Inhib_pm <- as.numeric(pm_data$Diff_Inhib_pm)
+pm_data$Diff_Inhib_pm <- as.numeric(gsub("\\D", "", pm_data$Diff_Inhib_pm))
+pm_data$Diff_Change_pm <- as.numeric(gsub("\\D", "", pm_data$Diff_Change_pm))
+pm_data$Diff_Stop_pm <- as.numeric(gsub("\\D", "", pm_data$Diff_Stop_pm))
+pm_data$Immed_Payoff_pm <- as.numeric(gsub("\\D", "", pm_data$Immed_Payoff_pm))
+pm_data$Res_Urge_pm <- as.numeric(gsub("\\D", "", pm_data$Res_Urge_pm))
+pm_data$Diff_LongRew_pm <- as.numeric(gsub("\\D", "", pm_data$Diff_LongRew_pm))
+pm_data$Diff_ResRew_pm <- as.numeric(gsub("\\D", "", pm_data$Diff_ResRew_pm))
+pm_data$Dep_pm <- as.numeric(gsub("\\D", "", pm_data$Dep_pm))
+pm_data$Hopeless_pm <- as.numeric(gsub("\\D", "", pm_data$Hopeless_pm))
+pm_data$Worthless_pm <- as.numeric(gsub("\\D", "", pm_data$Worthless_pm))
+pm_data$Anxious_pm <- as.numeric(gsub("\\D", "", pm_data$Anxious_pm))
+pm_data$MoodSwing_pm <- as.numeric(gsub("\\D", "", pm_data$MoodSwing_pm))
+pm_data$RejSens_pm <- as.numeric(gsub("\\D", "", pm_data$RejSens_pm))
+pm_data$Angry_pm <- as.numeric(gsub("\\D", "", pm_data$Angry_pm))
+pm_data$Conflicts_pm <- as.numeric(gsub("\\D", "", pm_data$Conflicts_pm))
+pm_data$Loss_Interest_pm <- as.numeric(gsub("\\D", "", pm_data$Loss_Interest_pm))
+pm_data$Diff_Conc_pm <- as.numeric(gsub("\\D", "", pm_data$Diff_Conc_pm))
+pm_data$Tired_pm <- as.numeric(gsub("\\D", "", pm_data$Tired_pm))
+pm_data$OverEat_pm <- as.numeric(gsub("\\D", "", pm_data$OverEat_pm))
+pm_data$Sp_Food_Crav_pm <- as.numeric(gsub("\\D", "", pm_data$Sp_Food_Crav_pm))
+pm_data$High_Sleep_pm <- as.numeric(gsub("\\D", "", pm_data$High_Sleep_pm))
+pm_data$Diff_Sleep_pm <- as.numeric(gsub("\\D", "", pm_data$Diff_Sleep_pm))
+pm_data$Overwhelm_pm <- as.numeric(gsub("\\D", "", pm_data$Overwhelm_pm))
+pm_data$Loss_Control_pm <- as.numeric(gsub("\\D", "", pm_data$Loss_Control_pm))
+pm_data$Breast_Tend_pm <- as.numeric(gsub("\\D", "", pm_data$Breast_Tend_pm))
+pm_data$Breast_Swell_pm <- as.numeric(gsub("\\D", "", pm_data$Breast_Swell_pm))
+pm_data$Headache_pm <- as.numeric(gsub("\\D", "", pm_data$Headache_pm))
+pm_data$JM_Pain_pm <- as.numeric(gsub("\\D", "", pm_data$JM_Pain_pm))
+pm_data$Loss_Prod_pm <- as.numeric(gsub("\\D", "", pm_data$Loss_Prod_pm))
+pm_data$Int_Relat_pm <- as.numeric(gsub("\\D", "", pm_data$Int_Relat_pm))
+
 ##the above code seemed to make them all NA - figure out how to remove statement portion of column so that you can code the responses as numerics 
 pm_data$Urg_Alc_pm <- as.numeric(pm_data$Urg_Alc_pm)
 pm_data$Urg_Nic_pm <- as.numeric(pm_data$Urg_Nic_pm)
@@ -858,11 +888,31 @@ pm_data <- pm_data %>% group_by(ID) %>% mutate(Urg_Alc_pm.d = sd(Urg_Alc_pm, na.
 
 #Raincloud plots on raw data 
 ```{r}
+#Urg alc 
 ggplot(pm_data, aes(1, Urg_Alc_pm)) +
   geom_rain() +
   theme_classic() +
   theme(axis.title.x = element_blank(), 
         axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Urg nic 
+ggplot(pm_data, aes(1, Urg_Nic_pm)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Urg mar 
+ggplot(pm_data, aes(1, Urg_Mar_pm)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Urg coc 
+ggplot(pm_data, aes(1, Urg_Coc_pm)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+
 ```
 
 
