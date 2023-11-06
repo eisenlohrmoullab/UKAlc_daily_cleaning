@@ -864,8 +864,6 @@ pm_data$Headache_pm <- as.numeric(gsub("\\D", "", pm_data$Headache_pm))
 pm_data$JM_Pain_pm <- as.numeric(gsub("\\D", "", pm_data$JM_Pain_pm))
 pm_data$Loss_Prod_pm <- as.numeric(gsub("\\D", "", pm_data$Loss_Prod_pm))
 pm_data$Int_Relat_pm <- as.numeric(gsub("\\D", "", pm_data$Int_Relat_pm))
-
-##the above code seemed to make them all NA - figure out how to remove statement portion of column so that you can code the responses as numerics 
 pm_data$Urg_Alc_pm <- as.numeric(pm_data$Urg_Alc_pm)
 pm_data$Urg_Nic_pm <- as.numeric(pm_data$Urg_Nic_pm)
 pm_data$Urg_Mar_pm <- as.numeric(pm_data$Urg_Mar_pm)
@@ -874,6 +872,40 @@ pm_data$Urg_Coc_pm <- as.numeric(pm_data$Urg_Coc_pm)
 #make numerical if not already 
 
 pm_data <- pm_data %>% group_by(ID) %>% mutate(Urg_Alc_pm.m = mean(Urg_Alc_pm, na.rm = T),
+                                               Urg_Nic_pm.m = mean(Urg_Nic_pm, na.rm = T),
+                                               Urg_Mar_pm.m = mean(Urg_Mar_pm, na.rm = T),
+                                               Urg_Coc_pm.m = mean(Urg_Coc_pm, na.rm = T),
+                                               Diff_Inhib_pm.m = mean(Diff_Inhib_pm, na.rm = T),
+                                               Diff_Change_pm.m = mean(Diff_Change_pm, na.rm = T),
+                                               Diff_Stop_pm.m = mean(Diff_Stop_pm, na.rm = T),
+                                               Immed_Payoff_pm.m = mean(Immed_Payoff_pm, na.rm = T),
+                                               Res_Urge_pm.m = mean(Res_Urge_pm, na.rm = T),
+                                               Diff_LongRew_pm.m = mean(Diff_LongRew_pm, na.rm = T),
+                                               Diff_ResRew_pm.m = mean(Diff_ResRew_pm, na.rm = T),
+                                               Dep_pm.m = mean(Dep_pm, na.rm = T),
+                                               Hopeless_pm.m = mean(Hopeless_pm, na.rm = T),
+                                               Worthless_pm.m = mean(Worthless_pm, na.rm = T),
+                                               Anxious_pm.m = mean(Anxious_pm, na.rm = T),
+                                               MoodSwing_pm.m = mean(MoodSwing_pm, na.rm = T),
+                                               RejSens_pm.m = mean(RejSens_pm, na.rm = T),
+                                               Angry_pm.m = mean(Angry_pm, na.rm = T),
+                                               Conflicts_pm.m = mean(Conflicts_pm, na.rm = T),
+                                               Loss_Interest_pm.m = mean(Loss_Interest_pm, na.rm = T),
+                                               Diff_Conc_pm.m = mean(Diff_Conc_pm, na.rm = T),
+                                               Tired_pm.m = mean(Tired_pm, na.rm = T),
+                                               OverEat_pm.m = mean(OverEat_pm, na.rm = T),
+                                               Sp_Food_Crav_pm.m = mean(Sp_Food_Crav_pm, na.rm = T),
+                                               High_Sleep_pm.m = mean(High_Sleep_pm, na.rm = T),
+                                               Diff_Sleep_pm.m = mean(Diff_Sleep_pm, na.rm = T),
+                                               Overwhelm_pm.m = mean(Overwhelm_pm, na.rm = T),
+                                               Loss_Control_pm.m = mean(Loss_Control_pm, na.rm = T),
+                                               Breast_Tend_pm.m = mean(Breast_Tend_pm, na.rm = T),
+                                               Breast_Swell_pm.m = mean(Breast_Swell_pm, na.rm = T),
+                                               Headache_pm.m = mean(Headache_pm, na.rm = T),
+                                               JM_Pain_pm.m = mean(JM_Pain_pm, na.rm = T),
+                                               Loss_Prod_pm.m = mean(Loss_Prod_pm, na.rm = T),
+                                               Int_Relat_pm.m = mean(Int_Relat_pm, na.rm = T),
+                                               Urg_Alc_pm.m = mean(Urg_Alc_pm, na.rm = T),
                                                Urg_Nic_pm.m = mean(Urg_Nic_pm, na.rm = T),
                                                Urg_Mar_pm.m = mean(Urg_Mar_pm, na.rm = T),
                                                Urg_Coc_pm.m = mean(Urg_Coc_pm, na.rm = T))
