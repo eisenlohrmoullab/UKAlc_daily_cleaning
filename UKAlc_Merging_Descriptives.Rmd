@@ -982,11 +982,66 @@ Diff_Change_pm_model <- lmer(Diff_Change_pm~ (1 | ID),
                                  data = pm_data)
 summary(Diff_Change_pm_model)
 icc(Diff_Change_pm_model) 
-#Diff change ICC 0.300
+#Diff stop ICC 0.135
 Diff_Stop_pm_model <- lmer(Diff_Stop_pm~ (1 | ID),
                                  data = pm_data)
 summary(Diff_Stop_pm_model)
 icc(Diff_Stop_pm_model) 
+#Immed payoff ICC 0.271
+Immed_Payoff_pm_model <- lmer(Immed_Payoff_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Immed_Payoff_pm_model)
+icc(Immed_Payoff_pm_model) 
+#Res urge ICC 0.425
+Res_Urge_pm_model <- lmer(Res_Urge_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Res_Urge_pm_model)
+icc(Res_Urge_pm_model) 
+#Diff LongRew ICC 0.294 
+Diff_LongRew_pm_model <- lmer(Diff_LongRew_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Diff_LongRew_pm_model)
+icc(Diff_LongRew_pm_model) 
+#Diff ResRew ICC 0.278
+Diff_ResRew_pm_model <- lmer(Diff_ResRew_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Diff_ResRew_pm_model)
+icc(Diff_ResRew_pm_model) 
+#Depression ICC 0.221
+Dep_pm_model <- lmer(Dep_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Dep_pm_model)
+icc(Dep_pm_model) 
+#Hopeless ICC 0.174
+Hopeless_pm_model <- lmer(Hopeless_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Hopeless_pm_model)
+icc(Hopeless_pm_model) 
+#Worthless icc 0.280 
+Worthless_pm_model <- lmer(Worthless_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Worthless_pm_model)
+icc(Worthless_pm_model) 
+#Anxious icc 0.511 
+Anxious_pm_model <- lmer(Anxious_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Anxious_pm_model)
+icc(Anxious_pm_model) 
+#Moodswing icc 0.154
+MoodSwing_pm_model <- lmer(MoodSwing_pm~ (1 | ID),
+                                 data = pm_data)
+summary(MoodSwing_pm_model)
+icc(MoodSwing_pm_model) 
+#RejSens icc 0.230 
+RejSens_pm_model <- lmer(RejSens_pm~ (1 | ID),
+                                 data = pm_data)
+summary(RejSens_pm_model)
+icc(RejSens_pm_model) 
+#Angry icc 0.230 
+Angry_pm_model <- lmer(Angry_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Angry_pm_model)
+icc(Angry_pm_model) 
 ```
 
 
