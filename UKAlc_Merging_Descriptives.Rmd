@@ -1115,7 +1115,6 @@ summary(Int_Relat_pm_model)
 icc(Int_Relat_pm_model)
 ```
 
-
 #Raincloud plots on raw pm_data
 ```{r}
 #Urg alc - interesting 
@@ -1148,8 +1147,38 @@ ggplot(pm_data, aes(1, Diff_Inhib_pm)) +
   theme_classic() +
   theme(axis.title.x = element_blank(), 
         axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
-#Diff inhib - not interesting 
-ggplot(pm_data, aes(1, Diff_Inhib_pm)) +
+#Diff stop - not interesting 
+ggplot(pm_data, aes(1, Diff_Stop_pm)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Diff change - not interesting 
+ggplot(pm_data, aes(1, Diff_Change_pm)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Immed Payoff - kinda interesting 
+ggplot(pm_data, aes(1, Immed_Payoff_pm)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Res urge - kinda interesting 
+ggplot(pm_data, aes(1, Res_Urge_pm)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Diff longrew - not interesting 
+ggplot(pm_data, aes(1, Diff_LongRew_pm)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Diff resrew - not interesting 
+ggplot(pm_data, aes(1, Diff_ResRew_pm)) +
   geom_rain() +
   theme_classic() +
   theme(axis.title.x = element_blank(), 
@@ -1158,7 +1187,12 @@ ggplot(pm_data, aes(1, Diff_Inhib_pm)) +
 
 #Raincloud plots for person-centered deviations 
 ```{r}
-
+#Urg alc - interesting 
+ggplot(pm_data, aes(1, Urg_Alc_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
 ```
 
 
