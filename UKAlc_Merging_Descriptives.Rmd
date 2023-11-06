@@ -494,20 +494,6 @@ am_data <- am_data %>% group_by(ID) %>% mutate(Urg_Alc_am.m = mean(Urg_Alc_am, n
                                                Alc_Amt_am.m = mean(Alc_Amt_am, na.rm = T),
                                               Alc_Drunk_am.m = mean(Alc_Drunk_am, na.rm = T))
 
-#Create person deviations    
-am_data <- am_data %>% group_by(ID) %>% mutate(Urg_Alc_am.d = sd(Urg_Alc_am, na.rm = T),
-                                               Urg_Nic_am.d = sd(Urg_Nic_am, na.rm = T),
-                                               Urg_Mar_am.d = sd(Urg_Mar_am, na.rm = T),
-                                               Urg_Coc_am.d = sd(Urg_Coc_am, na.rm = T),
-                                               Urg_Oth_am.d = sd(Urg_Oth_am, na.rm = T),
-                                               Crav_Alc_am.d = sd(Crav_Alc_am, na.rm = T),
-                                               Crav_Mar_am.d = sd(Crav_Mar_am, na.rm = T),
-                                               Crav_Coc_am.d = sd(Crav_Coc_am, na.rm = T),
-                                               Crav_Benz_am.d = sd(Crav_Benz_am, na.rm = T),
-                                               Crav_Hall_am.d = sd(Crav_Hall_am, na.rm = T),
-                                               Crav_Opiate_am.d = sd(Crav_Opiate_am, na.rm = T),
-                                               Alc_Amt_am.d = sd(Alc_Amt_am, na.rm = T),
-                                               Alc_Drunk_am.d = sd(Alc_Drunk_am, na.rm = T)) 
 #create person-centered deviations
 am_data <- am_data %>% rowwise() %>% mutate(Urg_Alc_am.d = Urg_Alc_am - Urg_Alc_am.m, na.rm = T,
                                             Urg_Nic_am.d = Urg_Nic_am - Urg_Nic_am.m, na.rm = T,
@@ -522,8 +508,6 @@ am_data <- am_data %>% rowwise() %>% mutate(Urg_Alc_am.d = Urg_Alc_am - Urg_Alc_
                                             Crav_Opiate_am.d = Crav_Opiate_am - Crav_Opiate_am.m, na.rm = T,
                                             Alc_Amt_am.d = Alc_Amt_am - Alc_Amt_am.m, na.rm = T,
                                             Alc_Drunk_am.d = Alc_Drunk_am - Alc_Drunk_am.m, na.rm = T)
-
-pm_data <- pm_data %>% rowwise() %>% mutate(Urg_Alc_pm.d = Urg_Alc_pm - Urg_Alc_pm.m, na.rm = T)
 
 
 #function to create person deviations (note, must have person means already made)
@@ -845,7 +829,7 @@ summary(Urg_Mar_am_model)
 icc(Urg_Mar_am_model) 
 ```
 
-### pm data means and sd's 
+### pm data means and deviations
 ```{r}
 #Anna process 
 
@@ -925,42 +909,41 @@ pm_data <- pm_data %>% group_by(ID) %>% mutate(Urg_Alc_pm.m = mean(Urg_Alc_pm, n
                                                Urg_Nic_pm.m = mean(Urg_Nic_pm, na.rm = T),
                                                Urg_Mar_pm.m = mean(Urg_Mar_pm, na.rm = T),
                                                Urg_Coc_pm.m = mean(Urg_Coc_pm, na.rm = T))
-#create person sd's 
-pm_data <- pm_data %>% group_by(ID) %>% mutate(Urg_Alc_pm.d = sd(Urg_Alc_pm, na.rm = T),
-                                               Urg_Nic_pm.d = sd(Urg_Nic_pm, na.rm = T),
-                                               Urg_Mar_pm.d = sd(Urg_Mar_pm, na.rm = T),
-                                               Urg_Coc_pm.d = sd(Urg_Coc_pm, na.rm = T),
-                                               Diff_Inhib_pm.d = sd(Diff_Inhib_pm, na.rm = T),
-                                               Diff_Change_pm.d = sd(Diff_Change_pm, na.rm = T),
-                                               Diff_Stop_pm.d = sd(Diff_Stop_pm, na.rm = T),
-                                               Immed_Payoff_pm.d = sd(Immed_Payoff_pm, na.rm = T),
-                                               Res_Urge_pm.d = sd(Res_Urge_pm, na.rm = T),
-                                               Diff_LongRew_pm.d = sd(Diff_LongRew_pm, na.rm = T),
-                                               Diff_ResRew_pm.d = sd(Diff_ResRew_pm, na.rm = T),
-                                               Dep_pm.d = sd(Dep_pm, na.rm = T),
-                                               Hopeless_pm.d = sd(Hopeless_pm, na.rm = T),
-                                               Worthless_pm.d = sd(Worthless_pm, na.rm = T),
-                                               Anxious_pm.d = sd(Anxious_pm, na.rm = T),
-                                               MoodSwing_pm.d = sd(MoodSwing_pm, na.rm = T),
-                                               RejSens_pm.d = sd(RejSens_pm, na.rm = T),
-                                               Angry_pm.d = sd(Angry_pm, na.rm = T),
-                                               Conflicts_pm.d = sd(Conflicts_pm, na.rm = T),
-                                               Loss_Interest_pm.d = sd(Loss_Interest_pm, na.rm = T),
-                                               Diff_Conc_pm.d = sd(Diff_Conc_pm, na.rm = T),
-                                               Tired_pm.d = sd(Tired_pm, na.rm = T),
-                                               OverEat_pm.d = sd(OverEat_pm, na.rm = T),
-                                               Sp_Food_Crav_pm.d = sd(Sp_Food_Crav_pm, na.rm = T),
-                                               High_Sleep_pm.d = sd(High_Sleep_pm, na.rm = T),
-                                               Diff_Sleep_pm.d = sd(Diff_Sleep_pm, na.rm = T),
-                                               Overwhelm_pm.d = sd(Overwhelm_pm, na.rm = T),
-                                               Loss_Control_pm.d = sd(Loss_Control_pm, na.rm = T),
-                                               Breast_Tend_pm.d = sd(Breast_Tend_pm, na.rm = T),
-                                               Breast_Swell_pm.d = sd(Breast_Swell_pm, na.rm = T),
-                                               Headache_pm.d = sd(Headache_pm, na.rm = T),
-                                               JM_Pain_pm.d = sd(JM_Pain_pm, na.rm = T),
-                                               Loss_Prod_pm.d = sd(Loss_Prod_pm, na.rm = T),
-                                               Int_Relat_pm.d = sd(Int_Relat_pm, na.rm = T))
-                                               
+#create person-centered deviations 
+pm_data <- pm_data %>% rowwise() %>% mutate(Urg_Alc_pm.d = Urg_Alc_pm - Urg_Alc_pm.m, na.rm = T, 
+                                            Urg_Nic_pm.d = Urg_Nic_pm - Urg_Nic_pm.m, na.rm = T,
+                                            Urg_Mar_pm.d = Urg_Mar_pm - Urg_Mar_pm.m, na.rm = T,
+                                            Urg_Coc_pm.d = Urg_Coc_pm - Urg_Coc_pm.m, na.rm = T,
+                                            Diff_Inhib_pm.d = Diff_Inhib_pm - Diff_Inhib_pm.m, na.rm = T,
+                                            Diff_Change_pm.d = Diff_Change_pm - Diff_Change_pm.m, na.rm = T,
+                                            Diff_Stop_pm.d = Diff_Stop_pm - Diff_Stop_pm.m, na.rm = T,
+                                            Immed_Payoff_pm.d = Immed_Payoff_pm - Immed_Payoff_pm.m, na.rm = T,
+                                            Res_Urge_pm.d = Res_Urge_pm - Res_Urge_pm.m, na.rm = T,
+                                            Diff_LongRew_pm.d = Diff_LongRew_pm - Diff_LongRew_pm.m, na.rm = T, 
+                                            Diff_ResRew_pm.d = Diff_ResRew_pm - Diff_ResRew_pm.m, na.rm = T,
+                                            Dep_pm.d = Dep_pm - Dep_pm.m, na.rm = T, 
+                                            Hopeless_pm.d = Hopeless_pm - Hopeless_pm.m, na.rm = T,
+                                            Worthless_pm.d = Worthless_pm - Worthless_pm.m, na.rm = T,
+                                            Anxious_pm.d = Anxious_pm - Anxious_pm.m, na.rm = T,
+                                            MoodSwing_pm.d = MoodSwing_pm - MoodSwing_pm.m, na.rm = T,
+                                            RejSens_pm.d = RejSens_pm - RejSens_pm.m, na.rm = T,
+                                            Angry_pm.d = Angry_pm - Angry_pm.m, na.rm = T,
+                                            Conflicts_pm.d = Conflicts_pm - Conflicts_pm.m, na.rm = T,
+                                            Loss_Interest_pm.d = Loss_Interest_pm - Loss_Interest_pm.m, na.rm = T,
+                                            Diff_Conc_pm.d = Diff_Conc_pm - Diff_Conc_pm.m, na.rm = T,
+                                            Tired_pm.d = Tired_pm - Tired_pm.m, na.rm = T,
+                                            OverEat_pm.d = OverEat_pm - OverEat_pm.m, na.rm = T,
+                                            Sp_Food_Crav_pm.d = Sp_Food_Crav_pm - Sp_Food_Crav_pm.m, na.rm = T,
+                                            High_Sleep_pm.d = High_Sleep_pm - High_Sleep_pm.m, na.rm = T,
+                                            Diff_Sleep_pm.d = Diff_Sleep_pm - Diff_Sleep_pm.m, na.rm = T,
+                                            Overwhelm_pm.d = Overwhelm_pm - Overwhelm_pm.m, na.rm = T,
+                                            Loss_Control_pm.d = Loss_Control_pm - Loss_Control_pm.m, na.rm = T,
+                                            Breast_Tend_pm.d = Breast_Tend_pm - Breast_Tend_pm.m, na.rm = T,
+                                            Breast_Swell_pm.d = Breast_Swell_pm - Breast_Swell_pm.m, na.rm = T,
+                                            Headache_pm.d = Headache_pm - Headache_pm.m, na.rm = T, 
+                                            JM_Pain_pm.d = JM_Pain_pm - JM_Pain_pm.m, na.rm = T, 
+                                            Loss_Prod_pm.d = Loss_Prod_pm - Loss_Prod_pm.m, na.rm = T,
+                                            Int_Relat_pm.d = Int_Relat_pm - Int_Relat_pm.m, na.rm = T) 
 ```
 
 ICCs for pm_data
