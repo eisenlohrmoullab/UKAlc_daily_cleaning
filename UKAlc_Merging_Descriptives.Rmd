@@ -1120,31 +1120,42 @@ icc(Int_Relat_pm_model)
 
 #Raincloud plots on raw data 
 ```{r}
-#Urg alc 
+#Urg alc - interesting 
 ggplot(pm_data, aes(1, Urg_Alc_pm)) +
   geom_rain() +
   theme_classic() +
   theme(axis.title.x = element_blank(), 
         axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
-#Urg nic 
+#Urg nic - not interesting 
 ggplot(pm_data, aes(1, Urg_Nic_pm)) +
   geom_rain() +
   theme_classic() +
   theme(axis.title.x = element_blank(), 
         axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
-#Urg mar 
+#Urg mar - interesting 
 ggplot(pm_data, aes(1, Urg_Mar_pm)) +
   geom_rain() +
   theme_classic() +
   theme(axis.title.x = element_blank(), 
         axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
-#Urg coc 
+#Urg coc - not interesting 
 ggplot(pm_data, aes(1, Urg_Coc_pm)) +
   geom_rain() +
   theme_classic() +
   theme(axis.title.x = element_blank(), 
         axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
-
+#Diff inhib - not interesting 
+ggplot(pm_data, aes(1, Diff_Inhib_pm)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Diff inhib - not interesting 
+ggplot(pm_data, aes(1, Diff_Inhib_pm)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
 ```
 
 
