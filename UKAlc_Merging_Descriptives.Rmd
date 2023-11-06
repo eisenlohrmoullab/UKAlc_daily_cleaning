@@ -1074,6 +1074,46 @@ High_Sleep_pm_model <- lmer(High_Sleep_pm~ (1 | ID),
                                  data = pm_data)
 summary(High_Sleep_pm_model)
 icc(High_Sleep_pm_model)
+#Overwhelm icc 0.211
+Overwhelm_pm_model <- lmer(Overwhelm_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Overwhelm_pm_model)
+icc(Overwhelm_pm_model)
+#Loss control icc 0.259 
+Loss_Control_pm_model <- lmer(Loss_Control_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Loss_Control_pm_model)
+icc(Loss_Control_pm_model)
+#Breast tend icc 0.161 
+Breast_Tend_pm_model <- lmer(Breast_Tend_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Breast_Tend_pm_model)
+icc(Breast_Tend_pm_model)
+#Breast swell icc 0.253 
+Breast_Swell_pm_model <- lmer(Breast_Swell_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Breast_Swell_pm_model)
+icc(Breast_Swell_pm_model)
+#Headache icc 0.274
+Headache_pm_model <- lmer(Headache_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Headache_pm_model)
+icc(Headache_pm_model)
+#JM Pain icc 0.222
+JM_Pain_pm_model <- lmer(JM_Pain_pm~ (1 | ID),
+                                 data = pm_data)
+summary(JM_Pain_pm_model)
+icc(JM_Pain_pm_model)
+#Loss Prod icc 0.236 
+Loss_Prod_pm_model <- lmer(Loss_Prod_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Loss_Prod_pm_model)
+icc(Loss_Prod_pm_model)
+#Int relat icc 0.111
+Int_Relat_pm_model <- lmer(Int_Relat_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Int_Relat_pm_model)
+icc(Int_Relat_pm_model)
 ```
 
 
