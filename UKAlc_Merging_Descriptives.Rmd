@@ -836,9 +836,12 @@ icc(Urg_Mar_am_model)
 pm_data$Diff_Inhib_pm <- as.numeric(pm_data$Diff_Inhib_pm)
 ##the above code seemed to make them all NA - figure out how to remove statement portion of column so that you can code the responses as numerics 
 
-
 #Create person means   
-am_data <- am_data %>% group_by(ID) %>% mutate(Urg_Alc_am.m = mean(Urg_Alc_am, na.rm = T),
+pm_data <- pm_data %>% group_by(ID) %>% mutate(Urg_Alc_pm.m = mean(Urg_Alc_pm, na.rm = T),
+                                               Urg_Nic_pm.m = mean(Urg_Nic_pm, na.rm = T),
+                                               Urg_Mar_pm.m = mean(Urg_Mar_pm, na.rm = T),
+                                               Urg_Coc_pm.m = mean(Urg_Coc_pm, na.rm = T),
+                                               )
 ```
 
 
