@@ -23,6 +23,7 @@ library(performance) #to extract ICCs
 library(emmeans) #for plotting interactions
 knitr::opts_chunk$set(echo = TRUE)
 install.packages( c( "dplyr", "ggplot2", "plyr" ) )
+library(ggpubr)
 library(ggplot2)
 library(ggdist)
 
@@ -853,6 +854,15 @@ pm_data <- pm_data %>% group_by(ID) %>% mutate(Urg_Alc_pm.d = sd(Urg_Alc_pm, na.
                                                Urg_Coc_pm.d = sd(Urg_Coc_pm, na.rm = T))
 
                                                
+```
+
+#Raincloud plots on raw data 
+```{r}
+ggplot(pm_data, aes(1, Urg_Alc_pm)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
 ```
 
 
