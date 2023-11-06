@@ -950,6 +950,46 @@ pm_data <- pm_data %>% group_by(ID) %>% mutate(Urg_Alc_pm.d = sd(Urg_Alc_pm, na.
                                                Urg_Coc_pm.d = sd(Urg_Coc_pm, na.rm = T))
 ```
 
+ICCs for pm_data
+```{r}
+#Alc urge ICC 0.442 
+Urg_Alc_pm_model <- lmer(Urg_Alc_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Urg_Alc_pm_model)
+icc(Urg_Alc_pm_model) 
+#Nic urge ICC 0.770 
+Urg_Nic_pm_model <- lmer(Urg_Nic_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Urg_Nic_pm_model)
+icc(Urg_Nic_pm_model) 
+#Mar urge ICC 0.657
+Urg_Mar_pm_model <- lmer(Urg_Mar_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Urg_Mar_pm_model)
+icc(Urg_Mar_pm_model) 
+#Coc urge ICC 0.979 
+Urg_Coc_pm_model <- lmer(Urg_Coc_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Urg_Coc_pm_model)
+icc(Urg_Coc_pm_model) 
+#Diff inhib ICC 0.183 
+Diff_Inhib_pm_model <- lmer(Diff_Inhib_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Diff_Inhib_pm_model)
+icc(Diff_Inhib_pm_model) 
+#Diff change ICC 0.300
+Diff_Change_pm_model <- lmer(Diff_Change_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Diff_Change_pm_model)
+icc(Diff_Change_pm_model) 
+#Diff change ICC 0.300
+Diff_Stop_pm_model <- lmer(Diff_Stop_pm~ (1 | ID),
+                                 data = pm_data)
+summary(Diff_Stop_pm_model)
+icc(Diff_Stop_pm_model) 
+```
+
+
 #Raincloud plots on raw data 
 ```{r}
 #Urg alc 
