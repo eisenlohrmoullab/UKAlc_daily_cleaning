@@ -1116,7 +1116,7 @@ icc(Int_Relat_pm_model)
 ```
 
 
-#Raincloud plots on raw data 
+#Raincloud plots on raw pm_data
 ```{r}
 #Urg alc - interesting 
 ggplot(pm_data, aes(1, Urg_Alc_pm)) +
@@ -1154,6 +1154,11 @@ ggplot(pm_data, aes(1, Diff_Inhib_pm)) +
   theme_classic() +
   theme(axis.title.x = element_blank(), 
         axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+```
+
+#Raincloud plots for person-centered deviations 
+```{r}
+
 ```
 
 
