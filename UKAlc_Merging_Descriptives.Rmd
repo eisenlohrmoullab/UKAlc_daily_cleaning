@@ -1238,6 +1238,12 @@ ggplot(pm_data, aes(1, Tired_pm)) +
   theme_classic() +
   theme(axis.title.x = element_blank(), 
         axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Overeat  - not interesting 
+ggplot(pm_data, aes(1, OverEat_pm)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
 ```
 
 #Raincloud plots for person-centered deviations 
@@ -1248,8 +1254,158 @@ ggplot(pm_data, aes(1, Urg_Alc_pm.d)) +
   theme_classic() +
   theme(axis.title.x = element_blank(), 
         axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
-#Urg alc - interesting 
+#OverEat - interesting 
 ggplot(pm_data, aes(1, OverEat_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Diff Inhib - not interesting 
+ggplot(pm_data, aes(1, Diff_Inhib_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Diff Change - not interesting 
+ggplot(pm_data, aes(1, Diff_Change_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Diff Stop - not interesting 
+ggplot(pm_data, aes(1, Diff_Stop_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Immed Payoff - interesting 
+ggplot(pm_data, aes(1, Immed_Payoff_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Res Urge - not super interesting 
+ggplot(pm_data, aes(1, Res_Urge_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Diff LongRew - not interesting 
+ggplot(pm_data, aes(1, Diff_LongRew_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Depression - interesting 
+ggplot(pm_data, aes(1, Dep_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Hopeless - not interesting 
+ggplot(pm_data, aes(1, Hopeless_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Worthless - not interesting 
+ggplot(pm_data, aes(1, Worthless_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#MoodSwing - interesting 
+ggplot(pm_data, aes(1, MoodSwing_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#RejSens - not interesting 
+ggplot(pm_data, aes(1, RejSens_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Angry - interesting 
+ggplot(pm_data, aes(1, Angry_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Loss intereset - not interesting 
+ggplot(pm_data, aes(1, Loss_Interest_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Diff conc
+ggplot(pm_data, aes(1, Diff_Conc_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Diff conc - interesting 
+ggplot(pm_data, aes(1, Tired_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Over-eating - interesting 
+ggplot(pm_data, aes(1, OverEat_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Spec food craving - interesting 
+ggplot(pm_data, aes(1, Sp_Food_Crav_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Overwhelm - not interesting 
+ggplot(pm_data, aes(1, Overwhelm_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Loss control - not interesting 
+ggplot(pm_data, aes(1, Loss_Control_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Breast tend - not interesting 
+ggplot(pm_data, aes(1, Breast_Tend_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Breast swell - not interesting 
+ggplot(pm_data, aes(1, Breast_Swell_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Headache - not interesting 
+ggplot(pm_data, aes(1, Headache_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#JM Pain - not interesting 
+ggplot(pm_data, aes(1, JM_Pain_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Loss prod - not interesting 
+ggplot(pm_data, aes(1, Loss_Prod_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Interpersonal Relat- not interesting 
+ggplot(pm_data, aes(1, Int_Relat_pm.d)) +
   geom_rain() +
   theme_classic() +
   theme(axis.title.x = element_blank(), 
