@@ -388,29 +388,15 @@ pm_data <- pm_data[!(pm_data$ID == 114 & pm_data$daterated == "2021-07-09" & pm_
 pm_data <- pm_data[!(pm_data$ID == 114 & pm_data$daterated == "2021-07-11" & pm_data$time_pm == "20H 46M 0S"), ]
 pm_data <- pm_data[!(pm_data$ID == 114 & pm_data$daterated == "2021-07-14" & pm_data$time_pm == "7H 48M 0S"), ]
 #ID 115 
-pm_data %>%
-  filter(ID == 115 & daterated == ymd("2021-06-26"))
 pm_data <- pm_data[!(pm_data$ID == 115 & pm_data$daterated == "2021-06-26" & pm_data$time_pm == "8H 20M 0S"), ]
-pm_data %>%
-  filter(ID == 115 & daterated == ymd("2021-06-28"))
 pm_data <- pm_data[!(pm_data$ID == 115 & pm_data$daterated == "2021-06-28" & pm_data$time_pm == "22H 1M 0S"), ]
-pm_data %>%
-  filter(ID == 115 & daterated == ymd("2021-07-01"))
 pm_data <- pm_data[!(pm_data$ID == 115 & pm_data$daterated == "2021-07-01" & pm_data$time_pm == "19H 52M 0S"), ]
-pm_data %>%
-  filter(ID == 115 & daterated == ymd("2021-07-03"))
 pm_data <- pm_data[!(pm_data$ID == 115 & pm_data$daterated == "2021-07-03" & pm_data$time_pm == "3H 5M 0S"), ]
-pm_data %>%
-  filter(ID == 115 & daterated == ymd("2021-07-09"))
 pm_data <- pm_data[!(pm_data$ID == 115 & pm_data$daterated == "2021-07-09" & pm_data$time_pm == "21H 52M 0S"), ]
 pm_data <- pm_data[!(pm_data$ID == 115 & pm_data$daterated == "2021-07-09" & pm_data$time_pm == "21H 54M 0S"), ]
 pm_data <- pm_data[!(pm_data$ID == 115 & pm_data$daterated == "2021-07-09" & pm_data$time_pm == "21H 57M 0S"), ]
-pm_data %>%
-  filter(ID == 115 & daterated == ymd("2021-07-10"))
 pm_data <- pm_data[!(pm_data$ID == 115 & pm_data$daterated == "2021-07-10" & pm_data$time_pm == "8H 37M 0S"), ]
 pm_data <- pm_data[!(pm_data$ID == 115 & pm_data$daterated == "2021-07-10" & pm_data$time_pm == "8H 40M 0S"), ]
-pm_data %>%
-  filter(ID == 115 & daterated == ymd("2021-07-19"))
 pm_data <- pm_data[!(pm_data$ID == 115 & pm_data$daterated == "2021-07-19" & pm_data$time_pm == "6H 48M 0S"), ]
 pm_data <- pm_data[!(pm_data$ID == 115 & pm_data$daterated == "2021-07-19" & pm_data$time_pm == "6H 56M 0S"), ]
 pm_data <- pm_data[!(pm_data$ID == 115 & pm_data$daterated == "2021-07-19" & pm_data$time_pm == "6H 59M 0S"), ]
@@ -458,6 +444,12 @@ pm_data <- pm_data[!(pm_data$ID == 180 & pm_data$daterated == "2023-04-15" & pm_
 pm_data <- pm_data[!(pm_data$ID == 181 & pm_data$daterated == "2023-03-22" & pm_data$time_pm == "19H 13M 0S"), ]
 #ID 185
 pm_data <- pm_data[!(pm_data$ID == 185 & pm_data$daterated == "2023-05-29" & pm_data$time_pm == "23H 34M 0S"), ]
+```
+
+### create new column for presence or absence of drinking in am dataset 
+```{r}
+am_data <- am_data %>%
+  mutate(drink_today_am = ifelse(Alc_Amt_am == 0, 0, 1)) 
 ```
 
 ### create person means and person deviations for am_data
