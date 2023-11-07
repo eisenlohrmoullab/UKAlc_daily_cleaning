@@ -1244,6 +1244,18 @@ ggplot(pm_data, aes(1, OverEat_pm)) +
   theme_classic() +
   theme(axis.title.x = element_blank(), 
         axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Spec Food Crav
+ggplot(pm_data, aes(1, Sp_Food_Crav_pm)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Angry - interesting 
+ggplot(pm_data, aes(1, Angry_pm)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
 ```
 
 #Raincloud plots for person-centered deviations 
@@ -1406,6 +1418,12 @@ ggplot(pm_data, aes(1, Loss_Prod_pm.d)) +
         axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
 #Interpersonal Relat- not interesting 
 ggplot(pm_data, aes(1, Int_Relat_pm.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+#Urg alc - interesting 
+ggplot(pm_data, aes(1, Urg_Mar_pm.d)) +
   geom_rain() +
   theme_classic() +
   theme(axis.title.x = element_blank(), 
