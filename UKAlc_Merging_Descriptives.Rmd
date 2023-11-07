@@ -452,6 +452,12 @@ am_data <- am_data %>%
   mutate(drink_today_am = ifelse(Alc_Amt_am == 0, 0, 1)) 
 ```
 
+### create new column for presence or absence of heavy drinking (> or eq to 4 in one day) in am dataset 
+```{r}
+am_data <- am_data %>%
+  mutate(heavy_drink_am = ifelse(Alc_Amt_am >= 4, 1, 0))
+```
+
 ### create person means and person deviations for am_data
 ```{r echo=T}
 #create person means
