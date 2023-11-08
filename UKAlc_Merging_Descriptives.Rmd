@@ -498,7 +498,7 @@ summary_Alc_daily <- am_data %>% group_by(ID) %>%
   arrange(daterated) ## getting confused at the arrange step 
 ##COUNTS
 summary_Alc_daily %>% tally() 
-## days not drinking per person
+## days not drinking per person ##found this to be kind of nice, thinking about how to incorporate this into my dataset in a meaningful way? maybe I just make a new df 
 am_data %>% tally(drink_today_am ==0)
 
 ## days drinking per person 
