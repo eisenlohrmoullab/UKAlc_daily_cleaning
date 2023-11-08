@@ -546,6 +546,7 @@ am_data <- am_data %>% rowwise() %>% mutate(Urg_Alc_am.d = Urg_Alc_am - Urg_Alc_
     #mutate("{{var}}.d" := {{var}} - {{var.m}})
 #}
 
+
 #function to create person means
 
 #Jordan's code below 
@@ -596,15 +597,17 @@ am_data <- am_data %>% rowwise() %>% mutate(Urg_Alc_am.d = Urg_Alc_am - Urg_Alc_
 #                  am_data, Alc_Amt_am, Alc_Amt_am.m)
 
 #Do I need to do rolling average? 
-# install.packages("zoo")
-# library(zoo)
-# create.3day.rolling.avg <- function(df, var, num) {
-#   df %>%
-#     group_by(ID) %>%
-#     mutate("{{var}}.roll" := rollapply({{var}}, 3,  mean, align="center", fill=NA))
-# }
-# ###I'm not sure why this below isn't making a new column? 
-# am_data$Alc_Amt_am.roll <- create.3day.rolling.avg(am_data, Alc_Amt_am, 3)
+install.packages("zoo")
+library(zoo)
+create.3day.rolling.avg <- function(df, var) {
+   df %>%
+     group_by(ID) %>%     mutate("{{var}}.roll" := rollapply({{var}}, 3,  mean, align="center", fill=NA))
+}
+
+
+
+# ###I'm not sure why this below isn't making a new column?
+am_data <- create.3day.rolling.avg(am_data, Alc_Amt_am) 
 # View(am_data$Alc_Amt_am.roll)
 ```
 
