@@ -487,6 +487,22 @@ result <- am_data %>%
   ungroup() %>%
   summarize(count = sum(has_value_ge_1))
 result
+
+### Jordan's suggestion below 
+summary_Alc_daily <- am_data %>% group_by(ID) %>% 
+  summarize(drink_today_am = n(),
+            TotalDrinkingDays = sum(drink_today_am, na.rm = TRUE),
+            MinDrinksperDay = min(Alc_Amt_am, na.rm = TRUE),
+            MaxDrinksperDay = max(Alc_Amt_am, na.rm = TRUE),
+            MeanDrinksperDay = mean(Alc_Amt_am, na.rm = TRUE)) %>%
+  arrange(daterated) ## getting confused at the arrange step 
+##COUNTS
+summary_Alc_daily %>% tally() 
+## days not drinking per person
+am_data %>% tally(drink_today_am ==0)
+
+## days drinking per person 
+am_data %>% tally(drink_today_am == 1)
 ```
 
 ### create person means and person deviations for am_data
@@ -604,11 +620,11 @@ create.3day.rolling.avg <- function(df, var) {
      group_by(ID) %>%     mutate("{{var}}.roll" := rollapply({{var}}, 3,  mean, align="center", fill=NA))
 }
 
+### make list and then put list into the function instead of the variable (in this case Alc_Amt_am)
 
 
-# ###I'm not sure why this below isn't making a new column?
 am_data <- create.3day.rolling.avg(am_data, Alc_Amt_am) 
-# View(am_data$Alc_Amt_am.roll)
+
 ```
 
 #raincloud plots on raw variables on interest from am_data
