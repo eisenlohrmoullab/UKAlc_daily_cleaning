@@ -874,7 +874,7 @@ icc(Crav_Mar_am_model)
 #Mar urg ICC 0.763
 Urg_Mar_am_model <- lmer(Urg_Mar_am~ (1 | ID),
                                  data = am_data)
-summary(Urg_Mar_am_model)
+summary(Urg_Mar_am_model) 
 icc(Urg_Mar_am_model) 
 ```
 
