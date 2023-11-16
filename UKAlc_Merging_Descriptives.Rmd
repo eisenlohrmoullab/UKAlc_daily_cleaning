@@ -475,7 +475,7 @@ summary_Alc_daily
 summary_Alc_daily %>% tally() #all participants drank alcohol 
 summary_Alc_daily %>% tally(TotalDrinkingDays ==0) #no participants drank no alcohol 
 
-## number of ppl w at least one binge-drink day (>4 drinks one one day) = 49
+## number of ppl w at least one binge-drink day (>4 drinks on one day) = 49
 am_data$Alc_Amt_am <- as.numeric(am_data$Alc_Amt_am)
 am_data %>% group_by(ID) %>% 
   filter(Alc_Amt_am > 4) 
