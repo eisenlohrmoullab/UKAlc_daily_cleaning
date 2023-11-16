@@ -8,6 +8,7 @@ output: html_document
 rm(list = ls())
 ```{r}
 #libraries
+install.packages( c( "dplyr", "ggplot2", "plyr" ) )
 library(tidyverse)
 library(dplyr)
 library(tidyr)
@@ -22,7 +23,6 @@ library(lmerTest) #to extract P values when lmer doesnt feel like showing them
 library(performance) #to extract ICCs
 library(emmeans) #for plotting interactions
 knitr::opts_chunk$set(echo = TRUE)
-install.packages( c( "dplyr", "ggplot2", "plyr" ) )
 library(ggpubr)
 library(ggplot2)
 library(ggdist)
@@ -495,14 +495,22 @@ summary_Alc_daily <- am_data %>% group_by(ID) %>%
             MinDrinksperDay = min(Alc_Amt_am, na.rm = TRUE),
             MaxDrinksperDay = max(Alc_Amt_am, na.rm = TRUE),
             MeanDrinksperDay = mean(Alc_Amt_am, na.rm = TRUE)) %>%
-  arrange(daterated) ## getting confused at the arrange step 
+  arrange(drink_today_am) ## getting confused at the arrange step 
+
+summary_Alc_daily
+##COUNTS
+summary_Alc_daily %>% tally() 
+## 91 total pts
+summary_Alc_daily %>% tally(TotalDrinkingDays ==0)
+## 13 nondrinkers
+summary_Alc_daily %>% tally(TotalDrinkingDays == 1 | TotalDrinkingDays == 2)
 ##COUNTS
 summary_Alc_daily %>% tally() 
 ## days not drinking per person ##found this to be kind of nice, thinking about how to incorporate this into my dataset in a meaningful way? maybe I just make a new df 
 am_data %>% tally(drink_today_am ==0)
 
 ## days drinking per person 
-am_data %>% tally(drink_today_am == 1)
+am_data %>% tally(drink_today_am >= 1)
 ```
 
 ### create person means and person deviations for am_data
