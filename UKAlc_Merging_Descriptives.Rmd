@@ -494,7 +494,7 @@ am_data$Crav_Coc_am <- as.numeric(am_data$Crav_Coc_am)
 am_data$Crav_Benz_am <- as.numeric(am_data$Crav_Benz_am)
 am_data$Crav_Hall_am <- as.numeric(am_data$Crav_Hall_am)
 am_data$Crav_Opiate_am <- as.numeric(am_data$Crav_Opiate_am)
-am_data$Alc_Amt_am <- as.numeric(am_data$Alc_Amt_am)
+
 
 #Create person means   
 am_data <- am_data %>% group_by(ID) %>% mutate(Urg_Alc_am.m = mean(Urg_Alc_am, na.rm = T),
