@@ -460,35 +460,6 @@ am_data <- am_data %>%
 
 ### identify how many people drank any alcohol throughout the study 
 ```{r}
-#attempt number 1 
-unique_ID <- unique(am_data$ID)
-count_above_1_or_equal <- sum(am_data$drink_today_am >= 1)
-count_unique_above_1_or_equal <- sum(am_data$ID[am_data$drink_today_am >= 1] %in% unique_ID)
-count_unique_above_1_or_equal
-#attempt number 2 
-result <- am_data %>%
-  group_by(ID) %>%
-  summarize(any_drinking = any(drink_today_am > 1)) %>%
-  summarise(count = sum(any_drinking))
-
-count_of_individuals_with_value_above_1 <- result$count
-count_of_individuals_with_value_above_1
-#attempt number 3 
-result <- am_data %>%
-  group_by(ID) %>%
-  summarize(any_drinking = sum(am_data$drink_today_am >= 1)) %>%
-  ungroup()
-
-sum(am_data$any_drinking)
-#attempt number 4 
-result <- am_data %>%
-  group_by(ID) %>%
-  summarize(has_value_ge_1 = any(drink_today_am >= 1)) %>%
-  ungroup() %>%
-  summarize(count = sum(has_value_ge_1))
-result
-
-### Jordan's suggestion below 
 summary_Alc_daily <- am_data %>% group_by(ID) %>% 
   summarize(drink_today_am = n(),
             TotalDrinkingDays = sum(drink_today_am, na.rm = TRUE),
