@@ -535,11 +535,18 @@ create.3day.rolling.avg <- function(df, var) {
      group_by(ID) %>%     mutate("{{var}}.roll" := rollapply({{var}}, 3,  mean, align="center", fill=NA))
 }
 
-### make list and then put list into the function instead of the variable (in this case Alc_Amt_am)
+### make list and then put list into the function instead of the variable 
+am_data_vars_int <- c("Alc_Amt_am",
+                      "Urg_Alc_am",
+                      "Crav_Alc_am"
+)
 
+am_data <- create.3day.rolling.avg(am_data, am_data_vars_int) 
 
-am_data <- create.3day.rolling.avg(am_data, Alc_Amt_am) 
-
+## subunits
+subunits <- c("gaba_a5",
+              "gaba_g2",
+              "gaba_d") 
 ```
 
 #raincloud plots on raw variables on interest from am_data
