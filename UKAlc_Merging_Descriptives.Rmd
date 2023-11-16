@@ -468,7 +468,7 @@ summary_Alc_daily <- am_data %>% group_by(ID) %>%
             MinDrinksperDay = min(Alc_Amt_am, na.rm = TRUE),
             MaxDrinksperDay = max(Alc_Amt_am, na.rm = TRUE),
             MeanDrinksperDay = mean(Alc_Amt_am, na.rm = TRUE)) %>%
-  arrange(drink_today_am) ## getting confused at the arrange step 
+  arrange(drink_today_am)
 
 summary_Alc_daily
 ##COUNTS
@@ -483,7 +483,10 @@ summary_Alc_daily %>% tally()
 am_data %>% tally(drink_today_am ==0)
 
 ## days drinking per person 
-am_data %>% tally(drink_today_am >= 1)
+am_data %>% 
+  filter(Alc_Amt_am > 1) %>% nrow()
+am_data %>% 
+  filter(Alc_Amt_am > 4) %>% nrow()
 ```
 
 ### create person means and person deviations for am_data
