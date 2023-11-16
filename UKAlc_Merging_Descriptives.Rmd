@@ -27,6 +27,8 @@ library(ggpubr)
 library(ggplot2)
 library(ggdist)
 library(ggrain)
+install.packages("zoo") #for rolling avgs
+library(zoo)
 
 
 #Anisha's Paths
@@ -488,8 +490,6 @@ am_data %>% tally(drink_today_am >= 1)
 ```{r echo=T}
 #create person means
 
-#Anna process below 
-
 #step 1: make variables numeric that aren't already 
 am_data$Alc_Drunk_am <- as.numeric(am_data$Alc_Drunk_am)
 am_data$Crav_Alc_am <- as.numeric(am_data$Crav_Alc_am)
@@ -500,7 +500,6 @@ am_data$Crav_Benz_am <- as.numeric(am_data$Crav_Benz_am)
 am_data$Crav_Hall_am <- as.numeric(am_data$Crav_Hall_am)
 am_data$Crav_Opiate_am <- as.numeric(am_data$Crav_Opiate_am)
 am_data$Alc_Amt_am <- as.numeric(am_data$Alc_Amt_am)
-
 
 #Create person means   
 am_data <- am_data %>% group_by(ID) %>% mutate(Urg_Alc_am.m = mean(Urg_Alc_am, na.rm = T),
@@ -534,64 +533,7 @@ am_data <- am_data %>% rowwise() %>% mutate(Urg_Alc_am.d = Urg_Alc_am - Urg_Alc_
                                             Alc_Drunk_am.d = Alc_Drunk_am - Alc_Drunk_am.m, na.rm = T)
 
 
-#function to create person deviations (note, must have person means already made)
-#create.deviation <- function(df, var, var.m) {
-  #df <- df %>%
-    #rowwise() %>%
-    #mutate("{{var}}.d" := {{var}} - {{var.m}})
-#}
-
-
-#function to create person means
-
-#Jordan's code below 
-#create.person.mean <- function(am_data, Urge_Alc_am, Urg_Nic_am, Urg_Mar_am, Alc_Amt_am) {
-  #am_data %>%
-    #group_by(ID) %>%
-    #mutate("{{Urge_Alc_am, Urg_Nic_am, Urg_Mar_am, Alc_Amt_am}}.m" := mean({{Urge_Alc_am, Urg_Nic_am, Urg_Mar_am, Alc_Amt_am}}, na.rm=T))
-#}
-#create.person.mean
-
-#create.person.mean <- function(df, var, ...) {
-  #df %>%
-    #group_by(...) %>%
-    #mutate("{{var}}.m" := mean({{var}}, na.rm=T))
-#}
-#create.person.mean(am_data, Urge_Alc_am) 
-
-#create.deviation <- function(am_data, Urg_Alc_am, Urg_Alc_am.m,
-#                              Urg_Nic_am, Urg_Nic_am.m, 
-#                              Urg_Mar_am, Urg_Mar_am.m,
-#                              Urg_Coc_am, Urg_Coc_am.m,
-#                              Urg_Oth_am, Urg_Oth_am.m,
-#                              Crav_Alc_am, Crav_Alc_am.m,
-#                              Crav_Nic_am, Crav_Nic_am.m,
-#                              Crav_Mar_am, Crav_Mar_am.m,
-#                              Crav_Coc_am, Crav_Coc_am.m,
-#                              Crav_Benz_am, Crav_Benz_am.m,
-#                              Crav_Hall_am, Crav_Hall_am.m,
-#                              Crav_Opiate_am, Crav_Opiate_am.m,
-#                              Alc_Amt_am, Alc_Amt_am.m) {
-#   am_data <- am_data %>%
-#     rowwise() %>%
-#     mutate("{{Urg_Nic_am}}.d" := {{Urg_Alc_am}} - {{Urg_Alc_am.m}})
-# }
-# 
-# create.deviation(am_data, Urg_Alc_am, Urg_Alc_am.m,
-#                  am_data, Urg_Nic_am, Urg_Nic_am.m,
-#                  am_data, Urg_Mar_am, Urg_Mar_am.m,
-#                  am_data, Urg_Coc_am, Urg_Coc_am.m,
-#                  am_data, Urg_Oth_am, Urg_Oth_am.m,
-#                  am_data, Crav_Alc_am, Crav_Alc_am.m,
-#                  am_data, Crav_Nic_am, Crav_Nic_am.m,
-#                  am_data, Crav_Mar_am, Crav_Mar_am.m,
-#                  am_data, Crav_Coc_am, Crav_Coc_am.m,
-#                  am_data, Crav_Benz_am, Crav_Benz_am.m,
-#                  am_data, Crav_Hall_am, Crav_Hall_am.m,
-#                  am_data, Crav_Opiate_am, Crav_Opiate_am.m,
-#                  am_data, Alc_Amt_am, Alc_Amt_am.m)
-
-#Do I need to do rolling average? 
+#Rolling averages
 install.packages("zoo")
 library(zoo)
 create.3day.rolling.avg <- function(df, var) {
