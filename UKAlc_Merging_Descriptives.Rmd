@@ -460,7 +460,7 @@ am_data <- am_data %>%
   mutate(heavy_drink_am = ifelse(Alc_Amt_am >= 4, 1, 0))
 ```
 
-### identify how many people drank any alcohol throughout the study 
+### identify how many people drank alcohol throughout the study 
 ```{r}
 summary_Alc_daily <- am_data %>% group_by(ID) %>% 
   summarize(drink_today_am = n(),
@@ -472,21 +472,13 @@ summary_Alc_daily <- am_data %>% group_by(ID) %>%
 
 summary_Alc_daily
 ##COUNTS
-summary_Alc_daily %>% tally() 
-## 91 total pts
-summary_Alc_daily %>% tally(TotalDrinkingDays ==0)
-## 13 nondrinkers
-summary_Alc_daily %>% tally(TotalDrinkingDays == 1 | TotalDrinkingDays == 2)
-##COUNTS
-summary_Alc_daily %>% tally() 
-## days not drinking per person ##found this to be kind of nice, thinking about how to incorporate this into my dataset in a meaningful way? maybe I just make a new df 
-am_data %>% tally(drink_today_am ==0)
+summary_Alc_daily %>% tally() #all participants drank alcohol 
+summary_Alc_daily %>% tally(TotalDrinkingDays ==0) #no participants drank no alcohol 
 
-## days drinking per person 
-am_data %>% 
-  filter(Alc_Amt_am > 1) %>% nrow()
-am_data %>% 
-  filter(Alc_Amt_am > 4) %>% nrow()
+## number of ppl w at least one binge-drink day (>4 drinks one one day) = 49
+am_data$Alc_Amt_am <- as.numeric(am_data$Alc_Amt_am)
+am_data %>% group_by(ID) %>% 
+  filter(Alc_Amt_am > 4) 
 ```
 
 ### create person means and person deviations for am_data
