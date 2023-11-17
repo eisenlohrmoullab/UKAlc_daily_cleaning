@@ -493,7 +493,7 @@ am_data$Crav_Coc_am <- as.numeric(am_data$Crav_Coc_am)
 am_data$Crav_Benz_am <- as.numeric(am_data$Crav_Benz_am)
 am_data$Crav_Hall_am <- as.numeric(am_data$Crav_Hall_am)
 am_data$Crav_Opiate_am <- as.numeric(am_data$Crav_Opiate_am)
-
+am_data$Crav_Opiate_am <- as.numeric(am_data$ID)
 
 #Create person means   
 am_data <- am_data %>% group_by(ID) %>% mutate(Urg_Alc_am.m = mean(Urg_Alc_am, na.rm = T),
@@ -530,9 +530,16 @@ am_data_vars_int <- c("Alc_Amt_am",
                       "Urg_Alc_am",
                       "Crav_Alc_am",
                       "Crav_Mar_am",
-                      "Alc_Drunk_am"
+                      "Alc_Drunk_am",
+                      "Urg_Nic_am",
+                      "Urg_Mar_am",
+                      "Urg_Coc_am",
+                      "Urg_Oth_am",
+                      "Crav_Nic_am",
+                      "Crav_Coc_am",
+                      "Crav_Benz_am",
+                      "Crav_Oth_am",
 )
-
 #Rolling averages
 for (i in am_data_vars_int) {
   am_data <- create.3day.rolling.avg(am_data, !!sym({{i}}))
