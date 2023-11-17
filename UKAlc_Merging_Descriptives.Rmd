@@ -525,9 +525,18 @@ am_data <- am_data %>% rowwise() %>% mutate(Urg_Alc_am.d = Urg_Alc_am - Urg_Alc_
                                             Crav_Opiate_am.d = Crav_Opiate_am - Crav_Opiate_am.m, na.rm = T,
                                             Alc_Amt_am.d = Alc_Amt_am - Alc_Amt_am.m, na.rm = T,
                                             Alc_Drunk_am.d = Alc_Drunk_am - Alc_Drunk_am.m, na.rm = T)
-
+#Create variables of interest list to put into loop function 
+am_data_vars_int <- c("Alc_Amt_am",
+                      "Urg_Alc_am",
+                      "Crav_Alc_am",
+                      "Crav_Mar_am",
+                      "Alc_Drunk_am"
+)
 
 #Rolling averages
+for (i in am_data_vars_int) {
+  am_data <- create.3day.rolling.avg(am_data, !!sym({{i}}))
+}
 install.packages("zoo")
 library(zoo)
 create.3day.rolling.avg <- function(df, var) {
@@ -535,18 +544,9 @@ create.3day.rolling.avg <- function(df, var) {
      group_by(ID) %>%     mutate("{{var}}.roll" := rollapply({{var}}, 3,  mean, align="center", fill=NA))
 }
 
-### make list and then put list into the function instead of the variable 
-am_data_vars_int <- c("Alc_Amt_am",
-                      "Urg_Alc_am",
-                      "Crav_Alc_am"
-)
-
 am_data <- create.3day.rolling.avg(am_data, am_data_vars_int) 
 
-## subunits
-subunits <- c("gaba_a5",
-              "gaba_g2",
-              "gaba_d") 
+
 ```
 
 #raincloud plots on raw variables on interest from am_data
