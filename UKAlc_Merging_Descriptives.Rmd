@@ -645,6 +645,12 @@ am_data <- am_data %>%
 pm_data <- pm_data %>%
   mutate(DayOfWeek = wday(daterated, label = TRUE, abbr = TRUE))
 ```
+#Create Binge Drink Column
+```{r}
+#create binary variable for binge drink (>=4 drinks per day) 
+am_data <- am_data %>%
+  mutate(BingeDrink_am = ifelse(Alc_Amt_am >= 4, 1, 0)) 
+```
 
 #Day of the week analysis 
 ```{r}
@@ -746,9 +752,9 @@ ggplot(am_data, aes(x = factor(DayOfWeek), y = Alc_Amt_am)) +
 ```
 #Binge drinks per day 
 ```{r}
-#create binary variable for binge drink (>=4 drinks per day) 
-am_data <- am_data %>%
-  mutate(BingeDrink_am = ifelse(Alc_Amt_am >= 4, 1, 0))
+#number of people who binge drank on Sundays 
+sum(am_data_Sun$BingeDrink_am == 1) #didn't seem to work ? It's a numeric type 
+
 ```
 
 #raincloud plots on person-centered variables on interest from am_data
