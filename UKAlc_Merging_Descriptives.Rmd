@@ -671,13 +671,23 @@ Alc_Amt_am_model_weekday <- lmer(Alc_Amt_am~ (1 | ID),
                                  data = am_data_weekday)
 summary(Alc_Amt_am_model_weekday)
 icc(Alc_Amt_am_model_weekday) 
-ggplot(am_data, aes(x = factor(daterated), y = Alc_Amt_am)) +
+ggplot(am_day_of_week, aes(x = factor(daterated), y = Alc_Amt_am)) +
   geom_point(position = position_jitter(width = 0.1), size = 1) +
   labs(x = "Day of the Week", y = "Value") +
   scale_x_discrete(labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
 ggplot(am_data, aes(x = factor(daterated), y = Alc_Amt_am)) +
   geom_boxplot() +
   labs(x = "Day of the Week", y = "Amount of Alcohol") +
+  scale_x_discrete(labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
+##By day of week 
+set.seed(123)
+am_day_of_week <- data.frame(
+  DayOfWeek = rep(1:7, each = 10),
+  Value = rnorm(70)
+)
+ggplot(am_day_of_week, aes(x = factor(daterated), y = Alc_Amt_am)) +
+  geom_point(position = position_jitter(width = 0.1), size = 1) +
+  labs(x = "Day of the Week", y = "Value") +
   scale_x_discrete(labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
 #Alc Urge 
 ggplot(am_data_weekend, aes(1, Crav_Alc_am)) +
@@ -694,9 +704,7 @@ Alc_Amt_am_model_weekend <- lmer(Alc_Amt_am~ (1 | ID),
                                  data = am_data_weekend)
 summary(Alc_Amt_am_model_weekend)
 icc(Alc_Amt_am_model_weekend) 
-
 ```
-
 
 #raincloud plots on person-centered variables on interest from am_data
 ```{r}
