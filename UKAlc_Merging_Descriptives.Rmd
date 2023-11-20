@@ -727,7 +727,7 @@ ggplot(am_data, aes(x = factor(DayOfWeek), y = Alc_Amt_am)) +
   labs(x = "Day of the Week", y = "Number of Drinks") +
   scale_x_discrete(labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
 ##Tried to plot by day of week 
-# set.seed(123)
+# set.seed(123) 
 # am_day_of_week <- data.frame(
 #   DayOfWeek = rep(1:7, each = 10),
 #   Value = rnorm(70)
@@ -754,7 +754,6 @@ ggplot(am_data, aes(x = factor(DayOfWeek), y = Alc_Amt_am)) +
 ```{r}
 #number of people who binge drank on Sundays 
 sum(am_data_Sun$BingeDrink_am == 1) #didn't seem to work ? It's a numeric type 
-
 ```
 
 #raincloud plots on person-centered variables on interest from am_data
