@@ -639,13 +639,16 @@ ggplot(am_data, aes(1, Crav_Opiate_am)) +
 ```{r}
 am_data <- am_data %>%
   mutate(DayOfWeek = wday(daterated, label = TRUE, abbr = TRUE))
+##mutate DayOfWeek column to be day - 1 because they fill out survey next morning 
+am_data <- am_data %>%
+  mutate(PreviousDayOfWeek = (DayOfWeek - 2) %% 7 + 1) ##didn't appear to work 
 pm_data <- pm_data %>%
   mutate(DayOfWeek = wday(daterated, label = TRUE, abbr = TRUE))
 ```
 
 #Day of the week analysis 
 ```{r}
-#weekend means Saturday/Sunday (bc amts are for the night before)
+#weekend defined as Saturday/Sunday (so indicates amount Fri/Sat bc amts are for the night before)
 am_data_weekend <- am_data %>%
   filter(wday(daterated) %in% c(1, 7))
 am_data_weekday <- am_data %>%
@@ -679,6 +682,7 @@ Alc_Amt_am_model_weekday <- lmer(Alc_Amt_am~ (1 | ID),
                                  data = am_data_weekday)
 summary(Alc_Amt_am_model_weekday)
 icc(Alc_Amt_am_model_weekday) 
+###Plots by Day of Week 
 ggplot(am_data, aes(x = factor(DayOfWeek), y = Alc_Amt_am)) +
   geom_point(position = position_jitter(width = 0.1), size = 1) +
   labs(x = "Day of the Week", y = "Number of Drinks") +
@@ -710,21 +714,15 @@ ggplot(am_data, aes(x = factor(DayOfWeek), y = Alc_Amt_am)) +
 #   ylab("Amount of Alcohol Consumed")+
 #   labs(color = "")+
 #   theme(legend.position = "bottom")
-#Alc Urge 
-ggplot(am_data_weekend, aes(1, Crav_Alc_am)) +
-  geom_rain() +
-  theme_classic() +
-  theme(axis.title.x = element_blank(), 
-        axis.text.x = element_blank(), axis.ticks.x = element_blank())
-ggplot(am_data_weekend, aes(1, Crav_Alc_am.d)) +
-  geom_rain() +
-  theme_classic() +
-  theme(axis.title.x = element_blank(), 
-        axis.text.x = element_blank(), axis.ticks.x = element_blank())
-Alc_Amt_am_model_weekend <- lmer(Alc_Amt_am~ (1 | ID),
-                                 data = am_data_weekend)
-summary(Alc_Amt_am_model_weekend)
-icc(Alc_Amt_am_model_weekend) 
+##Alc Urge
+ggplot(am_data, aes(x = factor(DayOfWeek), y = Urg_Alc_am)) +
+  geom_boxplot() +
+  labs(x = "Day of the Week", y = "Alcohol Urge") +
+  scale_x_discrete(labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
+ggplot(am_data, aes(x = factor(DayOfWeek), y = Crav_Alc_am)) +
+  geom_boxplot() +
+  labs(x = "Day of the Week", y = "Alcohol Craving") +
+  scale_x_discrete(labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
 ```
 
 #raincloud plots on person-centered variables on interest from am_data
