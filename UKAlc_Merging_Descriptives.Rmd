@@ -682,6 +682,35 @@ Alc_Amt_am_model_weekday <- lmer(Alc_Amt_am~ (1 | ID),
                                  data = am_data_weekday)
 summary(Alc_Amt_am_model_weekday)
 icc(Alc_Amt_am_model_weekday) 
+##alc amt stats by day of week 
+#Saturday (actually indicates Friday)
+am_data_Sat <- am_data %>%
+  filter(wday(daterated) %in% c(7))
+summary(am_data_Sat$Alc_Amt_am, na.rm =T)
+#Sunday (actually indicates Saturday)
+am_data_Sun <- am_data %>%
+  filter(wday(daterated) %in% c(1))
+summary(am_data_Sun$Alc_Amt_am, na.rm =T)
+#Monday (actually indicates Sunday)
+am_data_Mon <- am_data %>%
+  filter(wday(daterated) %in% c(2))
+summary(am_data_Mon$Alc_Amt_am, na.rm =T)
+#Tuesday (actually indicates Monday)
+am_data_Tues <- am_data %>%
+  filter(wday(daterated) %in% c(3))
+summary(am_data_Tues$Alc_Amt_am, na.rm =T)
+#Wednesday (actually indicates Tuesday)
+am_data_Wed <- am_data %>%
+  filter(wday(daterated) %in% c(4))
+summary(am_data_Wed$Alc_Amt_am, na.rm =T)
+#Thursday (actually indicates Wednesday)
+am_data_Thurs <- am_data %>%
+  filter(wday(daterated) %in% c(5))
+summary(am_data_Thurs$Alc_Amt_am, na.rm =T)
+#Friday (actually indicates Thursday)
+am_data_Fri <- am_data %>%
+  filter(wday(daterated) %in% c(6))
+summary(am_data_Fri$Alc_Amt_am, na.rm =T) 
 ###Plots by Day of Week 
 ggplot(am_data, aes(x = factor(DayOfWeek), y = Alc_Amt_am)) +
   geom_point(position = position_jitter(width = 0.1), size = 1) +
