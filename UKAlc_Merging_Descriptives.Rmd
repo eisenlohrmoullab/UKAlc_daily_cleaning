@@ -651,6 +651,7 @@ ggplot(am_data_weekend, aes(1, Alc_Amt_am.d)) +
   theme_classic() +
   theme(axis.title.x = element_blank(), 
         axis.text.x = element_blank(), axis.ticks.x = element_blank())
+
 #Feel Drunk 
 ggplot(am_data_weekend, aes(1, Alc_Drunk_am.d)) +
   geom_rain() +
