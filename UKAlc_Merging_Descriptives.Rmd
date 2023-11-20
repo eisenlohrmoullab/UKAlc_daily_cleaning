@@ -639,7 +639,8 @@ ggplot(am_data, aes(1, Crav_Opiate_am)) +
 ```{r}
 am_data <- am_data %>%
   mutate(DayOfWeek = wday(daterated, label = TRUE, abbr = TRUE))
-
+pm_data <- pm_data %>%
+  mutate(DayOfWeek = wday(daterated, label = TRUE, abbr = TRUE))
 ```
 
 #Day of the week analysis 
