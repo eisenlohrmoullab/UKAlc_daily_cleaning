@@ -635,6 +635,31 @@ ggplot(am_data, aes(1, Crav_Opiate_am)) +
   theme(axis.title.x = element_blank(), 
         axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
 ```
+#Day of the week analysis 
+```{r}
+#weekend means Saturday/Sunday (bc amts are for the night before)
+am_data_weekend <- am_data %>%
+  filter(wday(daterated) %in% c(1, 7))
+#Alc Amt
+ggplot(am_data_weekend, aes(1, Alc_Amt_am)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())
+ggplot(am_data_weekend, aes(1, Alc_Amt_am.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())
+#Feel Drunk 
+ggplot(am_data_weekend, aes(1, Alc_Drunk_am.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())  
+
+```
+
 
 #raincloud plots on person-centered variables on interest from am_data
 ```{r}
