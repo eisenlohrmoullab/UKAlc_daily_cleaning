@@ -681,11 +681,11 @@ summary(Alc_Amt_am_model_weekday)
 icc(Alc_Amt_am_model_weekday) 
 ggplot(am_data, aes(x = factor(DayOfWeek), y = Alc_Amt_am)) +
   geom_point(position = position_jitter(width = 0.1), size = 1) +
-  labs(x = "Day of the Week", y = "Value") +
+  labs(x = "Day of the Week", y = "Number of Drinks") +
   scale_x_discrete(labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
-ggplot(am_data, aes(x = factor(daterated), y = Alc_Amt_am)) +
+ggplot(am_data, aes(x = factor(DayOfWeek), y = Alc_Amt_am)) +
   geom_boxplot() +
-  labs(x = "Day of the Week", y = "Amount of Alcohol") +
+  labs(x = "Day of the Week", y = "Number of Drinks") +
   scale_x_discrete(labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
 ##Tried to plot by day of week 
 # set.seed(123)
