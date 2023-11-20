@@ -667,6 +667,10 @@ ggplot(am_data_weekday, aes(1, Alc_Amt_am.d)) +
   theme_classic() +
   theme(axis.title.x = element_blank(), 
         axis.text.x = element_blank(), axis.ticks.x = element_blank())
+Alc_Amt_am_model_weekday <- lmer(Alc_Amt_am~ (1 | ID),
+                                 data = am_data_weekday)
+summary(Alc_Amt_am_model_weekday)
+icc(Alc_Amt_am_model_weekday) 
 #Feel Drunk 
 ggplot(am_data_weekend, aes(1, Alc_Drunk_am.d)) +
   geom_rain() +
