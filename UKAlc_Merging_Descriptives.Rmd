@@ -671,12 +671,29 @@ Alc_Amt_am_model_weekday <- lmer(Alc_Amt_am~ (1 | ID),
                                  data = am_data_weekday)
 summary(Alc_Amt_am_model_weekday)
 icc(Alc_Amt_am_model_weekday) 
-#Feel Drunk 
-ggplot(am_data_weekend, aes(1, Alc_Drunk_am.d)) +
+ggplot(am_data, aes(x = factor(daterated), y = Alc_Amt_am)) +
+  geom_point(position = position_jitter(width = 0.1), size = 1) +
+  labs(x = "Day of the Week", y = "Value") +
+  scale_x_discrete(labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
+ggplot(am_data, aes(x = factor(daterated), y = Alc_Amt_am)) +
+  geom_boxplot() +
+  labs(x = "Day of the Week", y = "Amount of Alcohol") +
+  scale_x_discrete(labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
+#Alc Urge 
+ggplot(am_data_weekend, aes(1, Crav_Alc_am)) +
   geom_rain() +
   theme_classic() +
   theme(axis.title.x = element_blank(), 
-        axis.text.x = element_blank(), axis.ticks.x = element_blank())  
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())
+ggplot(am_data_weekend, aes(1, Crav_Alc_am.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())
+Alc_Amt_am_model_weekend <- lmer(Alc_Amt_am~ (1 | ID),
+                                 data = am_data_weekend)
+summary(Alc_Amt_am_model_weekend)
+icc(Alc_Amt_am_model_weekend) 
 
 ```
 
