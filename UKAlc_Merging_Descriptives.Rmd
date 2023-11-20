@@ -640,6 +640,8 @@ ggplot(am_data, aes(1, Crav_Opiate_am)) +
 #weekend means Saturday/Sunday (bc amts are for the night before)
 am_data_weekend <- am_data %>%
   filter(wday(daterated) %in% c(1, 7))
+am_data_weekday <- am_data %>%
+  filter(wday(daterated) %in% c(2, 3, 4, 5, 6))
 #Alc Amt
 ggplot(am_data_weekend, aes(1, Alc_Amt_am)) +
   geom_rain() +
@@ -651,7 +653,20 @@ ggplot(am_data_weekend, aes(1, Alc_Amt_am.d)) +
   theme_classic() +
   theme(axis.title.x = element_blank(), 
         axis.text.x = element_blank(), axis.ticks.x = element_blank())
-
+Alc_Amt_am_model_weekend <- lmer(Alc_Amt_am~ (1 | ID),
+                                 data = am_data_weekend)
+summary(Alc_Amt_am_model_weekend)
+icc(Alc_Amt_am_model_weekend) 
+ggplot(am_data_weekday, aes(1, Alc_Amt_am)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())
+ggplot(am_data_weekday, aes(1, Alc_Amt_am.d)) +
+  geom_rain() +
+  theme_classic() +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())
 #Feel Drunk 
 ggplot(am_data_weekend, aes(1, Alc_Drunk_am.d)) +
   geom_rain() +
@@ -813,7 +828,7 @@ Crav_Alc_am_model <- lmer(Crav_Alc_am~ (1 | ID),
                                  data = am_data)
 summary(Crav_Alc_am_model)
 icc(Crav_Alc_am_model) 
-#Alc Amt ICC 0.069 (!!!!) 
+#Alc Amt ICC 0.274
 Alc_Amt_am_model <- lmer(Alc_Amt_am~ (1 | ID),
                                  data = am_data)
 summary(Alc_Amt_am_model)
