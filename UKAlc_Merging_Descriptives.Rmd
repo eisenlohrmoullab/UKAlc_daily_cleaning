@@ -1057,6 +1057,18 @@ ggplot(pm_data, aes(x = factor(DayOfWeek), y = Diff_Inhib_pm)) +
   geom_boxplot() +
   labs(x = "Day of the Week", y = "Difficulty with Inhibition") +
   scale_x_discrete(labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
+ggplot(pm_data, aes(x = factor(DayOfWeek), y = Diff_Stop_pm)) +
+  geom_boxplot() +
+  labs(x = "Day of the Week", y = "Difficulty with Stopping") +
+  scale_x_discrete(labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
+ggplot(pm_data, aes(x = factor(DayOfWeek), y = Res_Urge_pm)) +
+  geom_boxplot() +
+  labs(x = "Day of the Week", y = "Difficulty with Resisting Fun Urge") +
+  scale_x_discrete(labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
+ggplot(pm_data, aes(x = factor(DayOfWeek), y = Diff_ResRew_pm)) +
+  geom_boxplot() +
+  labs(x = "Day of the Week", y = "Difficulty with Immediate Reward") +
+  scale_x_discrete(labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
 ```
 
 
