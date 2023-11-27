@@ -1000,6 +1000,50 @@ pm_data <- pm_data %>% rowwise() %>% mutate(Urg_Alc_pm.d = Urg_Alc_pm - Urg_Alc_
                                             Int_Relat_pm.d = Int_Relat_pm - Int_Relat_pm.m, na.rm = T) 
 ```
 
+#PM Data by Day of Week 
+```{r}
+#Saturday (actually indicates Friday)
+pm_data_Sat <- pm_data %>%
+  filter(wday(daterated) %in% c(7))
+summary(pm_data_Sat$Urg_Alc_pm, na.rm =T) #alc urge mean = 2.4 on Fridays 
+summary(pm_data_Sat$Urg_Alc_pm.d, na.rm =T) #person-centered alc urge mean = 0.34 on Fridays 
+summary(pm_data_Sat$Diff_Inhib_pm, na.rm =T) #diff inhib mean = 1.2 on Fridays 
+#Sunday (actually indicates Saturday)
+pm_data_Sun <- pm_data %>%
+  filter(wday(daterated) %in% c(1))
+summary(pm_data_Sun$Urg_Alc_pm, na.rm =T)
+#Monday (actually indicates Sunday)
+am_data_Mon <- am_data %>%
+  filter(wday(daterated) %in% c(2))
+summary(am_data_Mon$Alc_Amt_am, na.rm =T)
+#Tuesday (actually indicates Monday)
+am_data_Tues <- am_data %>%
+  filter(wday(daterated) %in% c(3))
+summary(am_data_Tues$Alc_Amt_am, na.rm =T)
+#Wednesday (actually indicates Tuesday)
+am_data_Wed <- am_data %>%
+  filter(wday(daterated) %in% c(4))
+summary(am_data_Wed$Alc_Amt_am, na.rm =T)
+#Thursday (actually indicates Wednesday)
+am_data_Thurs <- am_data %>%
+  filter(wday(daterated) %in% c(5))
+summary(am_data_Thurs$Alc_Amt_am, na.rm =T)
+#Friday (actually indicates Thursday)
+am_data_Fri <- am_data %>%
+  filter(wday(daterated) %in% c(6))
+summary(am_data_Fri$Alc_Amt_am, na.rm =T) 
+###Plots by Day of Week 
+ggplot(am_data, aes(x = factor(DayOfWeek), y = Alc_Amt_am)) +
+  geom_point(position = position_jitter(width = 0.1), size = 1) +
+  labs(x = "Day of the Week", y = "Number of Drinks") +
+  scale_x_discrete(labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
+ggplot(am_data, aes(x = factor(DayOfWeek), y = Alc_Amt_am.d)) +
+  geom_boxplot() +
+  labs(x = "Day of the Week", y = "Number of Drinks") +
+  scale_x_discrete(labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
+```
+
+
 ICCs for pm_data
 ```{r}
 #Alc urge ICC 0.442 
