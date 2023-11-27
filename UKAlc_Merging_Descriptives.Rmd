@@ -1053,7 +1053,7 @@ ggplot(pm_data, aes(x = factor(DayOfWeek), y = Urg_Alc_pm.d)) +
   geom_boxplot() +
   labs(x = "Day of the Week", y = "Urge to Drink") +
   scale_x_discrete(labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
-ggplot(pm_data, aes(x = factor(DayOfWeek), y = Diff_Inhib_pm)) +
+ggplot(pm_data, aes(x = factor(DayOfWeek), y = Diff_Inhib_pm.d)) +
   geom_boxplot() +
   labs(x = "Day of the Week", y = "Difficulty with Inhibition") +
   scale_x_discrete(labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
