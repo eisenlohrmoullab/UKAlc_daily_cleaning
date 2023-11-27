@@ -477,7 +477,7 @@ am_data %>% group_by(ID) %>%
   filter(Alc_Amt_am > 4) 
 ```
 
-### create person means and person deviations for am_data
+### create person means, person deviations and 3 day rolling avg for am_data
 ```{r echo=T}
 #create person means
 
@@ -522,21 +522,25 @@ am_data <- am_data %>% rowwise() %>% mutate(Urg_Alc_am.d = Urg_Alc_am - Urg_Alc_
                                             Crav_Opiate_am.d = Crav_Opiate_am - Crav_Opiate_am.m, na.rm = T,
                                             Alc_Amt_am.d = Alc_Amt_am - Alc_Amt_am.m, na.rm = T,
                                             Alc_Drunk_am.d = Alc_Drunk_am - Alc_Drunk_am.m, na.rm = T)
+
 #Create variables of interest list to put into loop function 
-am_data_vars_int <- c("Alc_Amt_am",
-                      "Urg_Alc_am",
-                      "Crav_Alc_am",
-                      "Crav_Mar_am",
-                      "Alc_Drunk_am",
-                      "Urg_Nic_am",
-                      "Urg_Mar_am",
-                      "Urg_Coc_am",
-                      "Urg_Oth_am",
-                      "Crav_Nic_am",
-                      "Crav_Coc_am",
-                      "Crav_Benz_am",
-                      "Crav_Oth_am",
-)
+am_data_roll <- am_data %>% 
+  select(c(Urg_Alc_am,
+           Urg_Nic_am,
+           Urg_Mar_am,
+           Urg_Coc_am,
+           Urg_Oth_am,
+           Crav_Alc_am,
+           Crav_Nic_am,
+           Crav_Mar_am,
+           Crav_Coc_am,
+           Crav_Benz_am,
+           Crav_Hall_am,
+           Crav_Opiate_am,
+           Crav_Oth_am,
+           Alc_Amt_am,
+           Alc_Drunk_am))
+
 #Rolling averages
 for (i in am_data_vars_int) {
   am_data <- create.3day.rolling.avg(am_data, !!sym({{i}}))
@@ -547,7 +551,7 @@ create.3day.rolling.avg <- function(df, var) {
      group_by(ID) %>%     mutate("{{var}}.roll" := rollapply({{var}}, 3,  mean, align="center", fill=NA))
 }
 
-am_data <- create.3day.rolling.avg(am_data, am_data_vars_int) 
+am_data <- create.3day.rolling.avg(am_data, am_data_roll) 
 
 ```
 
@@ -723,29 +727,7 @@ ggplot(am_data, aes(x = factor(DayOfWeek), y = Alc_Amt_am.d)) +
   geom_boxplot() +
   labs(x = "Day of the Week", y = "Number of Drinks") +
   scale_x_discrete(labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
-##Tried to plot by day of week 
-# set.seed(123) 
-# am_day_of_week <- data.frame(
-#   DayOfWeek = rep(1:7, each = 10),
-#   Value = rnorm(70)
-# )
-# ggplot(am_day_of_week, aes(x = factor(daterated), y = Alc_Amt_am)) +
-#   geom_point(position = position_jitter(width = 0.1), size = 1) +
-#   labs(x = "Day of the Week", y = "Value") +
-#   scale_x_discrete(labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
 
-###Plot from Jordan's template from "ADHD-KY Plotting Across Cycle"
-# group_by(am_day_of_week, Alc_Amt_am) %>%
-#   ggplot(aes(x=factor(am_day_of_week, levels = Alc_Amt_am), 
-#              group=Alc_Amt_am, color=Alc_Amt_am))+
-#   geom_line()+
-#   geom_hline(yintercept = 0, linetype="dashed", col="gray")+
-#   scale_y_continuous(expand = c(0,0.005))+
-#   theme_bw()+
-#   xlab("Day of Week")+
-#   ylab("Amount of Alcohol Consumed")+
-#   labs(color = "")+
-#   theme(legend.position = "bottom")
 ```
 #Binge drinks per day (subtract one day for each bc surveys are filled out next day)
 ```{r}
@@ -855,44 +837,6 @@ ggplot(am_data, aes(1, Crav_Opiate_am.d)) +
         axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
 ```
 
-#Rolling averages - is this necessary? If so, can Jordan help walk me through the for loops? 
-```{r}
-#create rolling averages on RAW variables
-for (i in suimed_varlist) {
-  suimeddata_cycleday <- create.3day.rolling.avg(suimeddata_cycleday, !!sym({{i}}))
-}
-
-install.packages("zoo")
-library(zoo)
-create.3day.rolling.avg <- function(df, var, num) {
-   df %>%
-     group_by(ID) %>%
-     mutate("{{var}}.roll" := rollapply({{var}}, 3,  mean, align="center", fill=NA))
-}
-#create varlist for for loop 
-# am_data_roll <- am_data %>% 
-#   select(c(Urg_Alc_am,
-#            Urg_Nic_am,
-#            Urg_Mar_am,
-#            Urg_Coc_am,
-#            Urg_Oth_am,
-#            Crav_Alc_am,
-#            Crav_Nic_am,
-#            Crav_Mar_am,
-#            Crav_Coc_am,
-#            Crav_Benz_am,
-#            Crav_Hall_am,
-#            Crav_Opiate_am,
-#            Crav_Oth_am,
-#            Alc_Amt_am,
-#            Alc_Drunk_am))
-# 
-# for (i in am_data_roll) {
-#   am_data_rolling <- create.3day.rolling.avg(am_data_roll, !!sym({{i}}))
-# }
-
-
-```
 
 ## IF OUTCOME IS LINEAR, function is "lmer" not "glmer"
 # rest of syntax is the same, including * for interaction and placement of random effect terms
