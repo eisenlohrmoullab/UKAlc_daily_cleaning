@@ -1011,35 +1011,51 @@ summary(pm_data_Sat$Diff_Inhib_pm, na.rm =T) #diff inhib mean = 1.2 on Fridays
 #Sunday (actually indicates Saturday)
 pm_data_Sun <- pm_data %>%
   filter(wday(daterated) %in% c(1))
-summary(pm_data_Sun$Urg_Alc_pm, na.rm =T)
+summary(pm_data_Sun$Urg_Alc_pm, na.rm =T) #alc urge mean = 1.85 on Saturdays 
+summary(pm_data_Sun$Urg_Alc_pm.d, na.rm =T) #person-centered alc urge mean = -0.067 on Saturdays
+summary(pm_data_Sun$Diff_Inhib_pm, na.rm =T) #diff inhib mean = 1.1 on Saturdays
 #Monday (actually indicates Sunday)
-am_data_Mon <- am_data %>%
+pm_data_Mon <- pm_data %>%
   filter(wday(daterated) %in% c(2))
-summary(am_data_Mon$Alc_Amt_am, na.rm =T)
+summary(pm_data_Mon$Urg_Alc_pm, na.rm =T) #alc urge mean = 1.75 on Sundays
+summary(pm_data_Mon$Urg_Alc_pm.d, na.rm =T) #person-centered alc urge mean = -0.21 on Sundays
+summary(pm_data_Mon$Diff_Inhib_pm, na.rm =T) #diff inhib mean = 1.2 on Sundays 
 #Tuesday (actually indicates Monday)
-am_data_Tues <- am_data %>%
+pm_data_Tues <- pm_data %>%
   filter(wday(daterated) %in% c(3))
-summary(am_data_Tues$Alc_Amt_am, na.rm =T)
+summary(pm_data_Tues$Urg_Alc_pm, na.rm =T) #alc urge mean = 1.99 on Mondays
+summary(pm_data_Tues$Urg_Alc_pm.d, na.rm =T) #person-centered alc urge mean = -0.24 on Mondays
+summary(pm_data_Tues$Diff_Inhib_pm, na.rm =T) #diff inhib mean = 1.1 on Mondays
 #Wednesday (actually indicates Tuesday)
-am_data_Wed <- am_data %>%
+pm_data_Wed <- pm_data %>%
   filter(wday(daterated) %in% c(4))
-summary(am_data_Wed$Alc_Amt_am, na.rm =T)
+summary(pm_data_Wed$Urg_Alc_pm, na.rm =T) #alc urge mean = 1.93 on Tuesdays 
+summary(pm_data_Wed$Urg_Alc_pm.d, na.rm =T) #person-centered alc urge mean = -0.15 on Mondays
+summary(pm_data_Wed$Diff_Inhib_pm, na.rm =T) #diff inhib mean = 1.1 on Tuesdays 
 #Thursday (actually indicates Wednesday)
-am_data_Thurs <- am_data %>%
+pm_data_Thurs <- pm_data %>%
   filter(wday(daterated) %in% c(5))
-summary(am_data_Thurs$Alc_Amt_am, na.rm =T)
+summary(pm_data_Thurs$Urg_Alc_pm, na.rm =T) #alc urge mean = 2.5 on Wednesdays 
+summary(pm_data_Thurs$Urg_Alc_pm.d, na.rm =T) #person-centered alc urge mean = 0.24 on Mondays
+summary(pm_data_Thurs$Diff_Inhib_pm, na.rm =T) #diff inhib mean = 1.1 on Tuesdays 
 #Friday (actually indicates Thursday)
-am_data_Fri <- am_data %>%
+pm_data_Fri <- pm_data %>%
   filter(wday(daterated) %in% c(6))
-summary(am_data_Fri$Alc_Amt_am, na.rm =T) 
+summary(pm_data_Fri$Urg_Alc_pm, na.rm =T) #alc urge mean = 2.25 on Thursdays
+summary(pm_data_Fri$Urg_Alc_pm.d, na.rm =T) #person-centered alc urge mean = 0.035 on Thursdays 
+summary(pm_data_Fri$Diff_Inhib_pm, na.rm =T) #diff inhib mean = 1.2 on Thursdays  
 ###Plots by Day of Week 
-ggplot(am_data, aes(x = factor(DayOfWeek), y = Alc_Amt_am)) +
+ggplot(pm_data, aes(x = factor(DayOfWeek), y = Urg_Alc_pm)) +
   geom_point(position = position_jitter(width = 0.1), size = 1) +
-  labs(x = "Day of the Week", y = "Number of Drinks") +
+  labs(x = "Day of the Week", y = "Urge to Drink") +
   scale_x_discrete(labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
-ggplot(am_data, aes(x = factor(DayOfWeek), y = Alc_Amt_am.d)) +
+ggplot(pm_data, aes(x = factor(DayOfWeek), y = Urg_Alc_pm.d)) +
   geom_boxplot() +
-  labs(x = "Day of the Week", y = "Number of Drinks") +
+  labs(x = "Day of the Week", y = "Urge to Drink") +
+  scale_x_discrete(labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
+ggplot(pm_data, aes(x = factor(DayOfWeek), y = Diff_Inhib_pm)) +
+  geom_boxplot() +
+  labs(x = "Day of the Week", y = "Difficulty with Inhibition") +
   scale_x_discrete(labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
 ```
 
