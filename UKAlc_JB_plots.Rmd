@@ -1,0 +1,284 @@
+---
+title: "UKAlc_JB_plots"
+author: "Jordan Barone"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+#Setup:
+-data
+-libraries
+-wd
+```{r}
+library(haven) #for reading files
+library(ggplot2) #for plotting
+library(tidyverse) #for data management and manipulation
+library(zoo) #for rolling averages
+library(performance) #icc
+library(nlme) #for mlm
+library(lme4) #for mlm
+library(GLMMadaptive) #for testing if study duration is a predictor of outcomes, via "adaptive quadrature"
+library(lubridate) #for working with dates
+library(broom.mixed) #95% confint
+
+knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/") 
+
+```
+
+## spaghetti plots by cycle phase (one line per person, person-centered)
+```{r}
+RR_data_for_plot1a %>% 
+  group_by(id, LH_cyclephasenames) %>%
+  summarize(person.m.drinkingprob.d = mean(drinkingprobphase.d, na.rm=T),
+            se=sd(drinkingprobphase.d, na.rm=T)/sqrt(n())) %>%
+  ggplot(aes(x=LH_cyclephasenames, y=person.m.drinkingprob.d, group=id))+
+  geom_line()+
+  scale_x_discrete(labels=c("midfol" = "Midfollicular", 
+                            "midlut" = "Midluteal",
+                            "perimen" = "Perimenstrual",
+                            "periov" = "Periovulatory"))+
+  scale_y_continuous(limits = c(-0.05, 0.10))+
+  geom_errorbar(aes(ymin=person.m.drinkingprob.d-se, 
+                    ymax=person.m.drinkingprob.d+se), 
+                size=0.5, width=0.5, position=position_dodge())+
+  geom_hline(yintercept=0.0, color="red", linetype="dashed")+
+  theme_bw()+
+  xlab("Cycle Phase")+
+  ylab("Person-Centered Prob. of Drinking")
+```
+
+
+## outcome by cycle phase (one line, person-centered)
+```{r}
+RR_data_for_plot1a %>% 
+  group_by(LH_cyclephasenames) %>%
+  summarize(grand.m.drinkingprob.d = mean(drinkingprobphase.d, na.rm=T),
+            se=sd(drinkingprobphase.d, na.rm=T)/sqrt(n())) %>%
+  ggplot(aes(x=LH_cyclephasenames, y=grand.m.drinkingprob.d))+
+  geom_line(group=1)+
+  scale_x_discrete(labels=c("midfol" = "Midfollicular", 
+                            "midlut" = "Midluteal",
+                            "perimen" = "Perimenstrual",
+                            "periov" = "Periovulatory"))+
+  scale_y_continuous(limits = c(-0.05, 0.10))+
+  geom_errorbar(aes(ymin=grand.m.drinkingprob.d-se, 
+                    ymax=grand.m.drinkingprob.d+se), 
+                size=0.5, width=0.5, position=position_dodge())+
+  geom_hline(yintercept=0.0, color="red", linetype="dashed")+
+  theme_bw()+
+  xlab("Cycle Phase")+
+  ylab("Person-Centered Prob. of Drinking")
+```
+
+## outcome by day of week (one line, person-centered)
+```{r}
+RR_data_for_plot1b <- etoh_data %>% group_by(id, dayofweek) %>% 
+  filter(!is.na(dayofweek)) %>%
+  summarize(drinkingprob.m=mean(drinkingprob.m),
+            drinkingprobdayofweek.m = mean(drinkingday_today, na.rm = TRUE),
+            drinkingprobdayofweek.d = drinkingprobdayofweek.m - drinkingprob.m)
+
+#plot1b
+RR_PLOT1bpersoncentered_by_dayofweek_line <- RR_data_for_plot1b %>% group_by(dayofweek) %>%
+  summarize(grand.m.drinkingprobdayofweek.d = mean(drinkingprobdayofweek.d, na.rm=T),
+            se=sd(drinkingprobdayofweek.d, na.rm=T)/sqrt(n())) %>%
+  ggplot(aes(x=as.factor(dayofweek), y=grand.m.drinkingprobdayofweek.d))+
+  geom_line(group=1)+
+  geom_hline(yintercept = 0, linetype="dashed", col="red")+
+  geom_errorbar(aes(ymin=grand.m.drinkingprobdayofweek.d-se, 
+                    ymax=grand.m.drinkingprobdayofweek.d+se), 
+                size=0.5, width=0.5, position=position_dodge())+
+  theme_bw()+
+  scale_x_discrete(breaks=c(1,2,3,4,5,6,7),
+                   labels=c("Sun", "Mon", "Tues", 
+                            "Wed", "Thurs", "Fri", "Sat"))+
+  xlab("Day of Week")+
+  ylab("Person-Centered Prob. of Drinking")
+```
+
+## outcome by cycle day (one line, person-centered)
+```{r}
+
+#create hybrid version of cycle day:
+etoh_data_cycleday <- etoh_data_cycleday %>%
+  mutate(hybridcycleday = case_when((daycountLH >= -7 & daycountLH <= 5) ~ 
+                                      paste(as.character(daycountLH), "L", sep = ""),
+                                    (cycleday >= -9 & cycleday <= 7) ~ 
+                                      paste(as.character(cycleday), "M",  sep = ""),
+                                    TRUE ~ NA_character_))
+
+etoh_data_cycleday <- etoh_data_cycleday %>%
+  filter(!is.na(hybridcycleday))
+
+hybridcycleday_order <- c("-7L",
+                       "-6L",
+                       "-5L",
+                       "-4L",
+                       "-3L",
+                       "-2L",
+                       "-1L",
+                       "0L",
+                       "1L",
+                       "2L",
+                       "3L",
+                       "4L",
+                       "5L",
+                       "-9M",
+                       "-8M",
+                       "-7M",
+                       "-6M",
+                       "-5M",
+                       "-4M",
+                       "-3M",
+                       "-2M",
+                       "-1M",
+                       "1M",
+                       "2M",
+                       "3M",
+                       "4M",
+                       "5M",
+                       "6M",
+                       "7M")
+
+#person-mean-center
+RR_data_for_plot1c <- etoh_data_cycleday %>% group_by(id, hybridcycleday) %>% 
+  filter(!is.na(hybridcycleday)) %>%
+  summarize(drinkingprob.m=mean(drinkingprob.m),
+            drinkingprob.day.m = mean(drinkingday_today, na.rm = TRUE),
+            drinkingdayprob.d = drinkingprob.day.m - drinkingprob.m) %>%
+  arrange(factor(hybridcycleday, levels = hybridcycleday_order))
+
+RR_PLOT1cpersoncentered_by_day_roll <- 
+  RR_data_for_plot1c %>% group_by(hybridcycleday) %>%
+  summarize(personcentered.dev = mean(drinkingdayprob.d, na.rm=T),
+            se=sd(drinkingdayprob.d, na.rm=T)/sqrt(n())) %>%
+  arrange(factor(hybridcycleday, levels = hybridcycleday_order)) %>%
+  mutate(roll= rollapply(personcentered.dev, 3, 
+                         mean, align = "center", fill=NA)) %>%
+  ggplot(aes(x=factor(hybridcycleday, levels = hybridcycleday_order), y=roll))+
+  geom_line(group=1)+
+  geom_hline(yintercept = 0, linetype="dashed", col="red")+
+  #geom_vline(xintercept = "1M", col="blue", size=0.25)+
+  #geom_vline(xintercept = "0L", col="blue", size=0.25)+
+  geom_errorbar(aes(ymin=roll-se, ymax=roll+se), 
+                size=0.5, width=0.5, position=position_dodge())+
+  theme_bw()+
+  scale_y_continuous(expand = c(0,0.001))+
+  xlab("Cycle Day (based on LH-surge and menses self-report)")+
+  ylab("Person-Centered Prob. of Drinking")+
+  annotate("rect", ymin = -0.065, ymax = -0.055, xmin = "-7L", xmax = "-3L", alpha = .2)+
+  annotate("text", x="-7L", y=-0.06, label="midfollicular", 
+           size=3, hjust=-0.25, fontface="italic")+
+  annotate("rect", ymin = -0.065, ymax = -0.055, xmin = "-2L", xmax = "1L", alpha = .2)+
+  annotate("text", x="-2L", y=-0.06, label="periovulatory", 
+           size=3, hjust=0, fontface="italic")+
+  annotate("rect", ymin = -0.065, ymax = -0.055, xmin = "-9M", xmax = "-5M", alpha = .2)+
+  annotate("text", x="-9M", y=-0.06, label="midluteal", 
+           size=3, hjust=-0.5, fontface="italic")+
+  annotate("rect", ymin = -0.065, ymax = -0.055, xmin = "-3M", xmax = "2M", alpha = .2)+
+  annotate("text", x="-3M", y=-0.06, label="perimenstrual", 
+           size=3, hjust=-0.15, fontface="italic")+
+  annotate("text", x="0L", y=-0.07, label="*", size=8, color="blue")+
+  annotate("text", x="1M", y=-0.07, label="*", size=8, color="blue")
+
+```
+
+## outcome by cycle day, separated by weekend and weekday (one line, person centered
+)
+```{r}
+#plot 1d = weekendvsweekday
+RR_PLOT1dpersoncentered_by_day_roll <- etoh_data_cycleday %>% 
+  group_by(id, hybridcycleday) %>% #each person gets a deviation for that cycleday (x)
+  filter(!is.na(hybridcycleday)) %>% #ignore any NAs
+  summarize(drinkingprob.m=drinkingprob.m, #that person's overall mean (already calculated, just pulling down)
+            drinkingprobday.m = mean(drinkingday_today, na.rm = TRUE), #that person's overall mean
+            drinkingprobday.d = drinkingprobday.m - drinkingprob.m, #that person's deviation on cycle day X
+            #that persons mean for drinking on that cycle day on weekdays
+            drinkingprobday.wd.m = mean(drinkingday_today[frisatsun==0],na.rm=T), 
+            #that persons mean for drinking on that cycle day on weekends
+            drinkingprobday.we.m = mean(drinkingday_today[frisatsun==1],na.rm = T), 
+            #person centered deviation on cycle day X on weekdays
+            drinkingprobday.wd.d = drinkingprobday.wd.m - drinkingprob.m,
+            #person centered deviation on cycle day X on weekends
+            drinkingprobday.we.d = drinkingprobday.we.m - drinkingprob.m) %>%
+  arrange(factor(hybridcycleday, levels = hybridcycleday_order)) %>%
+  ungroup() %>%
+  group_by(hybridcycleday) %>%
+  summarize(#grand.m.drinkingprob.m=mean(drinkingprob.m, na.rm=T), 
+            #grand.drinkingprob.we=mean(drinkingprob.we.m, na.rm=T),
+            #grand.drinkingprob.wd = mean(drinkingprob.wd.m, na.rm=T),
+            #mean of all the person-centered deviations, on cycle day X on weekdays
+            grand.m.drinkingprobday.wd.d = mean(drinkingprobday.wd.d, na.rm=T),
+            #mean of all the person-centered deviations, on cycle day X on weekends
+            grand.m.drinkingprobday.we.d = mean(drinkingprobday.we.d, na.rm=T),
+            se.wd = sd(drinkingprobday.wd.d, na.rm=T)/sqrt(n()),
+            se.we = sd(drinkingprobday.we.d, na.rm=T)/sqrt(n())) %>%
+  arrange(factor(hybridcycleday, levels = hybridcycleday_order)) %>%
+  #make the rolling average based on the mean of the deviations, for w.e. and w.d. separately
+  mutate(roll.wd = rollapply(grand.m.drinkingprobday.wd.d, 3, 
+                         mean, align = "center", fill=NA),
+         roll.we = rollapply(grand.m.drinkingprobday.we.d, 3, 
+                         mean, align = "center", fill=NA)) %>%
+  ggplot()+
+  geom_line(aes(x=factor(hybridcycleday, levels = hybridcycleday_order), y=roll.wd), group=1, color="red")+
+  geom_ribbon(aes(x=factor(hybridcycleday, levels = hybridcycleday_order),
+                    ymin=roll.wd-se.wd,
+                    ymax=roll.wd+se.wd),
+              fill="red", alpha=0.5, group=1)+
+  geom_line(aes(x=factor(hybridcycleday, levels = hybridcycleday_order), y=roll.we), group=1, color="blue")+
+  geom_ribbon(aes(x=factor(hybridcycleday, levels = hybridcycleday_order),
+                    ymin=roll.we-se.we,
+                    ymax=roll.we+se.we),
+              fill="blue", alpha=0.5, group=1)+
+  theme_bw()+
+  theme(axis.title.x = element_blank())+
+  ggtitle("Person-centered Probability to Drink by Cycle Day",
+          subtitle = "Centered on Overall Mean")+
+  ylab("Deviation from Participant Mean")+
+  annotate("text",  x="-6M", y = 0.13, label = "Fri-Sun", color="blue")+
+  annotate("text",  x="-6M", y = -0.13, label = "Mon-Thurs", color="red")+
+  geom_hline(yintercept = 0.0, color="black", linetype="dashed")+
+  annotate("rect", ymin = 0.01, ymax = 0.02, xmin = "-7L", xmax = "-3L", alpha = .2)+
+  annotate("text", x="-7L", y=0.015, label="midfollicular", 
+           size=3, hjust=-0.25, fontface="italic")+
+  annotate("rect", ymin = 0.01, ymax = 0.02, xmin = "-2L", xmax = "1L", alpha = .2)+
+  annotate("text", x="-2L", y=0.015, label="periovulatory", 
+           size=3, hjust=0, fontface="italic")+
+  annotate("rect", ymin = 0.01, ymax = 0.02, xmin = "-9M", xmax = "-5M", alpha = .2)+
+  annotate("text", x="-9M", y=0.015, label="midluteal", 
+           size=3, hjust=-0.5, fontface="italic")+
+  annotate("rect", ymin = 0.01, ymax = 0.02, xmin = "-3M", xmax = "2M", alpha = .2)+
+  annotate("text", x="-3M", y=0.015, label="perimenstrual", 
+           size=3, hjust=-0.15, fontface="italic")
+```
+
+## plot hormone levels by person (one plot per id)
+```{r}
+
+adhd_ky_bio %>% 
+  filter(ID==260) %>%                              
+  ggplot(aes(x=TubeNumber, y=pg_ml, group=Hormone, color=Hormone))+
+  geom_line()+
+  geom_line(aes(y = Estradiol*100, color = "Estradiol")) +
+    scale_y_continuous(sec.axis = sec_axis(~./100, name="estradiol")) +
+  ggtitle("260")
+
+rollingavgs <- adhd_ky_bio %>% 
+  group_by(Hormone, ID) %>%
+  mutate(Estradiol.roll = rollapply(Estradiol, 3, mean,na.rm = TRUE, fill = NA),
+         Hormone.roll = rollapply(pg_ml, 3, mean,na.rm = TRUE, fill = NA))
+
+figfortheorypaper <- rollingavgs %>%
+  filter(ID==260) %>%                              
+  ggplot(aes(x=TubeNumber, y=Hormone.roll, group=Hormone, color=Hormone, linetype = Hormone))+
+  geom_line()+
+  ylab("Progesterone, LH (pg/ml)")+
+  xlab("Day")+
+  scale_x_continuous(breaks = c(0,5,10,15,20,25,30))+
+  geom_line(aes(y = Estradiol.roll*100, color = "Estradiol", linetype = "Estradiol")) +
+    scale_y_continuous(sec.axis = sec_axis(~./100, name="Estradiol (pg/ml)")) +
+  ggtitle("Daily hormone levels from a representative ovulating participant")+
+  theme_bw()+
+  theme(legend.position = "bottom")
+```
+
