@@ -1565,7 +1565,7 @@ ggplot(pm_data, aes(1, Urg_Mar_pm.d)) +
 
 #Save cleaned files as csv files
 ```{r}
-write.csv(am_data, "/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/am_data_cleaned.csv", row.names=TRUE)
+write.csv(am_data, "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/am_data_cleaned_JB.csv", row.names=TRUE)
 
 write.csv(pm_data, "/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/pm_data_cleaned.csv", row.names=TRUE)
 ```
@@ -1723,9 +1723,9 @@ cycleday.am.merge %>%
 ```{r}
 #create hybrid version of cycle day:
 cycleday.am.merge <- cycleday.am.merge %>%
-  mutate(hybridcycleday = case_when((daycountLH >= -7 & daycountLH <= 5) ~ 
+  mutate(hybridcycleday = case_when((daycountLH >= -7 & daycountLH <= 15) ~ 
                                       paste(as.character(daycountLH), "L", sep = ""),
-                                    (cycleday >= -9 & cycleday <= 7) ~ paste(as.character(cycleday), "M",  sep = ""),
+                                    (cycleday >= -9 & cycleday <= 10) ~ paste(as.character(cycleday), "M",  sep = ""),
                                     TRUE ~ NA_character_))
 
 am_data_hybridcycleday <- cycleday.am.merge %>%
@@ -1744,6 +1744,16 @@ hybridcycleday_order <- c("-7L",
                        "3L",
                        "4L",
                        "5L",
+                       "6L",
+                       "7L",
+                       "8L",
+                       "9L",
+                       "10L",
+                       "11L",
+                       "12L",
+                       "13L",
+                       "14L",
+                       "15L",
                        "-9M",
                        "-8M",
                        "-7M",
