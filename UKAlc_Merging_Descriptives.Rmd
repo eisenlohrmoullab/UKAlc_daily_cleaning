@@ -1708,31 +1708,33 @@ cycleday.am.merge %>%
 
 
 ```                                                                        
-
 ```{r}
 
-#check overlaps: goal is to only have 6 possible group combinations here (1 row per dummy coded phase, then a row where ALL are NA)
-cycleday.pm.merge %>%
-  group_by(periov_LH, earlylut_LH, midluteal_LH, perimenstrual_LH, midfol_LH) %>%
-  summarize(n=n())
-#make note of errors
+```
 
-
-#example code to review midfol_LH and perimenstrual_LH overlaps, if they exist
-cycleday.pm.merge %>%
-  filter(midfol_LH==1) %>%
-  filter(perimenstrual_LH==1) %>%
-  select(id, daterated, posLHtoday, daycountLH,
-         menstrualbleeding,
-         firstdayofperiod, cycleday,
-         midfol_LH, periov_LH, earlylut_LH,
-         midluteal_LH, perimenstrual_LH) %>%
-  View()
-
-
-
-```    
-     
+## spaghetti plots by cycle phase (one line per person, person-centered)
+```{r}
+RR_data_for_plot1a %>% 
+  group_by(id, LH_cyclephasenames) %>%
+  summarize(person.m.drinkingprob.d = mean(drinkingprobphase.d, na.rm=T),
+            se=sd(drinkingprobphase.d, na.rm=T)/sqrt(n())) %>%
+  ggplot(aes(x=LH_cyclephasenames, y=person.m.drinkingprob.d, group=id))+
+  geom_line()+
+  scale_x_discrete(labels=c("midfol" = "Midfollicular", 
+                            "midlut" = "Midluteal",
+                            "perimen" = "Perimenstrual",
+                            "periov" = "Periovulatory"))+
+  scale_y_continuous(limits = c(-0.05, 0.10))+
+  geom_errorbar(aes(ymin=person.m.drinkingprob.d-se, 
+                    ymax=person.m.drinkingprob.d+se), 
+                size=0.5, width=0.5, position=position_dodge())+
+  geom_hline(yintercept=0.0, color="red", linetype="dashed")+
+  theme_bw()+
+  xlab("Cycle Phase")+
+  ylab("Person-Centered Prob. of Drinking")
+```
+  
+    
 #edit days that got double-counted
 ```{r}
 
