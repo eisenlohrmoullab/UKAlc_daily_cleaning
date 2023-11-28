@@ -1783,6 +1783,7 @@ data_cycleday_plot <- am_data_cycleday %>% group_by(ID, hybridcycleday) %>%
 
 ```{r}
 
+
 data_cycleday_plot %>% group_by(hybridcycleday) %>%
   summarize(personcentered.dev = mean(drinkingdayprob.d, na.rm=T),
             se=sd(drinkingdayprob.d, na.rm=T)/sqrt(n())) %>%
