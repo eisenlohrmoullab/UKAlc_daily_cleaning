@@ -1719,28 +1719,86 @@ cycleday.am.merge %>%
 
 
 ```                                                                        
+## JB: create hybridcycleday (one variable combining data surrounding LH and surrounding menses)
+```{r}
+#create hybrid version of cycle day:
+cycleday.am.merge <- cycleday.am.merge %>%
+  mutate(hybridcycleday = case_when((daycountLH >= -7 & daycountLH <= 5) ~ 
+                                      paste(as.character(daycountLH), "L", sep = ""),
+                                    (cycleday >= -9 & cycleday <= 7) ~ paste(as.character(cycleday), "M",  sep = ""),
+                                    TRUE ~ NA_character_))
+
+am_data_cycleday <- cycleday.am.merge %>%
+  filter(!is.na(hybridcycleday))
+
+hybridcycleday_order <- c("-7L",
+                       "-6L",
+                       "-5L",
+                       "-4L",
+                       "-3L",
+                       "-2L",
+                       "-1L",
+                       "0L",
+                       "1L",
+                       "2L",
+                       "3L",
+                       "4L",
+                       "5L",
+                       "-9M",
+                       "-8M",
+                       "-7M",
+                       "-6M",
+                       "-5M",
+                       "-4M",
+                       "-3M",
+                       "-2M",
+                       "-1M",
+                       "1M",
+                       "2M",
+                       "3M",
+                       "4M",
+                       "5M",
+                       "6M",
+                       "7M")
+
+#craete overall probability of drinking
+am_data_cycleday <- am_data_cycleday %>%
+  group_by(ID) %>%
+  mutate(drinkingprob.m = sum(drink_today_am, na.rm = TRUE)/n())
+
+#view everyones overall probability of drinking (on a day that received a cycle variable)
+am_data_cycleday %>% group_by(ID) %>% slice(1) %>% select(ID, drinkingprob.m)
+
+#person-mean-center
+data_cycleday_plot <- am_data_cycleday %>% group_by(ID, hybridcycleday) %>% 
+  filter(!is.na(hybridcycleday)) %>%
+  summarize(drinkingprob.m=mean(drinkingprob.m),
+            drinkingprob.day.m = mean(drink_today_am, na.rm = TRUE),
+            drinkingdayprob.d = drinkingprob.day.m - drinkingprob.m) %>%
+  arrange(factor(hybridcycleday, levels = hybridcycleday_order))
+
+```
+
+
 
 ```{r}
-#person-mean-center
-cycleday_alcamt_plot1 <- cycleday.am.merge %>% group_by(ID, cycleday) %>% 
-  filter(!is.na(cycleday)) %>%
-  summarize(Alc_Amt_am.m=mean(Alc_Amt_am.m),
-            Amt.day.m = mean(Alc_Amt_am, na.rm = TRUE),
-            Amt.day.d = Amt.day.m - Alc_Amt_am.m) 
 
-cycleday_alcamt_plot1 %>% group_by(cycleday) %>%
-  summarize(personcentered.dev = mean(Amt.day.d, na.rm=T),
-            se=sd(Amt.day.d, na.rm=T)/sqrt(n())) %>%
+data_cycleday_plot %>% group_by(hybridcycleday) %>%
+  summarize(personcentered.dev = mean(drinkingdayprob.d, na.rm=T),
+            se=sd(drinkingdayprob.d, na.rm=T)/sqrt(n())) %>%
+  arrange(factor(hybridcycleday, levels = hybridcycleday_order)) %>%
   mutate(roll= rollapply(personcentered.dev, 3, 
                          mean, align = "center", fill=NA)) %>%
-  ggplot(aes(x=cycleday, y=roll))+
+  ggplot(aes(x=factor(hybridcycleday, levels = hybridcycleday_order), y=roll))+
   geom_line(group=1)+
   geom_hline(yintercept = 0, linetype="dashed", col="red")+
   #geom_vline(xintercept = "1M", col="blue", size=0.25)+
   #geom_vline(xintercept = "0L", col="blue", size=0.25)+
   geom_errorbar(aes(ymin=roll-se, ymax=roll+se), 
                 size=0.5, width=0.5, position=position_dodge())+
-  theme_bw()
+  theme_bw()+
+  xlab("Cycle Day (based on LH-surge and menses self-report)")+
+  ylab("Person-Centered Prob. of Drinking")
 ```
 
   
