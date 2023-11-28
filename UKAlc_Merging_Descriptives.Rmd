@@ -1593,7 +1593,7 @@ cycleday.pm.merge <- merge(cycle.day, pm_data, by = c("ID", "daterated"), all = 
 ```{r}
 LH.Count <- read.csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/UKAlc.LH.Data.csv")
 
-LH.Count$daterated <- ymd(LH.Count$daterated)
+LH.Count$daterated <- mdy(LH.Count$daterated)
 
 cycleday.am.merge <- merge(LH.Count, cycleday.am.merge, by = c("ID", "daterated"), all = T)
 cycleday.pm.merge <- merge(LH.Count, cycleday.pm.merge, by = c("ID", "daterated"), all = T)
