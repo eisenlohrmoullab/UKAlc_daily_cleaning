@@ -25,6 +25,211 @@ knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (
 
 ```
 
+## import the clean dataset
+```{r}
+df <- read_csv("Cycle_Day_LH_menses_am.csv")
+```
+
+
+## JB: create hybridcycleday (one variable combining data surrounding LH and surrounding menses)
+```{r}
+#create hybrid version of cycle day:
+df <- df %>%
+  mutate(hybridcycleday = case_when((daycountLH >= -7 & daycountLH <= 15) ~ 
+                                      paste(as.character(daycountLH), "L", sep = ""),
+                                    (cycleday >= -9 & cycleday <= 10) ~ paste(as.character(cycleday), "M",  sep = ""),
+                                    TRUE ~ NA_character_))
+
+am_data_hybridcycleday <- df %>%
+  filter(!is.na(hybridcycleday))
+
+hybridcycleday_order <- c("-7L",
+                       "-6L",
+                       "-5L",
+                       "-4L",
+                       "-3L",
+                       "-2L",
+                       "-1L",
+                       "0L",
+                       "1L",
+                       "2L",
+                       "3L",
+                       "4L",
+                       "5L",
+                       "6L",
+                       "7L",
+                       "8L",
+                       "9L",
+                       "10L",
+                       "11L",
+                       "12L",
+                       "13L",
+                       "14L",
+                       "15L",
+                       "-9M",
+                       "-8M",
+                       "-7M",
+                       "-6M",
+                       "-5M",
+                       "-4M",
+                       "-3M",
+                       "-2M",
+                       "-1M",
+                       "1M",
+                       "2M",
+                       "3M",
+                       "4M",
+                       "5M",
+                       "6M",
+                       "7M",
+                       "8M",
+                       "9M",
+                       "10M")
+
+##hybridcycledayorder if we remove the early M days
+hybridcycleday_order_new <- c("-7L",
+                       "-6L",
+                       "-5L",
+                       "-4L",
+                       "-3L",
+                       "-2L",
+                       "-1L",
+                       "0L",
+                       "1L",
+                       "2L",
+                       "3L",
+                       "4L",
+                       "5L",
+                       "6L",
+                       "7L",
+                       "8L",
+                       "9L",
+                       "10L",
+                       "11L",
+                       "12L",
+                       "13L",
+                       "14L",
+                       "15L",
+                       "2M",
+                       "3M",
+                       "4M",
+                       "5M",
+                       "6M",
+                       "7M",
+                       "8M",
+                       "9M",
+                       "10M")
+
+
+#we never have data that does not get overridden by LH count up until menses+2:
+am_data_cycleday <- am_data_cycleday %>%
+  filter(!hybridcycleday %in% c("-9M",
+                       "-8M",
+                       "-7M",
+                       "-6M",
+                       "-5M",
+                       "-4M",
+                       "-3M",
+                       "-2M",
+                       "-1M",
+                       "1M"))
+
+
+#craete overall probability of drinking
+am_data_cycleday <- cycleday.am.merge %>%
+  group_by(ID) %>%
+  mutate(drinkingprob.m = sum(drink_today_am, na.rm = TRUE)/n())
+
+#view everyones overall probability of drinking (on a day that received a cycle variable)
+am_data_cycleday %>% group_by(ID) %>% slice(1) %>% select(ID, drinkingprob.m)
+
+#person-mean-center
+data_cycleday_plot <- am_data_cycleday %>% group_by(ID, hybridcycleday) %>% 
+  filter(!is.na(hybridcycleday)) %>%
+  summarize(drinkingprob.m=mean(drinkingprob.m),
+            drinkingprob.day.m = mean(drink_today_am, na.rm = TRUE),
+            drinkingdayprob.d = drinkingprob.day.m - drinkingprob.m) %>%
+  arrange(factor(hybridcycleday, levels = hybridcycleday_order_new))
+
+
+```
+
+
+
+```{r}
+
+
+data_cycleday_plot %>% group_by(hybridcycleday) %>%
+  summarize(personcentered.dev = mean(drinkingdayprob.d, na.rm=T),
+            se=sd(drinkingdayprob.d, na.rm=T)/sqrt(n())) %>%
+  arrange(factor(hybridcycleday, levels = hybridcycleday_order_new)) %>%
+  mutate(roll= rollapply(personcentered.dev, 3, 
+                         mean, align = "center", fill=NA)) %>%
+  ggplot(aes(x=factor(hybridcycleday, levels = hybridcycleday_order_new), y=roll))+
+  geom_line(group=1)+
+  geom_hline(yintercept = 0, linetype="dashed", col="red")+
+  #geom_vline(xintercept = "1M", col="blue", size=0.25)+
+  #geom_vline(xintercept = "0L", col="blue", size=0.25)+
+  geom_errorbar(aes(ymin=roll-se, ymax=roll+se), 
+                size=0.5, width=0.5, position=position_dodge())+
+  theme_bw()+
+  xlab("Cycle Day (based on LH-surge and menses self-report)")+
+  ylab("Person-Centered Prob. of Drinking")
+```
+
+## JB: repeat prior block but on daycountLH to see if we get better coverage of the luteal phase
+```{r}
+
+#person-mean-center: daycountLH
+data_daycountLH_plot <- am_data_cycleday %>% group_by(ID, daycountLH) %>% 
+  filter(!is.na(daycountLH)) %>%
+  summarize(drinkingprob.m=mean(drinkingprob.m),
+            drinkingprob.day.m = mean(drink_today_am, na.rm = TRUE),
+            drinkingdayprob.d = drinkingprob.day.m - drinkingprob.m) 
+
+#person-mean-center:menses
+data_mensescountplot <- am_data_cycleday %>% group_by(ID, cycleday) %>% 
+  filter(!is.na(cycleday)) %>%
+  summarize(drinkingprob.m=mean(drinkingprob.m),
+            drinkingprob.day.m = mean(drink_today_am, na.rm = TRUE),
+            drinkingdayprob.d = drinkingprob.day.m - drinkingprob.m) 
+
+
+#daycountLH only
+data_daycountLH_plot %>% group_by(daycountLH) %>%
+  summarize(personcentered.dev = mean(drinkingdayprob.d, na.rm=T),
+            se=sd(drinkingdayprob.d, na.rm=T)/sqrt(n())) %>%
+  mutate(roll= rollapply(personcentered.dev, 3, 
+                         mean, align = "center", fill=NA)) %>%
+  ggplot(aes(x=as.factor(daycountLH), y=roll))+
+  geom_line(group=1)+
+  geom_hline(yintercept = 0, linetype="dashed", col="red")+
+  geom_errorbar(aes(ymin=roll-se, ymax=roll+se), 
+                size=0.5, width=0.5, position=position_dodge())+
+  theme_bw()+
+  xlab("Cycle Day (based on LH-surge only)")+
+  ylab("Person-Centered Prob. of Drinking")
+
+#menses count only
+data_mensescountplot %>% group_by(cycleday) %>%
+  summarize(personcentered.dev = mean(drinkingdayprob.d, na.rm=T),
+            se=sd(drinkingdayprob.d, na.rm=T)/sqrt(n())) %>%
+  mutate(roll= rollapply(personcentered.dev, 3, 
+                         mean, align = "center", fill=NA)) %>%
+  ggplot(aes(x=as.factor(cycleday), y=roll))+
+  geom_line(group=1)+
+  geom_hline(yintercept = 0, linetype="dashed", col="red")+
+  geom_errorbar(aes(ymin=roll-se, ymax=roll+se), 
+                size=0.5, width=0.5, position=position_dodge())+
+  theme_bw()+
+  xlab("Cycle Day (based on menses onset only)")+
+  ylab("Person-Centered Prob. of Drinking")
+
+```
+
+
+
+==== ALL EXAMPLE CODE BELOW =====
 ## spaghetti plots by cycle phase (one line per person, person-centered)
 ```{r}
 RR_data_for_plot1a %>% 
