@@ -1769,7 +1769,59 @@ hybridcycleday_order <- c("-7L",
                        "4M",
                        "5M",
                        "6M",
-                       "7M")
+                       "7M",
+                       "8M",
+                       "9M",
+                       "10M")
+
+##hybridcycledayorder if we remove the early M days
+hybridcycleday_order_new <- c("-7L",
+                       "-6L",
+                       "-5L",
+                       "-4L",
+                       "-3L",
+                       "-2L",
+                       "-1L",
+                       "0L",
+                       "1L",
+                       "2L",
+                       "3L",
+                       "4L",
+                       "5L",
+                       "6L",
+                       "7L",
+                       "8L",
+                       "9L",
+                       "10L",
+                       "11L",
+                       "12L",
+                       "13L",
+                       "14L",
+                       "15L",
+                       "2M",
+                       "3M",
+                       "4M",
+                       "5M",
+                       "6M",
+                       "7M",
+                       "8M",
+                       "9M",
+                       "10M")
+
+
+#we never have data that does not get overridden by LH count up until menses+2:
+am_data_cycleday <- am_data_cycleday %>%
+  filter(!hybridcycleday %in% c("-9M",
+                       "-8M",
+                       "-7M",
+                       "-6M",
+                       "-5M",
+                       "-4M",
+                       "-3M",
+                       "-2M",
+                       "-1M",
+                       "1M"))
+
 
 #craete overall probability of drinking
 am_data_cycleday <- cycleday.am.merge %>%
@@ -1785,7 +1837,8 @@ data_cycleday_plot <- am_data_cycleday %>% group_by(ID, hybridcycleday) %>%
   summarize(drinkingprob.m=mean(drinkingprob.m),
             drinkingprob.day.m = mean(drink_today_am, na.rm = TRUE),
             drinkingdayprob.d = drinkingprob.day.m - drinkingprob.m) %>%
-  arrange(factor(hybridcycleday, levels = hybridcycleday_order))
+  arrange(factor(hybridcycleday, levels = hybridcycleday_order_new))
+
 
 ```
 
@@ -1797,10 +1850,10 @@ data_cycleday_plot <- am_data_cycleday %>% group_by(ID, hybridcycleday) %>%
 data_cycleday_plot %>% group_by(hybridcycleday) %>%
   summarize(personcentered.dev = mean(drinkingdayprob.d, na.rm=T),
             se=sd(drinkingdayprob.d, na.rm=T)/sqrt(n())) %>%
-  arrange(factor(hybridcycleday, levels = hybridcycleday_order)) %>%
+  arrange(factor(hybridcycleday, levels = hybridcycleday_order_new)) %>%
   mutate(roll= rollapply(personcentered.dev, 3, 
                          mean, align = "center", fill=NA)) %>%
-  ggplot(aes(x=factor(hybridcycleday, levels = hybridcycleday_order), y=roll))+
+  ggplot(aes(x=factor(hybridcycleday, levels = hybridcycleday_order_new), y=roll))+
   geom_line(group=1)+
   geom_hline(yintercept = 0, linetype="dashed", col="red")+
   #geom_vline(xintercept = "1M", col="blue", size=0.25)+
