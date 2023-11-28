@@ -1728,7 +1728,7 @@ cycleday.am.merge <- cycleday.am.merge %>%
                                     (cycleday >= -9 & cycleday <= 7) ~ paste(as.character(cycleday), "M",  sep = ""),
                                     TRUE ~ NA_character_))
 
-am_data_cycleday <- cycleday.am.merge %>%
+am_data_hybridcycleday <- cycleday.am.merge %>%
   filter(!is.na(hybridcycleday))
 
 hybridcycleday_order <- c("-7L",
@@ -1762,7 +1762,7 @@ hybridcycleday_order <- c("-7L",
                        "7M")
 
 #craete overall probability of drinking
-am_data_cycleday <- am_data_cycleday %>%
+am_data_cycleday <- cycleday.am.merge %>%
   group_by(ID) %>%
   mutate(drinkingprob.m = sum(drink_today_am, na.rm = TRUE)/n())
 
@@ -1801,7 +1801,56 @@ data_cycleday_plot %>% group_by(hybridcycleday) %>%
   ylab("Person-Centered Prob. of Drinking")
 ```
 
-  
+## JB: repeat prior block but on daycountLH to see if we get better coverage of the luteal phase
+```{r}
+
+#person-mean-center
+data_daycountLH_plot <- am_data_cycleday %>% group_by(ID, daycountLH) %>% 
+  filter(!is.na(daycountLH)) %>%
+  summarize(drinkingprob.m=mean(drinkingprob.m),
+            drinkingprob.day.m = mean(drink_today_am, na.rm = TRUE),
+            drinkingdayprob.d = drinkingprob.day.m - drinkingprob.m) 
+
+#person-mean-center
+data_mensescountplot <- am_data_cycleday %>% group_by(ID, cycleday) %>% 
+  filter(!is.na(cycleday)) %>%
+  summarize(drinkingprob.m=mean(drinkingprob.m),
+            drinkingprob.day.m = mean(drink_today_am, na.rm = TRUE),
+            drinkingdayprob.d = drinkingprob.day.m - drinkingprob.m) 
+
+
+#daycountLH only
+data_daycountLH_plot %>% group_by(daycountLH) %>%
+  summarize(personcentered.dev = mean(drinkingdayprob.d, na.rm=T),
+            se=sd(drinkingdayprob.d, na.rm=T)/sqrt(n())) %>%
+  mutate(roll= rollapply(personcentered.dev, 3, 
+                         mean, align = "center", fill=NA)) %>%
+  ggplot(aes(x=as.factor(daycountLH), y=roll))+
+  geom_line(group=1)+
+  geom_hline(yintercept = 0, linetype="dashed", col="red")+
+  geom_errorbar(aes(ymin=roll-se, ymax=roll+se), 
+                size=0.5, width=0.5, position=position_dodge())+
+  theme_bw()+
+  xlab("Cycle Day (based on LH-surge only)")+
+  ylab("Person-Centered Prob. of Drinking")
+
+#menses count only
+data_mensescountplot %>% group_by(cycleday) %>%
+  summarize(personcentered.dev = mean(drinkingdayprob.d, na.rm=T),
+            se=sd(drinkingdayprob.d, na.rm=T)/sqrt(n())) %>%
+  mutate(roll= rollapply(personcentered.dev, 3, 
+                         mean, align = "center", fill=NA)) %>%
+  ggplot(aes(x=as.factor(cycleday), y=roll))+
+  geom_line(group=1)+
+  geom_hline(yintercept = 0, linetype="dashed", col="red")+
+  geom_errorbar(aes(ymin=roll-se, ymax=roll+se), 
+                size=0.5, width=0.5, position=position_dodge())+
+  theme_bw()+
+  xlab("Cycle Day (based on menses onset only)")+
+  ylab("Person-Centered Prob. of Drinking")
+
+```
+
     
 #edit days that got double-counted
 ```{r}
