@@ -541,15 +541,20 @@ am_data_roll <- am_data %>%
            Alc_Amt_am,
            Alc_Drunk_am))
 
+am_vars_roll_list <- c("Urg_Alc_am", "Urg_Nic_am", "Urg_Mar_am") #Finish list later 
+
 #Rolling averages
-for (i in am_data_vars_int) {
+for (i in am_vars_roll_list) {
   am_data <- create.3day.rolling.avg(am_data, !!sym({{i}}))
 }
-
+#Saving function 
 create.3day.rolling.avg <- function(df, var) {
    df %>%
      group_by(ID) %>%     mutate("{{var}}.roll" := rollapply({{var}}, 3,  mean, align="center", fill=NA))
 }
+
+am_data %>% select(Urg_Alc_am, Urg_Alc_am.roll, Urg_Nic_am, Urg_Nic_am.roll, Urg_Mar_am, Urg_Mar_am.roll) %>% View()
+am_data <- create.3day.rolling.avg(am_data, Urg_Alc_am)
 
 am_data <- create.3day.rolling.avg(am_data, am_data_roll) 
 
@@ -1680,58 +1685,6 @@ cycleday.am.merge <- cycleday.am.merge %>% mutate(cyclephase_LH = case_when(peri
 
 ```
 
-```{r cyclephase_LH}
-
-cycleday.pm.merge <- cycleday.pm.merge %>% 
-  mutate(midluteal_LH = ifelse(daycountLH >= 6 & daycountLH <= 10, 1, 0),
-         perimenstrual_LH = ifelse(cycleday >=-3 & cycleday <=2, 1, 0), #note perimenstrual is based on cycleday
-         midfol_LH = ifelse(daycountLH >=-7 & daycountLH <=-3, 1, 0),
-         periov_LH = ifelse(daycountLH >= -2 & daycountLH <= 1, 1, 0),
-         earlylut_LH = ifelse(daycountLH >= 2 & daycountLH <= 5, 1, 0))
-
-#fill out the dummy code, so that if any phase is 1, all others should be 0 (not NA)
-cycleday.pm.merge <- cycleday.pm.merge %>%
-  rowwise() %>%
-  mutate(sumdummy = sum(midfol_LH,
-                        periov_LH,
-                        earlylut_LH,
-                        perimenstrual_LH,
-                        midluteal_LH, na.rm = T)) %>% 
-  #if all phases=0, make the midluteal_LH variable NA instead of 0,
-  #if perimenstrual by menses count = 1, change midluteal_LH to 0 instead of NA to fill out structural set,
-  #otherwise, keep as is
-  mutate(midluteal_LH = case_when(sumdummy==0 ~ as.numeric(NA),
-                                  sumdummy==1 & perimenstrual_LH==1 ~ 0,
-                                  TRUE ~ midluteal_LH), 
-         #same for midfol
-         midfol_LH = case_when(sumdummy==0 ~ as.numeric(NA),
-                               sumdummy==1 & perimenstrual_LH==1 ~ 0,
-                               TRUE ~ midfol_LH), 
-          #same for periov
-         periov_LH = case_when(sumdummy==0 ~ as.numeric(NA),
-                               sumdummy==1 & perimenstrual_LH==1 ~ 0,
-                               TRUE ~ periov_LH),
-         earlylut_LH = case_when(sumdummy==0 ~ as.numeric(NA),
-                                  sumdummy==1 & perimenstrual_LH==1 ~ 0,
-                                  TRUE ~ earlylut_LH), 
-         #if any other phase is 1, fill out perimenstrual to be 0
-         perimenstrual_LH = case_when(sumdummy==0 ~ as.numeric(NA), 
-                                        sumdummy==1 & midfol_LH==1 ~ 0,
-                                        sumdummy==1 & periov_LH==1 ~ 0,
-                                      sumdummy==1 & earlylut_LH==1 ~ 0,
-                                        sumdummy==1 & midluteal_LH==1 ~ 0,
-                                        TRUE ~ perimenstrual_LH))
-
-#add a non-dummy coded variable with all of cycle phase info above, which will be useful for future visualizations and summaries
-cycleday.pm.merge <- cycleday.pm.merge %>% mutate(cyclephase_LH = case_when(periov_LH==1 ~ 1,
-                                                                        earlylut_LH==1 ~ 2,
-                                                     midluteal_LH==1 ~ 3,
-                                                     perimenstrual_LH==1 ~ 4,
-                                                     midfol_LH==1 ~ 5,
-                                                     TRUE ~ as.numeric(NA)))
-
-```
-  
 ```{r}
 
 #check overlaps: goal is to only have 6 possible group combinations here (1 row per dummy coded phase, then a row where ALL are NA)
