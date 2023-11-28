@@ -39,15 +39,15 @@ library(zoo)
 # pm_rc <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_REDCap_csv.csv")
 
 
-#Anna's Paths
+#Anna's Paths (jb updated to ~)
 
-am_qual <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_Qualtrics_csv.csv")
+am_qual <- read.csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_Qualtrics_csv.csv")
 
-pm_qual <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_Qualtrics_csv.csv")
+pm_qual <- read.csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_Qualtrics_csv.csv")
 
-am_rc <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_REDCap_csv.csv")
+am_rc <- read.csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_REDCap_csv.csv")
 
-pm_rc <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_REDCap_csv.csv")
+pm_rc <- read.csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_REDCap_csv.csv")
 ```
 
 ID's in am_qual: 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 126
@@ -543,20 +543,22 @@ am_data_roll <- am_data %>%
 
 am_vars_roll_list <- c("Urg_Alc_am", "Urg_Nic_am", "Urg_Mar_am") #Finish list later 
 
-#Rolling averages
-for (i in am_vars_roll_list) {
-  am_data <- create.3day.rolling.avg(am_data, !!sym({{i}}))
-}
+
 #Saving function 
 create.3day.rolling.avg <- function(df, var) {
    df %>%
      group_by(ID) %>%     mutate("{{var}}.roll" := rollapply({{var}}, 3,  mean, align="center", fill=NA))
 }
 
-am_data %>% select(Urg_Alc_am, Urg_Alc_am.roll, Urg_Nic_am, Urg_Nic_am.roll, Urg_Mar_am, Urg_Mar_am.roll) %>% View()
-am_data <- create.3day.rolling.avg(am_data, Urg_Alc_am)
+#Rolling averages
+for (i in am_vars_roll_list) {
+  am_data <- create.3day.rolling.avg(am_data, !!sym({{i}}))
+}
 
-am_data <- create.3day.rolling.avg(am_data, am_data_roll) 
+#example for how to check that the roll function worked
+am_data %>% select(Urg_Alc_am, Urg_Alc_am.roll, Urg_Nic_am, Urg_Nic_am.roll, Urg_Mar_am, Urg_Mar_am.roll) %>% View()
+#how to run rolling.avg fx on just 1 var at a time
+am_data <- create.3day.rolling.avg(am_data, Urg_Alc_am)
 
 ```
 
@@ -1573,7 +1575,7 @@ write.csv(pm_data, "/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab 
 #Add in cycle day 
 ```{r}
 
-cycle.day <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/UKAlc.Cycle.Day.csv")
+cycle.day <- read.csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/UKAlc.Cycle.Day.csv")
 
 ```
 
@@ -1589,7 +1591,7 @@ cycleday.pm.merge <- merge(cycle.day, pm_data, by = c("ID", "daterated"), all = 
 ```
 #Add in LH Data
 ```{r}
-LH.Count <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/UKAlc.LH.Data.csv")
+LH.Count <- read.csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/UKAlc.LH.Data.csv")
 
 LH.Count$daterated <- ymd(LH.Count$daterated)
 
@@ -1683,6 +1685,15 @@ cycleday.am.merge <- cycleday.am.merge %>% mutate(cyclephase_LH = case_when(peri
                                                      midfol_LH==1 ~ 5,
                                                      TRUE ~ as.numeric(NA)))
 
+#add names for easier visualization
+cycleday.am.merge <- cycleday.am.merge %>% mutate(cyclephase_LHnames = factor(cyclephase_LH, 
+                                                                              levels = c(1,2,3,4,5),
+                                                                              labels = c("periov",
+                                                                                         "earlylut",
+                                                                                         "midlut",
+                                                                                         "perimens",
+                                                                                         "midfol")))
+
 ```
 
 ```{r}
@@ -1708,31 +1719,30 @@ cycleday.am.merge %>%
 
 
 ```                                                                        
-```{r}
 
-```
-
-## spaghetti plots by cycle phase (one line per person, person-centered)
 ```{r}
-RR_data_for_plot1a %>% 
-  group_by(id, LH_cyclephasenames) %>%
-  summarize(person.m.drinkingprob.d = mean(drinkingprobphase.d, na.rm=T),
-            se=sd(drinkingprobphase.d, na.rm=T)/sqrt(n())) %>%
-  ggplot(aes(x=LH_cyclephasenames, y=person.m.drinkingprob.d, group=id))+
-  geom_line()+
-  scale_x_discrete(labels=c("midfol" = "Midfollicular", 
-                            "midlut" = "Midluteal",
-                            "perimen" = "Perimenstrual",
-                            "periov" = "Periovulatory"))+
-  scale_y_continuous(limits = c(-0.05, 0.10))+
-  geom_errorbar(aes(ymin=person.m.drinkingprob.d-se, 
-                    ymax=person.m.drinkingprob.d+se), 
+#person-mean-center
+cycleday_alcamt_plot1 <- cycleday.am.merge %>% group_by(ID, cycleday) %>% 
+  filter(!is.na(cycleday)) %>%
+  summarize(Alc_Amt_am.m=mean(Alc_Amt_am.m),
+            Amt.day.m = mean(Alc_Amt_am, na.rm = TRUE),
+            Amt.day.d = Amt.day.m - Alc_Amt_am.m) 
+
+cycleday_alcamt_plot1 %>% group_by(cycleday) %>%
+  summarize(personcentered.dev = mean(Amt.day.d, na.rm=T),
+            se=sd(Amt.day.d, na.rm=T)/sqrt(n())) %>%
+  mutate(roll= rollapply(personcentered.dev, 3, 
+                         mean, align = "center", fill=NA)) %>%
+  ggplot(aes(x=cycleday, y=roll))+
+  geom_line(group=1)+
+  geom_hline(yintercept = 0, linetype="dashed", col="red")+
+  #geom_vline(xintercept = "1M", col="blue", size=0.25)+
+  #geom_vline(xintercept = "0L", col="blue", size=0.25)+
+  geom_errorbar(aes(ymin=roll-se, ymax=roll+se), 
                 size=0.5, width=0.5, position=position_dodge())+
-  geom_hline(yintercept=0.0, color="red", linetype="dashed")+
-  theme_bw()+
-  xlab("Cycle Phase")+
-  ylab("Person-Centered Prob. of Drinking")
+  theme_bw()
 ```
+
   
     
 #edit days that got double-counted
