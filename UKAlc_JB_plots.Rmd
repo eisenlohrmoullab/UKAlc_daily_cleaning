@@ -149,15 +149,17 @@ am_data_daycountLH <- (cycleday.am.merge) %>% filter(!is.na(daycountLH))
 
 
 #view everyones overall probability of drinking (on a day that received a cycle variable)
-#am_data_cycleday %>% group_by(ID) %>% slice(1) %>% select(ID, drinkingprob.m) ###Anna: I commented this out here bc it doesn't appear to be relevant to my dataset right now 11/29/23
+#am_data_cycleday %>% group_by(ID) %>% slice(1) %>% select(ID, drinkingprob.m) ###Anna: I commented this out here bc it doesn't appear to be relevant to my dataset right now 11/29/23. The setup of cycle day variables was named am_data_hybridcycleday 
+
+am_data_hybridcycleday %>% group_by(ID) %>% slice(1) %>% select(ID, drinkingprob.m)
 
 #person-mean-center
-# data_cycleday_plot <- am_data_cycleday %>% 
-#   group_by(ID, hybridcycleday) %>%
-#   summarize(drinkingprob.m=mean(drinkingprob.m),
-#             drinkingprob.day.m = mean(drink_today_am, na.rm = TRUE),
-#             drinkingdayprob.d = drinkingprob.day.m - drinkingprob.m) %>%
-#   arrange(factor(hybridcycleday, levels = hybridcycleday_order_new))
+data_cycleday_plot <- am_data_hybridcycleday %>%
+  group_by(ID, hybridcycleday) %>%
+  summarize(drinkingprob.m=mean(drinkingprob.m),
+            drinkingprob.day.m = mean(drink_today_am, na.rm = TRUE),
+            drinkingdayprob.d = drinkingprob.day.m - drinkingprob.m) %>%
+  arrange(factor(hybridcycleday, levels = hybridcycleday_order_new))
 
 
 ```
@@ -183,6 +185,8 @@ data_cycleday_plot %>% group_by(hybridcycleday) %>%
   theme_bw()+
   xlab("Cycle Day (based on LH-surge and menses self-report)")+
   ylab("Person-Centered Prob. of Drinking")
+
+##Anna on 11/29/23: This plot does not hang around zero as expected - likely due to NAs rather than zeros? The NAs are brought about when we extrapolate cycle dates on days surveys were not completed. 
 ```
 
 ##AP following JB's instructions below 
