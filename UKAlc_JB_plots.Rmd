@@ -28,6 +28,9 @@ knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (
 ## import the clean dataset
 ```{r}
 df <- read_csv("Cycle_Day_LH_menses_am.csv")
+
+hormones <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace/Salivary_Plates_27-46_E2P4LH.csv")
+
 ```
 
 
@@ -311,6 +314,72 @@ am_data_cycleday %>%
 
 
 ```
+## cleaning hormone data
+```{r}
+
+#rename vars
+hormones <- hormones %>%
+  rename(ID = `Subject ID`,
+         samplenum = `Sample Number`,
+         Estradiol = `Estradiol (pg/mL)`,
+         Progesterone = `Progesterone (pg/mL)`,
+         LH = `LH (uIU/mL)`)
+
+#removed the -1, -2, etc from ID num
+hormones <- hormones %>%
+  mutate(ID = str_extract(ID, "\\d{3}"))
+
+#pivot to LONG format so that progesterone and LH are contained within one new variable called "Hormone" and the values are stored in "pg_ml
+#keep estrogen separate because we will add it on a new axis
+hormones <- hormones %>% 
+  pivot_longer(cols = c(Progesterone:LH), names_to = "Hormone", values_to = "pg_ml")
+
+```
+
+## plot hormones 
+```{r}
+
+hormones %>% 
+  filter(ID==145) %>% ##change out the ID number to see each person's hormones
+  ggplot(aes(x=samplenum, y=pg_ml, group=Hormone, color=Hormone))+
+  geom_line()+
+  geom_line(aes(y = Estradiol*100, color = "Estradiol")) +
+    scale_y_continuous(sec.axis = sec_axis(~./100, name="Estradiol")) +
+  ggtitle("145")+
+  ylab("Progesterone or LH")+
+  xlab("sample number")
+
+```
+## code to save an individual plot of hormones for everyone!
+```{r}
+
+##TO DO: make a list of IDS called "ids"
+#ids <- c(145, 146) (just an example)
+
+for (i in ids) {
+  
+  #make empty list to store the plots
+  plots <- list()
+  
+  #store and save one plot at a time
+  plot <- adhd_ky_bio %>%  #change with your dataset
+  filter(ID==i) %>%
+  ggplot(aes(x=TubeNumber, y=pg_ml, group=Hormone, color=Hormone))+
+  geom_line()+
+  geom_line(aes(y = Estradiol*100, color = "Estradiol")) +
+    scale_y_continuous(sec.axis = sec_axis(~./100, name="estradiol")) +
+    ggtitle(i)
+  
+  #save the plot we just made into the list
+  plots[[i]] <- plot
+  #print to console
+  print(plot)
+  
+  file_name <- paste0("2023-05-25 Hormone Graphs_04.11.23 dataset/hormones_plot_", i, ".png") #update name with where you want this to save
+  ggsave(file_name, plot, width = 8, height = 6, dpi = 300)
+}
+```
+
 
 
 ==== ALL EXAMPLE CODE BELOW =====
