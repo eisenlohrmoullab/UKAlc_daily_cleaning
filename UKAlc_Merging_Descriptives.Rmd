@@ -524,7 +524,7 @@ am_data <- am_data %>% rowwise() %>% mutate(Urg_Alc_am.d = Urg_Alc_am - Urg_Alc_
                                             Alc_Drunk_am.d = Alc_Drunk_am - Alc_Drunk_am.m, na.rm = T)
 
 
-am_vars_roll_list <- c("Urg_Alc_am", "Urg_Nic_am", "Urg_Mar_am", "Urg_Coc_am", "Urg_Oth_am", "Crav_Alc_am", "Crav_Nic_am", "Crav_Mar_am", "Crav_Coc_am", "Crav_Benz_am", "Crav_Hall_am", "Crav_Opiate_am", "Crav_Oth_am", "Alc_Amt_am", "Alc_Drunk_am") 
+am_vars_roll_list <- c("Urg_Alc_am", "Urg_Nic_am", "Urg_Mar_am", "Urg_Coc_am", "Urg_Oth_am", "Crav_Alc_am", "Crav_Nic_am", "Crav_Mar_am", "Crav_Coc_am", "Crav_Benz_am", "Crav_Hall_am", "Crav_Opiate_am", "Alc_Amt_am", "Alc_Drunk_am") 
 
 
 #Saving function 
