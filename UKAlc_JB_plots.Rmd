@@ -343,7 +343,7 @@ am_data_hybridcycleday %>%
   ylab("Person-Centered Urg_Alc")
 
 #Alcohol Amount
-am_data_daycountLH %>%
+am_data_hybridcycleday %>%
   group_by(daycountLH) %>%
   summarize(personcentered.dev=mean(Alc_Amt_am.d, na.rm=T),
             se = sd(Alc_Amt_am.d, na.rm=T)/sqrt(n())) %>%
