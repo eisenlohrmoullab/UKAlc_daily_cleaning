@@ -541,7 +541,7 @@ am_data_roll <- am_data %>%
            Alc_Amt_am,
            Alc_Drunk_am))
 
-am_vars_roll_list <- c("Urg_Alc_am", "Urg_Nic_am", "Urg_Mar_am") #Finish list later 
+am_vars_roll_list <- c("Urg_Alc_am", "Urg_Nic_am", "Urg_Mar_am", "Urg_Coc_am", "Urg_Oth_am",) #Finish list later 
 
 
 #Saving function 
