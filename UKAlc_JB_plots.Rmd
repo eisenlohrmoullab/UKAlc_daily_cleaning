@@ -122,7 +122,7 @@ hybridcycleday_order_new <- c("-7L",
 
 
 #we never have data that does not get overridden by LH count up until menses+2:
-am_data_cycleday <- am_data_cycleday %>%
+am_data_hybridcycleday <- am_data_hybridcycleday %>%
   filter(!hybridcycleday %in% c("-9M",
                        "-8M",
                        "-7M",
@@ -136,7 +136,7 @@ am_data_cycleday <- am_data_cycleday %>%
 
 
 #craete overall probability of drinking
-am_data_cycleday <- cycleday.am.merge %>%
+am_data_hybridcycleday <- am_data_hybridcycleday %>%
   group_by(ID) %>%
   mutate(drinkingprob.m = sum(drink_today_am, na.rm = TRUE)/n())
 
@@ -144,8 +144,8 @@ am_data_cycleday <- cycleday.am.merge %>%
 am_data_cycleday %>% group_by(ID) %>% slice(1) %>% select(ID, drinkingprob.m)
 
 #person-mean-center
-data_cycleday_plot <- am_data_cycleday %>% group_by(ID, hybridcycleday) %>% 
-  filter(!is.na(hybridcycleday)) %>%
+data_cycleday_plot <- am_data_cycleday %>% 
+  group_by(ID, hybridcycleday) %>%
   summarize(drinkingprob.m=mean(drinkingprob.m),
             drinkingprob.day.m = mean(drink_today_am, na.rm = TRUE),
             drinkingdayprob.d = drinkingprob.day.m - drinkingprob.m) %>%
@@ -181,8 +181,9 @@ data_cycleday_plot %>% group_by(hybridcycleday) %>%
 ```{r}
 
 #person-mean-center: daycountLH
-data_daycountLH_plot <- am_data_cycleday %>% group_by(ID, daycountLH) %>% 
+data_daycountLH_plot <- am_data_cycleday %>% 
   filter(!is.na(daycountLH)) %>%
+  group_by(ID, daycountLH) %>% 
   summarize(drinkingprob.m=mean(drinkingprob.m),
             drinkingprob.day.m = mean(drink_today_am, na.rm = TRUE),
             drinkingdayprob.d = drinkingprob.day.m - drinkingprob.m) 
@@ -227,6 +228,69 @@ data_mensescountplot %>% group_by(cycleday) %>%
 
 ```
 
+## troubleshoot the centering issue
+```{r}
+
+am_data_cycleday %>% filter(ID=="101") %>% nrow()
+
+am_data_cycleday %>% filter(ID=="101") %>% 
+  filter(drink_today_am==1) %>%
+    nrow()
+
+am_data_cycleday %>% filter(ID=="101") %>%
+  
+
+9/50
+
+am_data_cycleday %>% filter(ID=="101") %>% filter(hybridcycleday=="-7L") %>% select(daycountLH, drink_today_am, drinkingprob.m)
+
+am_data_cycleday %>% filter(hybridcycleday=="-7L") %>% select(daycountLH, drink_today_am, drinkingprob.m)
+
+
+test <- am_data_cycleday %>% 
+  filter(!is.na(hybridcycleday)) %>%
+  group_by(ID, hybridcycleday) %>%
+  summarize(drinkingprob.m=mean(drinkingprob.m),
+            drinkingprob.day.m = mean(drink_today_am, na.rm = TRUE),
+            drinkingdayprob.d = drinkingprob.day.m - drinkingprob.m) %>%
+  arrange(factor(hybridcycleday, levels = hybridcycleday_order_new))
+
+
+test %>% group_by(hybridcycleday) %>%
+  summarize(personcentered.dev = mean(drinkingdayprob.d, na.rm=T),
+            se=sd(drinkingdayprob.d, na.rm=T)/sqrt(n())) %>%
+  arrange(factor(hybridcycleday, levels = hybridcycleday_order_new))
+```
+
+## can we person-center and plot one other var? maybe numdrinks?
+```{r}
+
+#person-mean-center Urg_Alc
+data_daycountLH_urg_plot <- am_data_cycleday %>% 
+  filter(!is.na(daycountLH)) %>%
+  group_by(ID, daycountLH) %>% 
+  summarize(Urg_Alc_am.m=Urg_Alc_am.m,
+            Urg_Alc_am.day.d = Urg_Alc_am - Urg_Alc_am.m)
+
+data_daycountLH_urg_plot %>%
+  group_by(daycountLH) %>%
+  summarize(personcentered.dev=mean(Urg_Alc_am.day.d, na.rm=T),
+            se = sd(Urg_Alc_am.day.d, na.rm=T)/sqrt(n())) %>%
+  mutate(roll= rollapply(personcentered.dev, 3, 
+                         mean, align = "center", fill=NA)) %>%
+  filter(!is.na(daycountLH)) %>%
+  ggplot(aes(x=factor(daycountLH), y=roll))+
+  geom_line(group=1)+
+  geom_hline(yintercept = 0, linetype="dashed", col="red")+
+  geom_vline(xintercept = "0", col="blue", size=0.25)+
+  geom_errorbar(aes(ymin=roll-se, ymax=roll+se), 
+                size=0.5, width=0.5, position=position_dodge())+
+  theme_bw()+
+  xlab("Cycle Day (based on LH-surge only)")+
+  ylab("Person-Centered Urg_Alc")
+
+
+```
 
 
 ==== ALL EXAMPLE CODE BELOW =====
