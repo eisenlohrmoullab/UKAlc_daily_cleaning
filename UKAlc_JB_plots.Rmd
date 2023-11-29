@@ -284,17 +284,18 @@ cycleday.am.merge %>%
 ## can we person-center and plot one other var? maybe numdrinks?
 ```{r}
 
-#person-mean-center Urg_Alc on each specific day
+#person-mean-center Urg_Alc on each specific day: NOTE, this only needs to be done if there are multiple of the same days per person
 data_daycountLH_urg_plot <- am_data_cycleday %>% 
   filter(!is.na(daycountLH)) %>%
   group_by(ID, daycountLH) %>% 
   summarize(Urg_Alc_am.m=Urg_Alc_am.m,
             Urg_Alc_am.day.d = Urg_Alc_am - Urg_Alc_am.m)
 
-data_daycountLH_urg_plot %>%
+##CAN START HERE WITH JUST ONE CYCLE PER PERSON
+am_data_cycleday %>%
   group_by(daycountLH) %>%
-  summarize(personcentered.dev=mean(Urg_Alc_am.day.d, na.rm=T),
-            se = sd(Urg_Alc_am.day.d, na.rm=T)/sqrt(n())) %>%
+  summarize(personcentered.dev=mean(Urg_Alc_am.d, na.rm=T),
+            se = sd(Urg_Alc_am.d, na.rm=T)/sqrt(n())) %>%
   mutate(roll= rollapply(personcentered.dev, 3, 
                          mean, align = "center", fill=NA)) %>%
   filter(!is.na(daycountLH)) %>%
