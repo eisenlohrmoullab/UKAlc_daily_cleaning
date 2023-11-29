@@ -424,6 +424,36 @@ for (i in ids) {
 }
 ```
 
+## Anna trying loop code above, didn't want to erase what Jordan made above 
+```{r}
+
+##TO DO: make a list of IDS called "ids"
+#ids <- c(145, 146) (just an example)
+
+for (i in ids) {
+  
+  #make empty list to store the plots
+  plots <- list()
+  
+  #store and save one plot at a time
+  plot <- adhd_ky_bio %>%  #change with your dataset
+  filter(ID==i) %>%
+  ggplot(aes(x=TubeNumber, y=pg_ml, group=Hormone, color=Hormone))+
+  geom_line()+
+  geom_line(aes(y = Estradiol*100, color = "Estradiol")) +
+    scale_y_continuous(sec.axis = sec_axis(~./100, name="estradiol")) +
+    ggtitle(i)
+  
+  #save the plot we just made into the list
+  plots[[i]] <- plot
+  #print to console
+  print(plot)
+  
+  file_name <- paste0("2023-05-25 Hormone Graphs_04.11.23 dataset/hormones_plot_", i, ".png") #update name with where you want this to save
+  ggsave(file_name, plot, width = 8, height = 6, dpi = 300)
+}
+```
+
 
 
 ==== ALL EXAMPLE CODE BELOW =====
