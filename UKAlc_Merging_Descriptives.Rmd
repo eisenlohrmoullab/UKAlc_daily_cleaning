@@ -523,25 +523,8 @@ am_data <- am_data %>% rowwise() %>% mutate(Urg_Alc_am.d = Urg_Alc_am - Urg_Alc_
                                             Alc_Amt_am.d = Alc_Amt_am - Alc_Amt_am.m, na.rm = T,
                                             Alc_Drunk_am.d = Alc_Drunk_am - Alc_Drunk_am.m, na.rm = T)
 
-#Create variables of interest list to put into loop function 
-am_data_roll <- am_data %>% 
-  select(c(Urg_Alc_am,
-           Urg_Nic_am,
-           Urg_Mar_am,
-           Urg_Coc_am,
-           Urg_Oth_am,
-           Crav_Alc_am,
-           Crav_Nic_am,
-           Crav_Mar_am,
-           Crav_Coc_am,
-           Crav_Benz_am,
-           Crav_Hall_am,
-           Crav_Opiate_am,
-           Crav_Oth_am,
-           Alc_Amt_am,
-           Alc_Drunk_am))
 
-am_vars_roll_list <- c("Urg_Alc_am", "Urg_Nic_am", "Urg_Mar_am", "Urg_Coc_am", "Urg_Oth_am",) #Finish list later 
+am_vars_roll_list <- c("Urg_Alc_am", "Urg_Nic_am", "Urg_Mar_am", "Urg_Coc_am", "Urg_Oth_am", "Crav_Alc_am", "Crav_Nic_am", "Crav_Mar_am", "Crav_Coc_am", "Crav_Benz_am", "Crav_Hall_am", "Crav_Opiate_am", "Crav_Oth_am", "Alc_Amt_am", "Alc_Drunk_am") 
 
 
 #Saving function 
@@ -892,7 +875,7 @@ summary(Urg_Mar_am_model)
 icc(Urg_Mar_am_model) 
 ```
 
-### pm data means and deviations
+### pm data means, deviations, and rolling avg 
 ```{r}
 #step 1: make variables numeric that aren't already 
 pm_data$Diff_Inhib_pm <- as.numeric(gsub("\\D", "", pm_data$Diff_Inhib_pm))
@@ -1005,6 +988,20 @@ pm_data <- pm_data %>% rowwise() %>% mutate(Urg_Alc_pm.d = Urg_Alc_pm - Urg_Alc_
                                             JM_Pain_pm.d = JM_Pain_pm - JM_Pain_pm.m, na.rm = T, 
                                             Loss_Prod_pm.d = Loss_Prod_pm - Loss_Prod_pm.m, na.rm = T,
                                             Int_Relat_pm.d = Int_Relat_pm - Int_Relat_pm.m, na.rm = T) 
+
+pm_vars_roll_list <- c("Urg_Alc_pm", "Urg_Nic_pm", "Urg_Mar_pm", "Urg_Coc_pm", "Diff_Inhib_pm", "Diff_Change_pm", "Diff_Stop_pm", "Immed_Payoff_pm", "Res_Urge_pm", "Diff_LongRew_pm", "Diff_ResRew_pm", "Dep_pm", "Hopeless_pm", "Worthless_pm", "Anxious_pm", "MoodSwing_pm", "RejSens_pm", "RejSens_pm", "Angry_pm", "Conflicts_pm", "Loss_Interest_pm", "Diff_Conc_pm", "Tired_pm", "OverEat_pm", "Sp_Food_Crav_pm", "High_Sleep_pm", "Diff_Sleep_pm", "Overwhelm_pm", "Loss_Control_pm", "Breast_Tend_pm", "Breast_Swell_pm", "Headache_pm", "JM_Pain_pm", "Loss_Prod_pm", "Int_Relat_pm") 
+
+
+#Saving function 
+create.3day.rolling.avg <- function(df, var) {
+   df %>%
+     group_by(ID) %>%     mutate("{{var}}.roll" := rollapply({{var}}, 3,  mean, align="center", fill=NA))
+}
+
+#Rolling averages
+for (i in pm_vars_roll_list) {
+  pm_data <- create.3day.rolling.avg(pm_data, !!sym({{i}}))
+}
 ```
 
 #PM Data by Day of Week 
