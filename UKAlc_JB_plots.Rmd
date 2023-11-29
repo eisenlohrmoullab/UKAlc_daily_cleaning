@@ -191,7 +191,7 @@ data_cycleday_plot %>% group_by(hybridcycleday) %>%
 
 ##AP following JB's instructions below 
 ```{r}
-am_data_daycountLH %>% group_by(hybridcycleday) %>%
+am_data_hybridcycleday %>% group_by(hybridcycleday) %>%
   summarize(personcentered.dev = mean(drinkingdayprob.d, na.rm=T),
             se=sd(drinkingdayprob.d, na.rm=T)/sqrt(n())) %>%
   arrange(factor(hybridcycleday, levels = hybridcycleday_order_new)) %>%
@@ -214,7 +214,7 @@ am_data_daycountLH %>% group_by(hybridcycleday) %>%
 ```{r}
 
 #person-mean-center: daycountLH
-data_daycountLH_plot <- am_data_cycleday %>% 
+data_daycountLH_plot <- am_data_hybridcycleday %>% 
   filter(!is.na(daycountLH)) %>%
   group_by(ID, daycountLH) %>% 
   summarize(drinkingprob.m=mean(drinkingprob.m),
@@ -325,7 +325,7 @@ data_daycountLH_urg_plot <- am_data_cycleday %>%
             Urg_Alc_am.day.d = Urg_Alc_am - Urg_Alc_am.m)
 
 ##CAN START HERE WITH JUST ONE CYCLE PER PERSON
-am_data_cycleday %>%
+am_data_hybridcycleday %>%
   group_by(daycountLH) %>%
   summarize(personcentered.dev=mean(Urg_Alc_am.d, na.rm=T),
             se = sd(Urg_Alc_am.d, na.rm=T)/sqrt(n())) %>%
