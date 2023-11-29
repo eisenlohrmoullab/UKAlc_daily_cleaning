@@ -143,8 +143,12 @@ am_data_hybridcycleday <- am_data_hybridcycleday %>%
   group_by(ID) %>%
   mutate(drinkingprob.m = sum(drink_today_am, na.rm = TRUE)/n())
 
+#create am_data_daycountLH 
+am_data_daycountLH <- (cycleday.am.merge) %>% filter(!is.na(daycountLH))
+
+
 #view everyones overall probability of drinking (on a day that received a cycle variable)
-am_data_cycleday %>% group_by(ID) %>% slice(1) %>% select(ID, drinkingprob.m)
+am_data_cycleday %>% group_by(ID) %>% slice(1) %>% select(ID, drinkingprob.m) #should I change the df here to be am_data_daycountLH ? 
 
 #person-mean-center
 data_cycleday_plot <- am_data_cycleday %>% 
@@ -311,6 +315,24 @@ am_data_cycleday %>%
   theme_bw()+
   xlab("Cycle Day (based on LH-surge only)")+
   ylab("Person-Centered Urg_Alc")
+
+#Alcohol Amount
+am_data_daycountLH %>%
+  group_by(daycountLH) %>%
+  summarize(personcentered.dev=mean(Alc_Amt_am.d, na.rm=T),
+            se = sd(Alc_Amt_am.d, na.rm=T)/sqrt(n())) %>%
+  mutate(roll= rollapply(personcentered.dev, 3, 
+                         mean, align = "center", fill=NA)) %>%
+  filter(!is.na(daycountLH)) %>%
+  ggplot(aes(x=factor(daycountLH), y=roll))+
+  geom_line(group=1)+
+  geom_hline(yintercept = 0, linetype="dashed", col="red")+
+  geom_vline(xintercept = "0", col="blue", size=0.25)+
+  geom_errorbar(aes(ymin=roll-se, ymax=roll+se), 
+                size=0.5, width=0.5, position=position_dodge())+
+  theme_bw()+
+  xlab("Cycle Day (based on LH-surge only)")+
+  ylab("Person-Centered Amount Alcohol Consumed")
 
 
 ```
