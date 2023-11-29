@@ -362,12 +362,12 @@ hormones <- hormones %>%
 ```{r}
 
 hormones %>% 
-  filter(ID==145) %>% ##change out the ID number to see each person's hormones
+  filter(ID==149) %>% ##change out the ID number to see each person's hormones
   ggplot(aes(x=samplenum, y=pg_ml, group=Hormone, color=Hormone))+
   geom_line()+
   geom_line(aes(y = Estradiol*100, color = "Estradiol")) +
     scale_y_continuous(sec.axis = sec_axis(~./100, name="Estradiol")) +
-  ggtitle("145")+
+  ggtitle("149")+
   ylab("Progesterone or LH")+
   xlab("sample number")
 
