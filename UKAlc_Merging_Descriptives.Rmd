@@ -722,27 +722,27 @@ ggplot(am_data, aes(x = factor(DayOfWeek), y = Alc_Amt_am.d)) +
 ```
 #Binge drinks per day (subtract one day for each bc surveys are filled out next day)
 ```{r}
-#number of people who binge drank on Sundays = 38
+#number of people who binge drank on Sundays = 53
 am_data_Sun %>% group_by(ID) %>% 
-  filter(Alc_Amt_am > 4) 
-#number of people who binge drank on Mondays = 9
+  filter(Alc_Amt_am >= 4) 
+#number of people who binge drank on Mondays = 15
 am_data_Mon %>% group_by(ID) %>% 
-  filter(Alc_Amt_am > 4) 
-#number of people who binge drank on Tuesdays = 7
+  filter(Alc_Amt_am >= 4) 
+#number of people who binge drank on Tuesdays = 21
 am_data_Tues %>% group_by(ID) %>% 
-  filter(Alc_Amt_am > 4) 
-#number of people who binge drank on Wednesdays = 5
+  filter(Alc_Amt_am >= 4) 
+#number of people who binge drank on Wednesdays = 15
 am_data_Wed %>% group_by(ID) %>% 
-  filter(Alc_Amt_am > 4) 
-#number of people who binge drank on Thursdays = 5
+  filter(Alc_Amt_am >= 4) 
+#number of people who binge drank on Thursdays = 16
 am_data_Thurs %>% group_by(ID) %>% 
-  filter(Alc_Amt_am > 4) 
-#number of people who binge drank on Fridays = 13
+  filter(Alc_Amt_am >= 4) 
+#number of people who binge drank on Fridays = 24
 am_data_Fri %>% group_by(ID) %>% 
-  filter(Alc_Amt_am > 4) 
-#number of people who binge drank on Saturdays = 28
+  filter(Alc_Amt_am >= 4) 
+#number of people who binge drank on Saturdays = 38
 am_data_Sat %>% group_by(ID) %>% 
-  filter(Alc_Amt_am > 4) 
+  filter(Alc_Amt_am >= 4) 
 ```
 
 #raincloud plots on person-centered variables on interest from am_data
