@@ -100,6 +100,7 @@ length(unique(pm_data$ID))
 ```
 
 #Before correcting for duplicates, we have n = 83 for am data and n = 82 for pm data 
+#After correcting for duplicates, we have n = 78 for daily survey data 
 
 ```{r}
 #separate datetime variable 
