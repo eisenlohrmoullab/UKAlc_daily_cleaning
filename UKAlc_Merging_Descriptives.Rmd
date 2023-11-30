@@ -722,25 +722,25 @@ ggplot(am_data, aes(x = factor(DayOfWeek), y = Alc_Amt_am.d)) +
 ```
 #Binge drinks per day (subtract one day for each bc surveys are filled out next day)
 ```{r}
-#number of people who binge drank on Sundays = 53
+#number of people who binge drank on Saturdays = 53
 am_data_Sun %>% group_by(ID) %>% 
   filter(Alc_Amt_am >= 4) 
-#number of people who binge drank on Mondays = 15
+#number of people who binge drank on Sundays = 15
 am_data_Mon %>% group_by(ID) %>% 
   filter(Alc_Amt_am >= 4) 
-#number of people who binge drank on Tuesdays = 21
+#number of people who binge drank on Mondays = 21
 am_data_Tues %>% group_by(ID) %>% 
   filter(Alc_Amt_am >= 4) 
-#number of people who binge drank on Wednesdays = 15
+#number of people who binge drank on Tuesdays = 15
 am_data_Wed %>% group_by(ID) %>% 
   filter(Alc_Amt_am >= 4) 
-#number of people who binge drank on Thursdays = 16
+#number of people who binge drank on Wednesdays = 16
 am_data_Thurs %>% group_by(ID) %>% 
   filter(Alc_Amt_am >= 4) 
-#number of people who binge drank on Fridays = 24
+#number of people who binge drank on Thursdays = 24
 am_data_Fri %>% group_by(ID) %>% 
   filter(Alc_Amt_am >= 4) 
-#number of people who binge drank on Saturdays = 38
+#number of people who binge drank on Fridays = 38
 am_data_Sat %>% group_by(ID) %>% 
   filter(Alc_Amt_am >= 4) 
 ```
