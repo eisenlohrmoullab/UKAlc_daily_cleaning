@@ -325,6 +325,7 @@ data_daycountLH_urg_plot <- am_data_cycleday %>%
             Urg_Alc_am.day.d = Urg_Alc_am - Urg_Alc_am.m)
 
 ##CAN START HERE WITH JUST ONE CYCLE PER PERSON
+#Urge to Drink Alcohol 
 am_data_hybridcycleday %>%
   group_by(daycountLH) %>%
   summarize(personcentered.dev=mean(Urg_Alc_am.d, na.rm=T),
@@ -340,7 +341,7 @@ am_data_hybridcycleday %>%
                 size=0.5, width=0.5, position=position_dodge())+
   theme_bw()+
   xlab("Cycle Day (based on LH-surge only)")+
-  ylab("Person-Centered Urg_Alc")
+  ylab("Person-Centered Urg to Drink")
 
 #Alcohol Amount
 am_data_hybridcycleday %>%
@@ -359,7 +360,23 @@ am_data_hybridcycleday %>%
   theme_bw()+
   xlab("Cycle Day (based on LH-surge only)")+
   ylab("Person-Centered Amount Alcohol Consumed")
-
+#Alcohol Craving
+am_data_hybridcycleday %>%
+  group_by(daycountLH) %>%
+  summarize(personcentered.dev=mean(Crav_Alc_am.d, na.rm=T),
+            se = sd(Crav_Alc_am.d, na.rm=T)/sqrt(n())) %>%
+  mutate(roll= rollapply(personcentered.dev, 3, 
+                         mean, align = "center", fill=NA)) %>%
+  filter(!is.na(daycountLH)) %>%
+  ggplot(aes(x=factor(daycountLH), y=roll))+
+  geom_line(group=1)+
+  geom_hline(yintercept = 0, linetype="dashed", col="red")+
+  geom_vline(xintercept = "0", col="blue", size=0.25)+
+  geom_errorbar(aes(ymin=roll-se, ymax=roll+se), 
+                size=0.5, width=0.5, position=position_dodge())+
+  theme_bw()+
+  xlab("Cycle Day (based on LH-surge only)")+
+  ylab("Person-Centered Alcohol Craving")
 
 ```
 ## cleaning hormone data
@@ -388,12 +405,12 @@ hormones <- hormones %>%
 ```{r}
 
 hormones %>% 
-  filter(ID==149) %>% ##change out the ID number to see each person's hormones
+  filter(ID==161) %>% ##change out the ID number to see each person's hormones
   ggplot(aes(x=samplenum, y=pg_ml, group=Hormone, color=Hormone))+
   geom_line()+
   geom_line(aes(y = Estradiol*100, color = "Estradiol")) +
     scale_y_continuous(sec.axis = sec_axis(~./100, name="Estradiol")) +
-  ggtitle("149")+
+  ggtitle("161")+
   ylab("Progesterone or LH")+
   xlab("sample number")
 
