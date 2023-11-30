@@ -469,13 +469,13 @@ summary_Alc_daily <- am_data %>% group_by(ID) %>%
 
 summary_Alc_daily
 ##COUNTS
-summary_Alc_daily %>% tally() #all 82 participants drank alcohol 
+summary_Alc_daily %>% tally() #all 78 participants drank alcohol 
 summary_Alc_daily %>% tally(TotalDrinkingDays ==0) #no participants drank no alcohol 
 
-## number of ppl w at least one binge-drink day (>4 drinks on one day) = 51
+## number of ppl w at least one binge-drink day (>=4 drinks on one day) = 68
 am_data$Alc_Amt_am <- as.numeric(am_data$Alc_Amt_am)
 am_data %>% group_by(ID) %>% 
-  filter(Alc_Amt_am > 4) 
+  filter(Alc_Amt_am >= 4) 
 ```
 
 ### create person means, person deviations and 3 day rolling avg for am_data
