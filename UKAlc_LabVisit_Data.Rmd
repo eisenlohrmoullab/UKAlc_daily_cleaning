@@ -25,9 +25,3 @@ knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (
 ## import the dataset
 ```{r}
 dat <- read_csv("Mini_Dataset_11.30.23.csv")
-
-
-```
-
-
-
