@@ -1570,15 +1570,78 @@ write.csv(pm_data, "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folder
 
 # add in study day variable 
 ```{r}
-pm_data <- read_csv("/Users/apatterson/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/pm_data_cleaned.csv")
+am_data <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/am_data_cleaned.csv")
 
-pm_data <- read_csv("/Users/apatterson/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/pm_data_cleaned.csv")
+pm_data <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/pm_data_cleaned.csv")
 
 am_data <- am_data %>% group_by(ID) %>%
   mutate(day_in_study = seq(length = n())) 
 
 pm_data <- pm_data %>% group_by(ID) %>%
   mutate(day_in_study = seq(length = n())) 
+```
+
+#### Merge in lab visit data 
+
+```{r}
+#Lab Visit Data 
+labvisit <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_LABVISITS/01_raw_data/MIni_Dataset_11.30.23.csv") 
+```
+
+## rename vars to match am_data and pm_data and delete irrelevant columns 
+```{r}
+names(labvisit)[names(labvisit) == "Subject"] <- "ID"
+labvisit <- subset(labvisit, select = -Weight)
+```
+
+## save cleaned file as csv 
+```{r}
+write.csv(labvisit, "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_LABVISITS/03_cleaned_data/labvisit_cleaned_AP.csv", row.names=TRUE)
+
+labvisit <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_LABVISITS/03_cleaned_data/labvisit_cleaned_AP.csv")
+```
+
+## merge in lab visit dates 
+```{r}
+library(readxl)
+
+alc.visit.dates <- read_xlsx("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/01_raw_data/Alcohol Session Dates.xlsx")
+
+names(alc.visit.dates)[names(alc.visit.dates) == "Subject"] <- "ID"
+
+labvisit <- merge(alc.visit.dates, labvisit, by = c("ID"), all = T) 
+labvisit$S1 <- ymd(labvisit$S1)
+labvisit$S2 <- ymd(labvisit$S2)
+```
+
+## re-format 
+```{r}
+labvisit_S1 <- labvisit %>% select(ID, S1, starts_with("E1"))
+labvisit_S2 <- labvisit %>% select(ID, S2, starts_with("E2"))
+
+labvisit_S1 <- labvisit_S1 %>% rename_all(~ gsub("^E1", "", .))
+labvisit_S2 <- labvisit_S2 %>% rename_all(~ gsub("^E2", "", .))
+
+names(labvisit_S1)[names(labvisit_S1) == "S1"] <- "daterated"
+names(labvisit_S2)[names(labvisit_S2) == "S2"] <- "daterated"
+
+labvisit_S1$visitnum <- 1 
+labvisit_S2$visitnum <- 2
+
+labvisit_clean <- rbind(labvisit_S1, labvisit_S2)
+
+labvisit_clean <- labvisit_clean %>% arrange(ID)
+```
+
+
+## merge file with daily data 
+```{r}
+am_data_clean <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/am_data_cleaned_JB.csv")
+
+pm_data_clean <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/pm_data_cleaned.csv")
+
+labvisit.am.data.merge <- merge(labvisit_clean, am_data_clean, by = c("ID", "daterated"), all = T)
+labvisit.pm.data.merge <- merge(labvisit_clean, pm_data_clean, by =c("ID", "daterated"), all = T)
 ```
 
 
