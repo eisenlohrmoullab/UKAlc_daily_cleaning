@@ -1568,6 +1568,20 @@ write.csv(am_data, "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folder
 write.csv(pm_data, "/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/pm_data_cleaned.csv", row.names=TRUE)
 ```
 
+# add in study day variable 
+```{r}
+pm_data <- read_csv("/Users/apatterson/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/pm_data_cleaned.csv")
+
+pm_data <- read_csv("/Users/apatterson/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/pm_data_cleaned.csv")
+
+am_data <- am_data %>% group_by(ID) %>%
+  mutate(day_in_study = seq(length = n())) 
+
+pm_data <- pm_data %>% group_by(ID) %>%
+  mutate(day_in_study = seq(length = n())) 
+```
+
+
 
 
 #Add in cycle day 
