@@ -1570,14 +1570,14 @@ write.csv(pm_data, "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folder
 
 # add in study day variable 
 ```{r}
-am_data <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/am_data_cleaned.csv")
+am_data_clean <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/am_data_cleaned.csv")
 
-pm_data <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/pm_data_cleaned.csv")
+pm_data_clean <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/pm_data_cleaned.csv")
 
-am_data <- am_data %>% group_by(ID) %>%
+am_data_clean <- am_data_clean %>% group_by(ID) %>%
   mutate(day_in_study = seq(length = n())) 
 
-pm_data <- pm_data %>% group_by(ID) %>%
+pm_data_clean <- pm_data_clean %>% group_by(ID) %>%
   mutate(day_in_study = seq(length = n())) 
 ```
 
@@ -1585,7 +1585,7 @@ pm_data <- pm_data %>% group_by(ID) %>%
 
 ```{r}
 #Lab Visit Data 
-labvisit <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_LABVISITS/01_raw_data/MIni_Dataset_11.30.23.csv") 
+labvisit <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_LABVISITS/01_raw_data/Mini Dataset 11.30.23.csv") 
 ```
 
 ## rename vars to match am_data and pm_data and delete irrelevant columns 
@@ -1633,19 +1633,11 @@ labvisit_clean <- rbind(labvisit_S1, labvisit_S2)
 labvisit_clean <- labvisit_clean %>% arrange(ID)
 ```
 
-
 ## merge file with daily data 
 ```{r}
-am_data_clean <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/am_data_cleaned_JB.csv")
-
-pm_data_clean <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/pm_data_cleaned.csv")
-
 labvisit.am.data.merge <- merge(labvisit_clean, am_data_clean, by = c("ID", "daterated"), all = T)
 labvisit.pm.data.merge <- merge(labvisit_clean, pm_data_clean, by =c("ID", "daterated"), all = T)
 ```
-
-
-
 
 #Add in cycle day 
 ```{r}
