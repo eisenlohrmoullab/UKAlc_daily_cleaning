@@ -1608,6 +1608,9 @@ alc.visit.dates <- read_xlsx("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Loc
 
 names(alc.visit.dates)[names(alc.visit.dates) == "Subject"] <- "ID"
 
+#new column for presence of lab visit 
+alc.visit.dates$labvisit <- 1 
+
 labvisit <- merge(alc.visit.dates, labvisit, by = c("ID"), all = T) 
 labvisit$S1 <- ymd(labvisit$S1)
 labvisit$S2 <- ymd(labvisit$S2)
