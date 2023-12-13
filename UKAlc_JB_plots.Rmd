@@ -31,8 +31,9 @@ df <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/0
 
 hormones <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace/Salivary_Hormones_StudyDays.csv")
 
-```
+cycleday.am.merge <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace/Cycleday.am.LH.menses.data.csv")
 
+```
 
 ## JB: create hybridcycleday (one variable combining data surrounding LH and surrounding menses)
 ```{r}
@@ -188,27 +189,6 @@ data_cycleday_plot %>% group_by(hybridcycleday) %>%
 
 ##Anna on 11/29/23: This plot does not hang around zero as expected - likely due to NAs rather than zeros? The NAs are brought about when we extrapolate cycle dates on days surveys were not completed. 
 ```
-
-##AP following JB's instructions below 
-```{r}
-am_data_hybridcycleday %>% group_by(hybridcycleday) %>%
-  summarize(personcentered.dev = mean(drinkingdayprob.d, na.rm=T),
-            se=sd(drinkingdayprob.d, na.rm=T)/sqrt(n())) %>%
-  arrange(factor(hybridcycleday, levels = hybridcycleday_order_new)) %>%
-  mutate(roll= rollapply(personcentered.dev, 3, 
-                         mean, align = "center", fill=NA)) %>%
-  ggplot(aes(x=factor(hybridcycleday, levels = hybridcycleday_order_new), y=roll))+
-  geom_line(group=1)+
-  geom_hline(yintercept = 0, linetype="dashed", col="red")+
-  #geom_vline(xintercept = "1M", col="blue", size=0.25)+
-  #geom_vline(xintercept = "0L", col="blue", size=0.25)+
-  geom_errorbar(aes(ymin=roll-se, ymax=roll+se), 
-                size=0.5, width=0.5, position=position_dodge())+
-  theme_bw()+
-  xlab("Cycle Day (based on LH-surge and menses self-report)")+
-  ylab("Person-Centered Prob. of Drinking")
-```
-
 
 ## JB: repeat prior block but on daycountLH to see if we get better coverage of the luteal phase
 ```{r}
