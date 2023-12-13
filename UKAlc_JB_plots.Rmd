@@ -35,6 +35,15 @@ cycleday.am.merge <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Lo
 
 ```
 
+## plot daily hormones, lab visit data against period start date and ov date for verification     
+```{r}
+
+
+hormones.per.ov <- data.frame(ovpos, Period.Start.Date, Estradiol, LH, )
+```
+
+
+
 ## JB: create hybridcycleday (one variable combining data surrounding LH and surrounding menses)
 ```{r}
 #create hybrid version of cycle day:
