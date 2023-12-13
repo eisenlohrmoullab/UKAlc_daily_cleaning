@@ -1641,14 +1641,19 @@ labvisit.pm.data.merge <- merge(labvisit_clean, pm_data_clean, by =c("ID", "date
 ## merge in salivary hormone data 
 ```{r}
 library(readxl)
-hormones.lab <- read_xlsx("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace/Salivary_Results_For_Import.xlsx")
+hormones <- read_xlsx("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace/Salivary_Results_For_Import.xlsx")
 ```
 
 #add "day in study column" for hormone data and save new csv 
 ```{r}
-hormones.lab <- separate(hormones.lab, col = Sample, into = c("ID", "day_in_study"), sep = "-")
+hormones <- separate(hormones.lab, col = Sample, into = c("ID", "day_in_study"), sep = "-")
 
-write.csv(hormones.lab, "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace/Salivary_Hormones_StudyDays.csv", row.names=TRUE)
+write.csv(hormones, "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace/Salivary_Hormones_StudyDays.csv", row.names=TRUE)
+```
+
+# merge hormone data w am_data_cleaned and pm_data_cleaned 
+```{r}
+am_data_clean_horm <- merge(am_data_clean, hormones, by = c("ID", "dayinstudy"), all = T)
 ```
 
 
