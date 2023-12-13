@@ -364,11 +364,10 @@ am_data_hybridcycleday %>%
 
 #rename vars
 hormones <- hormones %>%
-  rename(ID = `Subject ID`,
-         samplenum = `Sample Number`,
-         Estradiol = `Estradiol (pg/mL)`,
-         Progesterone = `Progesterone (pg/mL)`,
-         LH = `LH (uIU/mL)`)
+  rename(
+         samplenum = `day_in_study`,
+         Estradiol = `E2`,
+         Progesterone = `P4`)
 
 #removed the -1, -2, etc from ID num
 hormones <- hormones %>%
