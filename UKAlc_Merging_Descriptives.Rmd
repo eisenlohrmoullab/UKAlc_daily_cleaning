@@ -1644,6 +1644,11 @@ labvisit.pm.data.merge <- merge(labvisit_clean, pm_data_clean, by =c("ID", "date
 hormones <- read_xlsx("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace/Salivary_Results_For_Import.xlsx")
 ```
 
+#add day in study column for hormone data 
+```{r}
+hormones <- separate(hormones, col = Sample, into = c("ID", "day_in_study"), sep = "-")
+```
+
 #Add in cycle day 
 ```{r}
 
