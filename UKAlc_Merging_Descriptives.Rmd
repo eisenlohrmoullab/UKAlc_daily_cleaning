@@ -25,6 +25,7 @@ library(ggplot2)
 library(ggdist)
 library(ggrain)
 library(zoo)
+library(readxl)
 
 
 #Anisha's Paths
@@ -1603,8 +1604,6 @@ labvisit <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Fold
 
 ## merge in lab visit dates 
 ```{r}
-library(readxl)
-
 alc.visit.dates <- read_xlsx("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/01_raw_data/Alcohol Session Dates.xlsx")
 
 names(alc.visit.dates)[names(alc.visit.dates) == "Subject"] <- "ID"
@@ -1644,10 +1643,14 @@ labvisit.pm.data.merge <- merge(labvisit_clean, pm_data_clean, by =c("ID", "date
 hormones <- read_xlsx("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace/Salivary_Results_For_Import.xlsx")
 ```
 
-#add day in study column for hormone data 
+#add "day in study column" for hormone data and save new csv 
 ```{r}
 hormones <- separate(hormones, col = Sample, into = c("ID", "day_in_study"), sep = "-")
+
+write.csv(hormones, "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace/Salivary_Hormones_StudyDays.csv", row.names=TRUE)
 ```
+
+
 
 #Add in cycle day 
 ```{r}
