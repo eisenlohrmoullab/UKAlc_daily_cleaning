@@ -66,8 +66,38 @@ ggplot() +
   labs(x = "date", y = "hormone level") +
   theme_minimal() + 
   ggtitle("155") +
-  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed") +
+  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed") 
 
+    
+```
+
+## another way to try to plot daily hormones, lab visit data against period start date and ov date for verification     
+```{r}
+saliva_cycleday_merge_am <- merge(hormones, cycleday.am.merge, by = c("ID", "day_in_study"), all = T)
+
+saliva_cycleday_merge_am$H_LH <- saliva_cycleday_merge_am$LH
+saliva_cycleday_merge_am$H_P4 <- saliva_cycleday_merge_am$P4
+
+#Create plot per ID 
+saliva_cycleday_merge_am <- pivot_longer(saliva_cycleday_merge_am, cols = starts_with("H_"), names_to = "variable", values_to = "value")
+
+#make variables numeric 
+saliva_cycleday_merge_am$day_in_study <- as.numeric(saliva_cycleday_merge_am$day_in_study)
+saliva_cycleday_merge_am$value <- as.numeric(saliva_cycleday_merge_am$value)
+saliva_cycleday_merge_am$E2 <- as.numeric(saliva_cycleday_merge_am$E2)
+saliva_cycleday_merge_am$daterated <- ymd(saliva_cycleday_merge_am$daterated)
+# Plot using ggplot2
+saliva_cycleday_merge_am %>% 
+  filter(ID==155) %>% 
+ggplot() +
+  geom_line(aes(x = daterated, y = value, color = variable, group = variable)) +
+  geom_line(aes(x = daterated, y = E2*100, color = "E2")) +
+    scale_y_continuous(sec.axis = sec_axis(~./100, name="estradiol")) +
+  labs(x = "date", y = "hormone level") +
+  theme_minimal() + 
+  ggtitle("155") +
+  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed") +
+  geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dotted")
     
 ```
 
