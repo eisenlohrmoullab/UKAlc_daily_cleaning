@@ -1654,11 +1654,11 @@ hormones <- separate(hormones.lab, col = Sample, into = c("ID", "day_in_study"),
 write.csv(hormones, "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace/Salivary_Hormones_StudyDays.csv", row.names=TRUE)
 ```
 
-# merge hormone data w am_data_cleaned and pm_data_cleaned 
+# merge hormone data w am, pm, and lab visit data 
 ```{r}
-am_data_clean_horm <- merge(am_data_clean, hormones, by = c("ID", "dayinstudy"), all = T)
+am_data_clean_horm <- merge(labvisit.am.data.merge, hormones, by = c("ID", "day_in_study"), all = T)
+pm_data_clean_horm <- merge(labvisit.pm.data.merge, hormones, by = c("ID", "day_in_study"), all = T)
 ```
-
 
 
 #Add in cycle day 
@@ -1675,8 +1675,8 @@ cycle.day <- read.csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Fol
 
 cycle.day$daterated <- mdy(cycle.day$daterated)
 
-cycleday.am.merge <- merge(cycle.day, am_data_clean, by = c("ID", "daterated"), all = T)
-cycleday.pm.merge <- merge(cycle.day, pm_data_clean, by = c("ID", "daterated"), all = T)
+cycleday.am.merge <- merge(cycle.day, labvisit.am.data.merge, by = c("ID", "daterated"), all = T)
+cycleday.pm.merge <- merge(cycle.day, labvisit.pm.data.merge, by = c("ID", "daterated"), all = T)
 ```
 #Add in LH Data
 ```{r}
@@ -1687,8 +1687,8 @@ LH.Count$daterated <- mdy(LH.Count$daterated)
 cycleday.am.merge <- merge(LH.Count, cycleday.am.merge, by = c("ID", "daterated"), all = T)
 cycleday.pm.merge <- merge(LH.Count, cycleday.pm.merge, by = c("ID", "daterated"), all = T)
 
-write_csv(cycleday.am.merge, "Cycle_Day_LH_menses_am.csv")
-write_csv(cycleday.pm.merge, "Cycle_Day_LH_menses_pm.csv")
+write_csv(cycleday.am.merge, "Cycle_Day_LH_menses_am_labvisit.csv")
+write_csv(cycleday.pm.merge, "Cycle_Day_LH_menses_pm_labvisit.csv")
 ```
 
 
@@ -1870,7 +1870,6 @@ cycleday.pm.merge %>%
 cycleday.am.merge %>% write.csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace/Cycleday.am.LH.menses.data.csv")
 ```
 
-#Look at data to be sure the cycle phases are typical lengths. This is in the code chunks I just copy/pasted from Jordan's code. 
 
 #as factor for each variable, then rename levels as factors - update data dictionary so you know max/min when factoring. Then do as numeric. It may automatically do numeric but double-check. 
 #Calculate luteal phase by subtracting the period start date column by posov_pred column but group by person first! 
