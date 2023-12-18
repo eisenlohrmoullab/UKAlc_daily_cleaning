@@ -38,10 +38,13 @@ cycleday.am.merge <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Lo
 
 ## plot daily hormones, lab visit data against period start date and ov date for verification     
 ```{r}
+saliva_cycleday_merge_am <- merge(hormones, cycleday.am.merge, by = c("ID", "day_in_study"), all = T)
+selected_columns <- saliva_cycleday_merge_am[, c("ID", "ovpos", "E2", "P4", "LH", "firstdayofperiod", "day_in_study")]
 
-
-hormones.per.ov <- data.frame(ovpos, Period.Start.Date, Estradiol, LH, )
+#Create new dataframe with daily hormones and menses/ov data 
+hormone_comparison <- data.frame(selected_columns)
 ```
+
 
 
 
