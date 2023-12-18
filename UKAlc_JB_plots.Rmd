@@ -21,6 +21,7 @@ library(GLMMadaptive) #for testing if study duration is a predictor of outcomes,
 library(lubridate) #for working with dates
 library(broom.mixed) #95% confint
 library(readr)
+library(tidyr)
 
 knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/") 
 
@@ -43,9 +44,23 @@ selected_columns <- saliva_cycleday_merge_am[, c("ID", "ovpos", "E2", "P4", "LH"
 
 #Create new dataframe with daily hormones and menses/ov data 
 hormone_comparison <- data.frame(selected_columns)
+hormone_comparison$H_E2 <- hormone_comparison$E2
+hormone_comparison$H_LH <- hormone_comparison$LH
+hormone_comparison$H_P4 <- hormone_comparison$P4
+
+#Create plot per ID 
+horm_compare_long <- pivot_longer(hormone_comparison, cols = starts_with("H_"), names_to = "variable", values_to = "value")
+
+# Plot using ggplot2
+horm_compare_long %>% 
+  filter(ID==101) %>% 
+ggplot(horm_compare_long, aes(x = day_in_study, y = value, color = variable)) +
+  geom_line() +
+  labs(x = "day in study", y = "hormone level") +
+  scale_color_manual(values = c("blue", "red", "green")) +
+  theme_minimal() + 
+  ggtitle("101")
 ```
-
-
 
 
 ## JB: create hybridcycleday (one variable combining data surrounding LH and surrounding menses)
