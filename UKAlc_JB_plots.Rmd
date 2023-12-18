@@ -66,8 +66,9 @@ ggplot() +
   labs(x = "date", y = "hormone level") +
   theme_minimal() + 
   ggtitle("155") +
-  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed") 
-  geom_vline(aes(xintercept=ifelse(periodstartdate==1, daterated, NA)), linetype = "dashed")
+  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed") +
+
+    
 ```
 
 
