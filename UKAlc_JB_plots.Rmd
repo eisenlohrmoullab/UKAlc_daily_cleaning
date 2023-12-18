@@ -20,6 +20,7 @@ library(lme4) #for mlm
 library(GLMMadaptive) #for testing if study duration is a predictor of outcomes, via "adaptive quadrature"
 library(lubridate) #for working with dates
 library(broom.mixed) #95% confint
+library(readr)
 
 knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/") 
 
