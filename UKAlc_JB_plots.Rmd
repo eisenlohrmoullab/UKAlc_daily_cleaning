@@ -36,6 +36,34 @@ hormones <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Fold
 cycleday.am.merge <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/Cycle_Day_LH_menses_am_labvisit.csv")
 
 ```
+##JB: data wrangling to plot firstdayofperiod
+```{r}
+cycleday.am.merge %>% filter(ID == 101) %>%
+  select(ID, daterated, Period.Start.Date) %>% print(n=65)
+
+
+#first problem is that "Period.Start.Date" is just a text entry in one random row, not in the long format of dataset
+cycleday.am.merge$Period.Start.Date <- as.Date(cycleday.am.merge$Period.Start.Date, format = "%m/%d/%y")
+
+cycleday.am.merge <- cycleday.am.merge %>%
+  group_by(ID) %>%
+  #this step fills in the rows starting from the Period.Start.Date until the end of the daterated
+  complete(daterated = seq(min(coalesce(Period.Start.Date, min(daterated, na.rm = TRUE))),
+                           max(daterated, na.rm = TRUE),
+                           by = "1 day")) %>%
+  #this step fills Period.Start.Date by ID, since one person's period start date is a trait-level variable
+  fill(Period.Start.Date, .direction = "updown") %>%
+  #switch to rowwise instead of grouped df for next step
+  rowwise() %>%
+  #now edit firstdayofperiod 0-1 variable to say that if we get to a row where the daterated matches the reported Period.Start.Date, make firstdayofperiod==1, otherwise keep it as it was
+  mutate(firstdayofperiod= ifelse(daterated==Period.Start.Date, 1, firstdayofperiod)) %>%
+  #get rid of all the rows of daterated that don't fit between first Period.Start.Date and end of study
+  filter(!is.na(daterated))
+
+
+
+```
+
 
 ## plot daily hormones, lab visit data against period start date and ov date for verification     
 ```{r}
@@ -88,14 +116,15 @@ saliva_cycleday_merge_am$E2 <- as.numeric(saliva_cycleday_merge_am$E2)
 saliva_cycleday_merge_am$daterated <- ymd(saliva_cycleday_merge_am$daterated)
 # Plot using ggplot2
 saliva_cycleday_merge_am %>% 
-  filter(ID==155) %>% 
+  filter(ID==101) %>% 
 ggplot() +
   geom_line(aes(x = daterated, y = value, color = variable, group = variable)) +
   geom_line(aes(x = daterated, y = E2*100, color = "E2")) +
     scale_y_continuous(sec.axis = sec_axis(~./100, name="estradiol")) +
   labs(x = "date", y = "hormone level") +
   theme_minimal() + 
-  ggtitle("155") +
+  ggtitle("101",
+          subtitle = "dotted line = menses onset, dashed line = posLH test") +
   geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed") +
   geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dotted")
     
