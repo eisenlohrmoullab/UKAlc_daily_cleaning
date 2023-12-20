@@ -64,43 +64,8 @@ cycleday.am.merge <- cycleday.am.merge %>%
 
 ```
 
-###AP: should we just delete lines 68-100? 
+
 ## plot daily hormones, lab visit data against period start date and ov date for verification     
-```{r}
-saliva_cycleday_merge_am <- merge(hormones, cycleday.am.merge, by = c("ID", "day_in_study"), all = T)
-selected_columns <- saliva_cycleday_merge_am[, c("ID", "ovpos", "E2", "P4", "LH", "firstdayofperiod", "day_in_study", "daterated")]
-
-#Create new dataframe with daily hormones and menses/ov data 
-hormone_comparison <- data.frame(selected_columns)
-hormone_comparison$E2 <- hormone_comparison$E2
-hormone_comparison$H_LH <- hormone_comparison$LH
-hormone_comparison$H_P4 <- hormone_comparison$P4
-
-#Create plot per ID 
-horm_compare_long <- pivot_longer(hormone_comparison, cols = starts_with("H_"), names_to = "variable", values_to = "value")
-
-#make variables numeric 
-horm_compare_long$day_in_study <- as.numeric(horm_compare_long$day_in_study)
-horm_compare_long$value <- as.numeric(horm_compare_long$value)
-horm_compare_long$E2 <- as.numeric(horm_compare_long$E2)
-horm_compare_long$daterated <- ymd(horm_compare_long$daterated)
-# Plot using ggplot2
-horm_compare_long %>% 
-  filter(ID==101) %>% 
-ggplot() +
-  geom_line(aes(x = daterated, y = value, color = variable, group = variable)) +
-  geom_line(aes(x = daterated, y = E2*100, color = "E2")) +
-    scale_y_continuous(sec.axis = sec_axis(~./100, name="estradiol")) +
-  labs(x = "date", y = "hormone level") +
-  theme_minimal() + 
-  ggtitle("101") +
-  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed") +
-  geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dotted")
-
-    
-```
-
-## another way to try to plot daily hormones, lab visit data against period start date and ov date for verification     
 ```{r}
 saliva_cycleday_merge_am <- merge(hormones, cycleday.am.merge, by = c("ID", "day_in_study"), all = T)
 
