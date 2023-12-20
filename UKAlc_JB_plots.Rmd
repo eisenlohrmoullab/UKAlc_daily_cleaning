@@ -64,7 +64,7 @@ cycleday.am.merge <- cycleday.am.merge %>%
 
 ```
 
-
+###AP: should we just delete lines 68-100? 
 ## plot daily hormones, lab visit data against period start date and ov date for verification     
 ```{r}
 saliva_cycleday_merge_am <- merge(hormones, cycleday.am.merge, by = c("ID", "day_in_study"), all = T)
@@ -86,14 +86,14 @@ horm_compare_long$E2 <- as.numeric(horm_compare_long$E2)
 horm_compare_long$daterated <- ymd(horm_compare_long$daterated)
 # Plot using ggplot2
 horm_compare_long %>% 
-  filter(ID==155) %>% 
+  filter(ID==101) %>% 
 ggplot() +
   geom_line(aes(x = daterated, y = value, color = variable, group = variable)) +
   geom_line(aes(x = daterated, y = E2*100, color = "E2")) +
     scale_y_continuous(sec.axis = sec_axis(~./100, name="estradiol")) +
   labs(x = "date", y = "hormone level") +
   theme_minimal() + 
-  ggtitle("155") +
+  ggtitle("101") +
   geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed") 
 
     
@@ -128,6 +128,40 @@ ggplot() +
   geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed") +
   geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dotted")
     
+```
+
+#make list and perform graphing function on all IDs 
+```{r}
+#make list of IDs for which to graph hormone data 
+
+ids <- c(101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 128, 129, 130, 131, 132, 133, 134, 135, 136, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185)
+
+for (i in ids) {
+  
+  #make empty list to store the plots
+  plots <- list()
+  
+  #store and save one plot at a time
+  plot <- saliva_cycleday_merge_am %>%  
+  filter(ID==i) %>%
+  ggplot() +
+  geom_line(aes(x = daterated, y = value, color = variable, group = variable)) +
+  geom_line(aes(x = daterated, y = E2*100, color = "E2")) +
+    scale_y_continuous(sec.axis = sec_axis(~./100, name="estradiol")) +
+  labs(x = "date", y = "hormone level") +
+  theme_minimal() + 
+  ggtitle(i,
+          subtitle = "dotted line = menses onset, dashed line = posLH test") +
+  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed") +
+  geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dotted") 
+  
+  #save the plot we just made into the list
+  plots[[i]] <- plot
+  #print to console
+  print(plot)
+  
+  UKAlc_menses_ov_horm_plots <- paste0("UKAlc_daily_cleaning/UKAlc_menses_ov_horm_plots", i, ".png") 
+  ggsave(UKAlc_menses_ov_horm_plots, plot, width = 8, height = 6, dpi = 300) }
 ```
 
 
