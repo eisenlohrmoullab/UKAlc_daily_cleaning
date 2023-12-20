@@ -94,7 +94,8 @@ ggplot() +
   labs(x = "date", y = "hormone level") +
   theme_minimal() + 
   ggtitle("101") +
-  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed") 
+  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed") +
+  geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dotted")
 
     
 ```
@@ -161,8 +162,8 @@ for (i in ids) {
   #print to console
   print(plot)
   
-  UKAlc_menses_ov_horm_plots <- paste0("UKAlc_daily_cleaning_plots/UKAlc_menses_ov_horm_plots", i, ".png") 
-  ggsave(UKAlc_menses_ov_horm_plots, plot, width = 8, height = 6, dpi = 300) }
+  UKAlc_menses_ov_horm_plots_ <- paste0("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace//UKAlc_menses_ov_horm_plots_", i, ".png") 
+  ggsave(UKAlc_menses_ov_horm_plots_, plot, width = 8, height = 6, dpi = 300) }
 #how to save above to box? I just copy/pasted from my local repository into ~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM
 ```
 
