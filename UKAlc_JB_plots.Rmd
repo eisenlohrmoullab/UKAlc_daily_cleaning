@@ -80,6 +80,7 @@ saliva_cycleday_merge_am$day_in_study <- as.numeric(saliva_cycleday_merge_am$day
 saliva_cycleday_merge_am$value <- as.numeric(saliva_cycleday_merge_am$value)
 saliva_cycleday_merge_am$E2 <- as.numeric(saliva_cycleday_merge_am$E2)
 saliva_cycleday_merge_am$daterated <- ymd(saliva_cycleday_merge_am$daterated)
+
 # Plot using ggplot2
 saliva_cycleday_merge_am %>% 
   filter(ID==101) %>% 
