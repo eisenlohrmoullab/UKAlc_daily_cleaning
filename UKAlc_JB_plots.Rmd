@@ -143,7 +143,10 @@ for (i in ids) {
   labvisit_plots <- list()
   
   #rename liquor w/ prefix liq_ ###start here Anna
-  
+  cycleday.am.merge$plac_liq_dw <- cycleday.am.merge$t1dwliq
+  cycleday.am.merge$alc_liq_dw <- cycleday.am.merge$t2dwliq
+  cycleday.am.merge$plac_neut_dw <- cycleday.am.merge$t1dwneut_Liq
+  cycleday.am.merge$alc_neut_dw <- cycleday.am.merge$t1dwneut_Liq
   
   #store and save one plot at a time
   labvisit_plots <- cycleday.am.merge %>%  
