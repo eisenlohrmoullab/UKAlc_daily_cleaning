@@ -92,8 +92,8 @@ ggplot() +
   theme_minimal() + 
   ggtitle("101",
           subtitle = "dotted line = menses onset, dashed line = posLH test") +
-  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed") +
-  geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dotted")
+  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "green") +
+  geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dotted", color = "pink")
     
 ```
 
@@ -121,8 +121,8 @@ for (i in ids) {
   theme_minimal() + 
   ggtitle(i,
           subtitle = "dotted line = menses onset, dashed line = posLH test") +
-  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed") +
-  geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dotted") 
+  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "green") +
+  geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dotted", color = "pink") 
   
   #save the plot we just made into the list
   plots[[i]] <- plot
