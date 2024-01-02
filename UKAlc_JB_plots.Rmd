@@ -90,6 +90,7 @@ ggplot() +
     scale_y_continuous(sec.axis = sec_axis(~./100, name="estradiol")) +
   labs(x = "date", y = "hormone level") +
   geom_point(aes(x = daterated, y = value, color = variable, group = variable)) +
+       geom_point(aes(x = daterated, y = E2*100, color = "E2")) +
   theme_minimal() + 
   ggtitle("101",
           subtitle = "dotted line = menses onset, dashed line = posLH test") +
@@ -119,6 +120,7 @@ for (i in ids) {
     scale_y_continuous(sec.axis = sec_axis(~./100, name="estradiol")) +
   labs(x = "date", y = "hormone level") +
      geom_point(aes(x = daterated, y = value, color = variable, group = variable)) +
+     geom_point(aes(x = daterated, y = E2*100, color = "E2")) +
   theme_minimal() + 
   ggtitle(i,
           subtitle = "dotted line = menses onset, dashed line = posLH test") +
@@ -130,7 +132,7 @@ for (i in ids) {
   #print to console
   print(plot)
   
-  UKAlc_menses_ov_horm_plots_ <- paste0("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace//UKAlc_menses_ov_horm_plots_", i, ".png") 
+  UKAlc_menses_ov_horm_plots_ <- paste0("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace//UKAlc_menses_ov_horm_plots_", i, ".png")  
   ggsave(UKAlc_menses_ov_horm_plots_, plot, width = 8, height = 6, dpi = 300) }
 #how to save above to box? I just copy/pasted from my local repository into ~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM
 ```
