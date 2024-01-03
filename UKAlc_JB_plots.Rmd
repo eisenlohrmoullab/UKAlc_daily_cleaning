@@ -95,7 +95,7 @@ ggplot() +
   ggtitle("101",
           subtitle = "dotted line = menses onset, dashed line = posLH test") +
   geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "green") +
-  geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dotted", color = "pink")
+  geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dotted", color = "maroon")
     
 ```
 
@@ -125,7 +125,7 @@ for (i in ids) {
   ggtitle(i,
           subtitle = "dotted line = menses onset, dashed line = posLH test") +
   geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "green") +
-  geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dotted", color = "pink") 
+  geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dotted", color = "maroon") 
   
   #save the plot we just made into the list
   plots[[i]] <- plot
@@ -135,23 +135,39 @@ for (i in ids) {
   UKAlc_menses_ov_horm_plots_ <- paste0("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace//UKAlc_menses_ov_horm_plots_", i, ".png")  
   ggsave(UKAlc_menses_ov_horm_plots_, plot, width = 8, height = 6, dpi = 300) }
 ```
+
+#make graphs by ID for lab visit data values 
 ```{r}
+ #rename liquor w/ prefix liq_ 
+  cycleday.am.merge$dw_plac_liq <- cycleday.am.merge$t1dwliq
+  cycleday.am.merge$dw_alc_liq <- cycleday.am.merge$t2dwliq
+  cycleday.am.merge$dw_plac_neut <- cycleday.am.merge$t1dwneut_Liq
+  cycleday.am.merge$dw_alc_neut_dw <- cycleday.am.merge$t1dwneut_Liq
+  
+  #make long dataset 
+  cycleday.am.merge_long <- pivot_longer(cycleday.am.merge, cols = starts_with("dw_"), names_to = "variable", values_to = "value")
+  
+# Plot first using ggplot2
+cycleday.am.merge_long %>% 
+  filter(ID==101) %>% 
+ggplot() +
+  geom_line(aes(x = variable, y = value, color = variable, group = variable)) +
+  labs(x = "condition", y = "seconds") +
+  geom_point(aes(x = variable, y = value, color = variable, group = variable)) +
+  theme_minimal() + 
+  ggtitle("101 Lab Visit Data") 
+ 
+  
 #make graphs by ID for lab visit data values 
 for (i in ids) {
   
   #make empty list to store the plots
   labvisit_plots <- list()
   
-  #rename liquor w/ prefix liq_ ###start here Anna
-  cycleday.am.merge$plac_liq_dw <- cycleday.am.merge$t1dwliq
-  cycleday.am.merge$alc_liq_dw <- cycleday.am.merge$t2dwliq
-  cycleday.am.merge$plac_neut_dw <- cycleday.am.merge$t1dwneut_Liq
-  cycleday.am.merge$alc_neut_dw <- cycleday.am.merge$t1dwneut_Liq
-  
   #store and save one plot at a time
   labvisit_plots <- cycleday.am.merge %>%  
   filter(ID==i) %>%
-  ggplot(aes(t1dwliq, y, color = group)) +
+  ggplot(aes(plac_liq_dw, y, color = group)) +
   
   
   #save the plot we just made into the list
