@@ -141,6 +141,18 @@ for (i in ids) {
 #import mini dataset 
 labvisit_data <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_LABVISITS/01_raw_data/Mini_Dataset_11.30.23.csv", show_col_types = FALSE) 
 
+#make vist number variable for easier graphing 
+labvisit_S1 <- labvisit %>% select(ID, S1, starts_with("E1"))
+labvisit_S2 <- labvisit %>% select(ID, S2, starts_with("E2"))
+
+labvisit_S1 <- labvisit_S1 %>% rename_all(~ gsub("^E1", "", .))
+labvisit_S2 <- labvisit_S2 %>% rename_all(~ gsub("^E2", "", .))
+
+names(labvisit_S1)[names(labvisit_S1) == "S1"] <- "daterated"
+names(labvisit_S2)[names(labvisit_S2) == "S2"] <- "daterated"
+
+labvisit_S1$visitnum <- 1 
+labvisit_S2$visitnum <- 2
 
  #rename vars for easier graphing 
 labvisit_data$t1E1dwliq <- labvisit_data$E1t1dwliq
@@ -159,7 +171,7 @@ labvisit_data$t1E1dwliq <- labvisit_data$E2t1dwliq
   y4 <- cycleday.am.merge$t2dwneut_Liq
 
   #plot w matplot 
-  matplot(x, cbind(y1, y2), type = "1", lty = 1,
+  matplot(x, cbind(y1, y2), 
           col = c("red", "blue"), xlab = "Visit Number",
           ylab = "Attentional Bias", main = "Attentional Bias to Liquor")
           legend("topright", legend = c("Placebo", "Alcohol"),
