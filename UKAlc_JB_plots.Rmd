@@ -152,7 +152,7 @@ cycleday.am.merge_long %>%
   filter(ID==101) %>% 
 ggplot() +
   geom_line(aes(x = variable, y = value, color = variable, group = variable)) +
-  labs(x = "condition", y = "seconds") +
+  labs(x = "condition", y = "Attentional Bias Score") +
   geom_point(aes(x = variable, y = value, color = variable, group = variable)) +
   theme_minimal() + 
   ggtitle("101 Lab Visit Data") 
