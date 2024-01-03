@@ -96,7 +96,34 @@ ggplot() +
           subtitle = "dotted line = menses onset, dashed line = posLH test") +
   geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "green") +
   geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dotted", color = "maroon")
-    
+
+--- ##working plot - Ask Anisha - Error: object 'ovpos' not found 
+    saliva_cycleday_merge_am %>% 
+  filter(ID==101) %>% 
+ggplot() +
+  geom_line(aes(x = daterated, y = value, color = variable, group = variable)) +
+  geom_line(aes(x = daterated, y = E2*100, color = "E2")) +
+    scale_y_continuous(sec.axis = sec_axis(~./100, name="estradiol")) +
+  labs(x = "date", y = "hormone level") +
+  geom_point(aes(x = daterated, y = value, color = variable, group = variable)) +
+       geom_point(aes(x = daterated, y = E2*100, color = "E2")) +
+  theme_minimal() + 
+  ggtitle("101",
+          subtitle = "dotted line = menses onset, dashed line = posLH test") +
+  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "green") +
+  annotate(geom = "text",
+             label = c(as.character(xintercept=ifelse(ovpos==1, daterated, NA)), as.character(xintercept=ifelse(ovpos==1, daterated, NA))),
+             x = c(xintercept=ifelse(ovpos==1, daterated, NA)),
+             y = c(200, 200),
+             angle = 90, 
+             vjust = 1) +
+  geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dotted", color = "maroon") + 
+    annotate(geom = "text",
+             label = c(as.character(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), as.character(xintercept=ifelse(firstdayofperiod==1, daterated, NA))),
+             x = c(xintercept=ifelse(firstdayofperiod==1, daterated, NA)),
+             y = c(200, 200),
+             angle = 90, 
+             vjust = 1) 
 ```
 
 #make list and perform graphing function on all IDs 
@@ -142,8 +169,8 @@ for (i in ids) {
 labvisit_data <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_LABVISITS/01_raw_data/Mini_Dataset_11.30.23.csv", show_col_types = FALSE) 
 
 #make vist number variable for easier graphing 
-labvisit_S1 <- labvisit_data %>% select(Subject, S1, starts_with("E1"))
-labvisit_S2 <- labvisit_data %>% select(ID, S2, starts_with("E2"))
+labvisit_S1 <- labvisit_data %>% select(Subject, starts_with("E1"))
+labvisit_S2 <- labvisit_data %>% select(Subject, starts_with("E2"))
 
 labvisit_S1 <- labvisit_S1 %>% rename_all(~ gsub("^E1", "", .))
 labvisit_S2 <- labvisit_S2 %>% rename_all(~ gsub("^E2", "", .))
@@ -154,21 +181,16 @@ names(labvisit_S2)[names(labvisit_S2) == "S2"] <- "daterated"
 labvisit_S1$visitnum <- 1 
 labvisit_S2$visitnum <- 2
 
- #rename vars for easier graphing 
-labvisit_data$t1E1dwliq <- labvisit_data$E1t1dwliq
-labvisit_data$t2E1dwliq <- labvisit_data$E1t2dwliq
-labvisit_data$t2E2dwliq <- labvisit_data$E2t2dwliq
-labvisit_data$t1E1dwliq <- labvisit_data$E2t1dwliq
+labvisit_data_clean <- rbind(labvisit_S1, labvisit_S2)
 
-  #make long dataset 
-  labvisit_data_long <- pivot_longer(labvisit_data, cols = starts_with("t1"), names_to = "variable", values_to = "value")
+----
 
  #specify inputs for matplot 
-  x <- cycleday.am.merge$visitnum 
-  y1 <- cycleday.am.merge$t1dwliq
-  y2 <- cycleday.am.merge$t2dwliq
-  y3 <- cycleday.am.merge$t1dwneut_Liq
-  y4 <- cycleday.am.merge$t2dwneut_Liq
+  x <- labvisit_data_clean$visitnum 
+  y1 <- labvisit_data_clean$t1dwliq
+  y2 <- labvisit_data_clean$t2dwliq
+  y3 <- labvisit_data_clean$t1dwneut_Liq
+  y4 <- labvisit_data_clean$t2dwneut_Liq
 
   #plot w matplot 
   matplot(x, cbind(y1, y2), 
