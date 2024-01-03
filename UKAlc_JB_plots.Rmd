@@ -175,7 +175,7 @@ for (i in ids) {
   #make long dataset 
   cycleday.am.merge_long <- pivot_longer(cycleday.am.merge, cols = starts_with("dw_"), names_to = "variable", values_to = "value")
   
-# Plot all visit data using ggplot2
+# Plot ALL visit data using ggplot2 - ##start here in afternoon
 cycleday.am.merge_long %>% 
   filter(ID==101) %>% 
 ggplot() +
