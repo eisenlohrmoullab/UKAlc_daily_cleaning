@@ -142,7 +142,32 @@ for (i in ids) {
 labvisit_data <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_LABVISITS/01_raw_data/Mini_Dataset_11.30.23.csv", show_col_types = FALSE) 
 
 
- #rename liquor w/ prefix liq_ 
+ #rename vars for easier graphing 
+labvisit_data$t1E1dwliq <- labvisit_data$E1t1dwliq
+labvisit_data$t2E1dwliq <- labvisit_data$E1t2dwliq
+labvisit_data$t2E2dwliq <- labvisit_data$E2t2dwliq
+labvisit_data$t1E1dwliq <- labvisit_data$E2t1dwliq
+
+  #make long dataset 
+  labvisit_data_long <- pivot_longer(labvisit_data, cols = starts_with("t1"), names_to = "variable", values_to = "value")
+
+ #specify inputs for matplot 
+  x <- cycleday.am.merge$visitnum 
+  y1 <- cycleday.am.merge$t1dwliq
+  y2 <- cycleday.am.merge$t2dwliq
+  y3 <- cycleday.am.merge$t1dwneut_Liq
+  y4 <- cycleday.am.merge$t2dwneut_Liq
+
+  #plot w matplot 
+  matplot(x, cbind(y1, y2), type = "1", lty = 1,
+          col = c("red", "blue"), xlab = "Visit Number",
+          ylab = "Attentional Bias", main = "Attentional Bias to Liquor")
+          legend("topright", legend = c("Placebo", "Alcohol"),
+                 col = c("red", "blue"),
+                 lty = 1)
+
+----
+ #rename vars for easier graphing 
   cycleday.am.merge$dw_plac_liq <- cycleday.am.merge$t1dwliq
   cycleday.am.merge$dw_alc_liq <- cycleday.am.merge$t2dwliq
   cycleday.am.merge$dw_plac_neut <- cycleday.am.merge$t1dwneut_Liq
