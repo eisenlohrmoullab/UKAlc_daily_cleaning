@@ -142,8 +142,8 @@ for (i in ids) {
 labvisit_data <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_LABVISITS/01_raw_data/Mini_Dataset_11.30.23.csv", show_col_types = FALSE) 
 
 #make vist number variable for easier graphing 
-labvisit_S1 <- labvisit %>% select(ID, S1, starts_with("E1"))
-labvisit_S2 <- labvisit %>% select(ID, S2, starts_with("E2"))
+labvisit_S1 <- labvisit_data %>% select(Subject, S1, starts_with("E1"))
+labvisit_S2 <- labvisit_data %>% select(ID, S2, starts_with("E2"))
 
 labvisit_S1 <- labvisit_S1 %>% rename_all(~ gsub("^E1", "", .))
 labvisit_S2 <- labvisit_S2 %>% rename_all(~ gsub("^E2", "", .))
