@@ -228,7 +228,10 @@ cycleday.am.merge %>%
   scale_color_manual(name = "Legend",
                      values = c("dw_alc_liq" = "red", "dw_plac_liq" = "blue"),
                      labels = c("Bias to Liquor - Alcohol Condition", "Bias to Liquor - Placebo Condition")) +
-  labs(x = "Vist Number", y = "Attentional Bias Score") 
+  xlim("1","2") +
+  labs(x = "Vist Number", y = "Attentional Bias Score") +
+  ggtitle(101,
+          subtitle = "Attentional Bias to Liquor") 
   
 
  
