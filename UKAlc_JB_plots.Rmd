@@ -165,41 +165,7 @@ for (i in ids) {
 
 #make graphs by ID for lab visit data values 
 ```{r}
-#import mini dataset 
-labvisit_data <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_LABVISITS/01_raw_data/Mini_Dataset_11.30.23.csv", show_col_types = FALSE) 
 
-#make vist number variable for easier graphing 
-labvisit_S1 <- labvisit_data %>% select(Subject, starts_with("E1"))
-labvisit_S2 <- labvisit_data %>% select(Subject, starts_with("E2"))
-
-labvisit_S1 <- labvisit_S1 %>% rename_all(~ gsub("^E1", "", .))
-labvisit_S2 <- labvisit_S2 %>% rename_all(~ gsub("^E2", "", .))
-
-names(labvisit_S1)[names(labvisit_S1) == "S1"] <- "daterated"
-names(labvisit_S2)[names(labvisit_S2) == "S2"] <- "daterated"
-
-labvisit_S1$visitnum <- 1 
-labvisit_S2$visitnum <- 2
-
-labvisit_data_clean <- rbind(labvisit_S1, labvisit_S2)
-
-
- #specify inputs for matplot 
-  x <- labvisit_data_clean$visitnum 
-  y1 <- labvisit_data_clean$t1dwliq
-  y2 <- labvisit_data_clean$t2dwliq
-  y3 <- labvisit_data_clean$t1dwneut_Liq
-  y4 <- labvisit_data_clean$t2dwneut_Liq
-
-  #plot w matplot 
-  matplot(x, cbind(y1, y2), 
-          col = c("red", "blue"), xlab = "Visit Number",
-          ylab = "Attentional Bias", main = "Attentional Bias to Liquor")
-          legend("topright", legend = c("Placebo", "Alcohol"),
-                 col = c("red", "blue"),
-                 lty = 1)
-
-----
  #rename vars for easier graphing 
   cycleday.am.merge$dw_plac_liq <- cycleday.am.merge$t1dwliq
   cycleday.am.merge$dw_alc_liq <- cycleday.am.merge$t2dwliq
@@ -221,7 +187,7 @@ ggplot() +
 
 #Plot using geom + count 
 cycleday.am.merge %>% 
-  filter(ID==101) %>% 
+  filter(ID==105) %>% 
   ggplot(aes(visitnum)) + 
   geom_line(aes(y = dw_plac_liq, colour = "dw_plac_liq")) + 
   geom_line(aes(y = dw_alc_liq, colour = "dw_alc_liq")) + 
@@ -230,13 +196,38 @@ cycleday.am.merge %>%
                      labels = c("Bias to Liquor - Alcohol Condition", "Bias to Liquor - Placebo Condition")) +
   xlim("1","2") +
   labs(x = "Vist Number", y = "Attentional Bias Score") +
-  ggtitle(101,
+  ggtitle(105,
           subtitle = "Attentional Bias to Liquor") 
   
-
- 
+# loop function to save each individual plot 
+for (i in ids) {
   
-##next step: make loop to save each graph individually like above 
+  #make empty list to store the plots
+  labvis_attn_alc_plots <- list()
+  
+  #store and save one plot at a time
+cycleday.am.merge %>% 
+  filter(ID==i) %>% 
+  ggplot(aes(visitnum)) + 
+  geom_line(aes(y = dw_plac_liq, colour = "dw_plac_liq")) + 
+  geom_line(aes(y = dw_alc_liq, colour = "dw_alc_liq")) + 
+  scale_color_manual(name = "Legend",
+                     values = c("dw_alc_liq" = "red", "dw_plac_liq" = "blue"),
+                     labels = c("Bias to Liquor - Alcohol Condition", "Bias to Liquor - Placebo Condition")) +
+  xlim("1","2") +
+  labs(x = "Vist Number", y = "Attentional Bias Score") +
+  ggtitle(i,
+          subtitle = "Attentional Bias to Liquor") 
+  
+  #save the plot we just made into the list
+  labvis_attn_alc_plots[[i]] <- labvis_attn_alc_plots
+  #print to console
+  print(labvis_attn_alc_plots)
+  
+  UKAlc_labvis_attn_alc_plot <- paste0("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace//UKAlc_labvis_attn_alc_plot", i, ".png")  
+  ggsave(UKAlc_labvis_attn_alc_plot, plot, width = 8, height = 6, dpi = 300) }
+ #question - I'm getting an error message above when saving all of them 
+
 ```
 
 
