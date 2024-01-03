@@ -170,7 +170,7 @@ for (i in ids) {
   cycleday.am.merge$dw_plac_liq <- cycleday.am.merge$t1dwliq
   cycleday.am.merge$dw_alc_liq <- cycleday.am.merge$t2dwliq
   cycleday.am.merge$dw_plac_neut <- cycleday.am.merge$t1dwneut_Liq
-  cycleday.am.merge$dw_alc_neut_dw <- cycleday.am.merge$t1dwneut_Liq
+  cycleday.am.merge$dw_alc_neut <- cycleday.am.merge$t2dwneut_Liq
   
   #make long dataset 
   cycleday.am.merge_long <- pivot_longer(cycleday.am.merge, cols = starts_with("dw_"), names_to = "variable", values_to = "value")
@@ -185,7 +185,7 @@ ggplot() +
   theme_minimal() + 
   ggtitle("101 Lab Visit Data") 
 
-#Plot using geom + count 
+#Plot attn bias to liquor individually first using geom + count 
 cycleday.am.merge %>% 
   filter(ID==105) %>% 
   ggplot(aes(visitnum)) + 
@@ -198,6 +198,20 @@ cycleday.am.merge %>%
   labs(x = "Vist Number", y = "Attentional Bias Score") +
   ggtitle(105,
           subtitle = "Attentional Bias to Liquor") 
+
+#Plot attn bias to neutral cues individually first using geom + count 
+cycleday.am.merge %>% 
+  filter(ID==105) %>% 
+  ggplot(aes(visitnum)) + 
+  geom_line(aes(y = dw_plac_neut, colour = "dw_plac_neut")) + 
+  geom_line(aes(y = dw_alc_neut, colour = "dw_alc_neut")) + 
+  scale_color_manual(name = "Legend",
+                     values = c("dw_alc_neut" = "red", "dw_plac_neut" = "blue"),
+                     labels = c("Bias to Neutral Cues - Alcohol Condition", "Bias to Neutral Cues - Placebo Condition")) +
+  xlim("1","2") +
+  labs(x = "Vist Number", y = "Attentional Bias Score") +
+  ggtitle(105,
+          subtitle = "Attentional Bias to Neutral Cues") 
   
 # loop function to save each individual plot 
 for (i in ids) {
@@ -220,7 +234,7 @@ cycleday.am.merge %>%
           subtitle = "Attentional Bias to Liquor") 
   
   #save the plot we just made into the list
-  labvis_attn_alc_plots[[i]] <- labvis_attn_alc_plots
+  labvis_attn_alc_plots[[i]] <- plot()
   #print to console
   print(labvis_attn_alc_plots)
   
