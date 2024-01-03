@@ -138,6 +138,10 @@ for (i in ids) {
 
 #make graphs by ID for lab visit data values 
 ```{r}
+#import mini dataset 
+labvisit_data <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_LABVISITS/01_raw_data/Mini_Dataset_11.30.23.csv", show_col_types = FALSE) 
+
+
  #rename liquor w/ prefix liq_ 
   cycleday.am.merge$dw_plac_liq <- cycleday.am.merge$t1dwliq
   cycleday.am.merge$dw_alc_liq <- cycleday.am.merge$t2dwliq
