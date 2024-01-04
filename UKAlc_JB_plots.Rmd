@@ -289,7 +289,35 @@ spaghetti_plot_liq_alc <- ggplot(cycleday.am.merge, aes(x = visitnum, y = t2dwli
        color = "ID") +
   theme(axis.text.x = element_blank()) 
 
+#bias to liquor - placebo condition
+spaghetti_plot_liq_plac <- ggplot(cycleday.am.merge, aes(x = visitnum, y = t1dwliq, group = ID, color = as.factor(ID))) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Bias to Liq - Placebo",
+       x = "Visit Number",
+       y = "Attentional Bias",
+       color = "ID") +
+  theme(axis.text.x = element_blank()) 
 
+#bias to neutral cues - alc condition
+spaghetti_plot_neut_alc <- ggplot(cycleday.am.merge, aes(x = visitnum, y = t2dwneut_Liq, group = ID, color = as.factor(ID))) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Bias to Neutral Cues - Alc Cond",
+       x = "Visit Number",
+       y = "Attentional Bias",
+       color = "ID") +
+  theme(axis.text.x = element_blank()) 
+
+#bias to neutral cues - placebo condition
+spaghetti_plot_neut_plac <- ggplot(cycleday.am.merge, aes(x = visitnum, y = t1dwneut_Liq, group = ID, color = as.factor(ID))) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Bias to Neutral Cues - Placebo",
+       x = "Visit Number",
+       y = "Attentional Bias",
+       color = "ID") +
+  theme(axis.text.x = element_blank()) 
 ```
 
 
