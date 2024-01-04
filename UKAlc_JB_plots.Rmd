@@ -163,7 +163,7 @@ for (i in ids) {
   ggsave(UKAlc_menses_ov_horm_plots_, plot, width = 8, height = 6, dpi = 300) }
 ```
 
-#make graphs by ID for lab visit data values 
+#make graphs by ID for lab visit attentional bias 
 ```{r}
 
  #rename vars for easier graphing 
@@ -274,6 +274,21 @@ cycleday.am.merge %>%
   UKAlc_labvis_attn_alc_plot <- paste0("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace//UKAlc_labvis_attn_alc_plot", i, ".png")  
   ggsave(UKAlc_labvis_attn_alc_plot, plot, width = 8, height = 6, dpi = 300) } 
  #question for Anisha - I'm getting an error message above when saving all of them. Error in plot.default() : argument "x" is missing, with no default 
+
+```
+
+#graph lab visit attentional bias in aggregate 
+```{r}
+#bias to liquor - alc condition
+spaghetti_plot_liq_alc <- ggplot(cycleday.am.merge, aes(x = visitnum, y = t2dwliq, group = ID, color = as.factor(ID))) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Bias to Liq - Alc Cond",
+       x = "Visit Number",
+       y = "Attentional Bias",
+       color = "ID") +
+  theme(axis.text.x = element_blank()) 
+
 
 ```
 
