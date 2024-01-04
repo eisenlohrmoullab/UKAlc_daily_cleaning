@@ -185,7 +185,7 @@ ggplot() +
   theme_minimal() + 
   ggtitle("101 Lab Visit Data") 
 
-# Plot ALL visit data per ID for visit 1 using ggplot2 
+# Plot ALL visit data per ID for visit 1
 cycleday.am.merge_long %>% 
   filter(ID==101, visitnum==1) %>% 
 ggplot() +
@@ -197,7 +197,22 @@ ggplot() +
                      values = c("dw_alc_liq" = "red", "dw_alc_neut_dw" = "gray", "dw_plac_liq" = "blue", "dw_plac_neut" = "purple"), 
                      labels = c("Bias to Liquor - Alcohol Condition", "Bias to Neutral Cues - Alcohol Condition", "Bias to Liquor - Placebo Condition", "Bias to Neutral Cues - Placebo Condition")) +
   theme(axis.text.x = element_blank()) +
-  ggtitle("101 Lab Visit Data") 
+  ggtitle("101 1st Lab Visit Data") 
+
+# Plot ALL visit data per ID for visit 2 
+cycleday.am.merge_long %>% 
+  filter(ID==101, visitnum==2) %>% 
+ggplot() +
+  geom_line(aes(x = variable, y = value, color = variable, group = variable)) +
+  labs(x = "condition", y = "Attentional Bias Score") +
+  geom_point(aes(x = variable, y = value, color = variable, group = variable)) +
+  theme_minimal() + 
+  scale_color_manual(name = "Legend",
+                     values = c("dw_alc_liq" = "red", "dw_alc_neut_dw" = "gray", "dw_plac_liq" = "blue", "dw_plac_neut" = "purple"), 
+                     labels = c("Bias to Liquor - Alcohol Condition", "Bias to Neutral Cues - Alcohol Condition", "Bias to Liquor - Placebo Condition", "Bias to Neutral Cues - Placebo Condition")) +
+  theme(axis.text.x = element_blank()) +
+  ggtitle(101,
+          subtitle = "2nd Lab Visit Data") 
 
 #Plot attn bias to liquor individually first using geom + count 
 cycleday.am.merge %>% 
