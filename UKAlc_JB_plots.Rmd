@@ -214,7 +214,7 @@ ggplot() +
   ggtitle(101,
           subtitle = "2nd Lab Visit Data") 
 
-#Plot attn bias to liquor individually first using geom + count 
+#Plot change in attentional bias to liquor across the 2 visits - individually first 
 cycleday.am.merge %>% 
   filter(ID==105) %>% 
   ggplot(aes(visitnum)) + 
@@ -222,13 +222,13 @@ cycleday.am.merge %>%
   geom_line(aes(y = dw_alc_liq, colour = "dw_alc_liq")) + 
   scale_color_manual(name = "Legend",
                      values = c("dw_alc_liq" = "red", "dw_plac_liq" = "blue"),
-                     labels = c("Bias to Liquor - Alcohol Condition", "Bias to Liquor - Placebo Condition")) +
+                     labels = c("Alcohol Condition", "Placebo Condition")) +
   xlim("1","2") +
   labs(x = "Vist Number", y = "Attentional Bias Score") +
   ggtitle(105,
           subtitle = "Attentional Bias to Liquor") 
 
-#Plot attn bias to neutral cues individually first using geom + count 
+#Plot change in attentional bias to neutral cues across the 2 visits - individually first 
 cycleday.am.merge %>% 
   filter(ID==105) %>% 
   ggplot(aes(visitnum)) + 
@@ -236,14 +236,18 @@ cycleday.am.merge %>%
   geom_line(aes(y = dw_alc_neut, colour = "dw_alc_neut")) + 
   scale_color_manual(name = "Legend",
                      values = c("dw_alc_neut" = "red", "dw_plac_neut" = "blue"),
-                     labels = c("Bias to Neutral Cues - Alcohol Condition", "Bias to Neutral Cues - Placebo Condition")) +
+                     labels = c("Alcohol Condition", "Placebo Condition")) +
   xlim("1","2") +
   labs(x = "Vist Number", y = "Attentional Bias Score") +
   ggtitle(105,
           subtitle = "Attentional Bias to Neutral Cues") 
   
 # loop function to save each individual plot 
-for (i in ids) {
+# updated list of ids based on lab visit data from "mini dataset"
+
+ids_labvis <- c(101,102,103,105,107,108,109,112,113,114,115,116,118,121,122,123,124,125,126,128,129,130,131,132,133,134,135,136,138,139,140,141,143,145,146,147,148,149,152,154,155,157,159,161,163,164,165,166,167,168)
+
+for (i in ids_labvis) {
   
   #make empty list to store the plots
   labvis_attn_alc_plots <- list()
@@ -268,8 +272,8 @@ cycleday.am.merge %>%
   print(labvis_attn_alc_plots)
   
   UKAlc_labvis_attn_alc_plot <- paste0("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace//UKAlc_labvis_attn_alc_plot", i, ".png")  
-  ggsave(UKAlc_labvis_attn_alc_plot, plot, width = 8, height = 6, dpi = 300) }
- #question - I'm getting an error message above when saving all of them 
+  ggsave(UKAlc_labvis_attn_alc_plot, plot, width = 8, height = 6, dpi = 300) } 
+ #question for Anisha - I'm getting an error message above when saving all of them. Error in plot.default() : argument "x" is missing, with no default 
 
 ```
 
