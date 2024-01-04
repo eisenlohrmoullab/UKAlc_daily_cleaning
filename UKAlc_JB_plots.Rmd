@@ -97,7 +97,7 @@ ggplot() +
   geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "green") +
   geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dotted", color = "maroon")
 
---- ##working plot - Ask Anisha - Error: object 'ovpos' not found 
+--- ##working plot - Ask Anisha - Error: object 'ovpos' not found #add lab visit dates to this
     saliva_cycleday_merge_am %>% 
   filter(ID==101) %>% 
 ggplot() +
