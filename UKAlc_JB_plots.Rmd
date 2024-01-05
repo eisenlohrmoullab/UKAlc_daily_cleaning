@@ -115,7 +115,7 @@ ggplot() +
   geom_text(aes(label = paste("Correlation: ", round(cor(E2, P4), 2))),
             x = 1, y = max(df$y), hjust = 0, vjust = 1, col = "blue") +
   ggtitle("101",
-          subtitle = "red line = menses onset, green line = posLH test") +
+          subtitle = "red line = menses onset, green line = pos LH test") +
   geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "forestgreen") +
   geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dashed", color = "maroon") +
 geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid", color = "black") +
@@ -136,7 +136,7 @@ ggplot() +
        geom_point(aes(x = daterated, y = E2*100, color = "E2")) +
   theme_minimal() + 
   ggtitle("101",
-          subtitle = "dotted line = menses onset, dashed line = posLH test") +
+          subtitle = "dotted line = menses onset, dashed line = pos LH test") +
   geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "forestgreen") +
   annotate(geom = "text",
              label = c(as.character(xintercept=ifelse(ovpos==1, daterated, NA)), as.character(xintercept=ifelse(ovpos==1, daterated, NA))),
