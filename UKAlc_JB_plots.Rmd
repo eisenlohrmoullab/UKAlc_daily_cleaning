@@ -87,13 +87,13 @@ saliva_cycleday_merge_am %>%
 ggplot() +
   geom_line(aes(x = daterated, y = value, color = variable, group = variable)) +
   geom_line(aes(x = daterated, y = E2*100, color = "E2")) +
-    scale_y_continuous(sec.axis = sec_axis(~./100, name="estradiol")) +
+    scale_y_continuous(sec.axis = sec_axis(~./100)) +
   labs(x = "date", y = "hormone level") +
   geom_point(aes(x = daterated, y = value, color = variable, group = variable)) +
        geom_point(aes(x = daterated, y = E2*100, color = "E2")) +
   theme_minimal() + 
   ggtitle("101",
-          subtitle = "red line = menses onset, green line = posLH test") +
+          subtitle = "red line = menses onset, green line = pos LH test") +
   geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "forestgreen") +
   geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dashed", color = "maroon") +
 geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid", color = "black") +
