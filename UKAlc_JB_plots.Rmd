@@ -207,6 +207,25 @@ geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid
   ggsave(UKAlc_menses_ov_horm_plots_, plot, width = 8, height = 6, dpi = 300) }  
 
 ```
+# calculate correlations between estrogen and progesterone per ID 
+```{r}
+saliva_cycleday_merge_am$P4 <- as.numeric(saliva_cycleday_merge_am$P4)
+
+saliva_cycleday_merge_am$E2_corr <- saliva_cycleday_merge_am$E2*100
+saliva_cycleday_merge_am$E2_corr <- as.numeric(saliva_cycleday_merge_am$E2_corr)
+
+calculate_correlation <- function(saliva_cycleday_merge_am) {
+  correlation_coefficient <- cor(saliva_cycleday_merge_am$E2_corr, saliva_cycleday_merge_am$P4)
+  return(correlation_coefficient)
+}
+
+# Split the data by ID and apply the function
+correlation_by_id <- tapply(saliva_cycleday_merge_am$ID, saliva_cycleday_merge_am$ID, FUN = function(ID) {
+  calculate_correlation(saliva_cycleday_merge_am[saliva_cycleday_merge_am$ID == ID, ])
+})
+
+```
+
 
 #make graphs by ID for lab visit attentional bias 
 ```{r}
