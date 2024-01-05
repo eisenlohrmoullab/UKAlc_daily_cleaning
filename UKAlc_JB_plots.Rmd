@@ -94,10 +94,12 @@ ggplot() +
   theme_minimal() + 
   ggtitle("101",
           subtitle = "red line = menses onset, green line = posLH test") +
-  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "green") +
+  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "forestgreen") +
   geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dashed", color = "maroon") +
 geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid", color = "black") +
-  geom_vline(aes(xintercept=ifelse(visitnum==2, daterated, NA)), linetype = "solid", color = "black")
+  geom_vline(aes(xintercept=ifelse(visitnum==2, daterated, NA)), linetype = "solid", color = "black") +   scale_color_manual(name = "Legend",
+                     values = c("E2" = "red", "H_LH" = "forestgreen", "H_P4" = "blue"), 
+                     labels = c("Estrogen", "LH", "Progesterone"))
 
 --- ##working plot - Ask Anisha - Error: object 'ovpos' not found #add lab visit dates to this
     saliva_cycleday_merge_am %>% 
@@ -112,7 +114,7 @@ ggplot() +
   theme_minimal() + 
   ggtitle("101",
           subtitle = "dotted line = menses onset, dashed line = posLH test") +
-  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "green") +
+  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "forestgreen") +
   annotate(geom = "text",
              label = c(as.character(xintercept=ifelse(ovpos==1, daterated, NA)), as.character(xintercept=ifelse(ovpos==1, daterated, NA))),
              x = c(xintercept=ifelse(ovpos==1, daterated, NA)),
