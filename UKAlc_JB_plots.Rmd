@@ -165,6 +165,47 @@ for (i in ids) {
   
   UKAlc_menses_ov_horm_plots_ <- paste0("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace//UKAlc_menses_ov_horm_plots_", i, ".png")  
   ggsave(UKAlc_menses_ov_horm_plots_, plot, width = 8, height = 6, dpi = 300) }
+
+
+## do with lab visit days 
+#make list of IDs for which to graph hormone data 
+#omitted IDs 104, 110, 111, 116, 120, 142, 144, 153, 158 for insufficient data 
+
+ids <- c(101, 102, 103, 105, 106, 107, 108, 109, 112, 113, 114, 115, 117, 118, 119, 121, 122, 123, 124, 125, 126, 128, 129, 130, 131, 133, 134, 135, 136, 138, 139, 140, 141, 143, 145, 146, 147, 148, 149, 150, 152, 154, 155, 156, 157, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185)
+
+for (i in ids) {
+  
+  #make empty list to store the plots
+  plots <- list()
+  
+  #store and save one plot at a time
+  plot <- saliva_cycleday_merge_am %>%  
+  filter(ID==i) %>%
+ggplot() +
+  geom_line(aes(x = daterated, y = value, color = variable, group = variable)) +
+  geom_line(aes(x = daterated, y = E2*100, color = "E2")) +
+    scale_y_continuous(sec.axis = sec_axis(~./100, name="estradiol")) +
+  labs(x = "date", y = "hormone level") +
+  geom_point(aes(x = daterated, y = value, color = variable, group = variable)) +
+       geom_point(aes(x = daterated, y = E2*100, color = "E2")) +
+  theme_minimal() + 
+  ggtitle(i,
+          subtitle = "red line = menses onset, green line = posLH test") +
+  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "forestgreen") +
+  geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dashed", color = "maroon") +
+geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid", color = "black") +
+  geom_vline(aes(xintercept=ifelse(visitnum==2, daterated, NA)), linetype = "solid", color = "black") +   scale_color_manual(name = "Legend",
+                     values = c("E2" = "red", "H_LH" = "forestgreen", "H_P4" = "blue"), 
+                     labels = c("Estrogen", "LH", "Progesterone"))
+  
+#save the plot we just made into the list
+  plots[[i]] <- plot
+  #print to console
+  print(plot)
+  
+  UKAlc_menses_ov_horm_plots_ <- paste0("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace//UKAlc_menses_ov_horm_plots_", i, ".png")  
+  ggsave(UKAlc_menses_ov_horm_plots_, plot, width = 8, height = 6, dpi = 300) }  
+
 ```
 
 #make graphs by ID for lab visit attentional bias 
