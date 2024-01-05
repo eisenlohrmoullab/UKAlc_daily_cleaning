@@ -101,6 +101,29 @@ geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid
                      values = c("E2" = "red", "H_LH" = "forestgreen", "H_P4" = "blue"), 
                      labels = c("Estrogen", "LH", "Progesterone"))
 
+# Plot individually using ggplot2 ##working plot for corr coeff 
+ID_101_plot <- saliva_cycleday_merge_am %>% 
+  filter(ID==101) %>% 
+ggplot() +
+  geom_line(aes(x = daterated, y = value, color = variable, group = variable)) +
+  geom_line(aes(x = daterated, y = E2*100, color = "E2")) +
+    scale_y_continuous(sec.axis = sec_axis(~./100, name="estradiol")) +
+  labs(x = "date", y = "hormone level") +
+  geom_point(aes(x = daterated, y = value, color = variable, group = variable)) +
+       geom_point(aes(x = daterated, y = E2*100, color = "E2")) +
+  theme_minimal() + 
+  geom_text(aes(label = paste("Correlation: ", round(cor(E2, P4), 2))),
+            x = 1, y = max(df$y), hjust = 0, vjust = 1, col = "blue") +
+  ggtitle("101",
+          subtitle = "red line = menses onset, green line = posLH test") +
+  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "forestgreen") +
+  geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dashed", color = "maroon") +
+geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid", color = "black") +
+  geom_vline(aes(xintercept=ifelse(visitnum==2, daterated, NA)), linetype = "solid", color = "black") +   scale_color_manual(name = "Legend",
+                     values = c("E2" = "red", "H_LH" = "forestgreen", "H_P4" = "blue"), 
+                     labels = c("Estrogen", "LH", "Progesterone"))
+
+
 --- ##working plot - Ask Anisha - Error: object 'ovpos' not found #add lab visit dates to this
     saliva_cycleday_merge_am %>% 
   filter(ID==101) %>% 
@@ -149,6 +172,8 @@ for (i in ids) {
   geom_line(aes(x = daterated, y = value, color = variable, group = variable)) +
   geom_line(aes(x = daterated, y = E2*100, color = "E2")) +
     scale_y_continuous(sec.axis = sec_axis(~./100, name="estradiol")) +
+      geom_text(aes(label = paste("Correlation: ", round(cor(E2, P4), 2))),
+            x = 1, y = max(df$y), hjust = 0, vjust = 1, col = "blue") +
   labs(x = "date", y = "hormone level") +
      geom_point(aes(x = daterated, y = value, color = variable, group = variable)) +
      geom_point(aes(x = daterated, y = E2*100, color = "E2")) +
@@ -219,11 +244,7 @@ calculate_correlation <- function(saliva_cycleday_merge_am) {
   return(correlation_coefficient)
 }
 
-calculate_correlation <- function(saliva_cycleday_merge_am) {
-  complete_cases <- complete.cases(saliva_cycleday_merge_am$E2_corr, saliva_cycleday_merge_am$P4)
-  correlation_coefficient <- cor(saliva_cycleday_merge_am$E2_corr[complete_cases], saliva_cycleday_merge_am$P4[complete_cases])
-  return(correlation_coefficient)
-}
+
 # Split the data by ID and apply the function
 correlation_by_id <- tapply(saliva_cycleday_merge_am$ID, saliva_cycleday_merge_am$ID, FUN = function(ID) {
   calculate_correlation(saliva_cycleday_merge_am[saliva_cycleday_merge_am$ID == ID, ])
