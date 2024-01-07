@@ -234,52 +234,58 @@ geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid
 ```
 # calculate correlations between estrogen and progesterone per ID ## work in progress
 ```{r}
-saliva_cycleday_merge_am$P4 <- as.numeric(saliva_cycleday_merge_am$P4)
-
-saliva_cycleday_merge_am$E2_corr <- saliva_cycleday_merge_am$E2*100
-saliva_cycleday_merge_am$E2_corr <- as.numeric(saliva_cycleday_merge_am$E2_corr)
-
-calculate_correlation <- function(saliva_cycleday_merge_am) {
-  correlation_coefficient <- cor(saliva_cycleday_merge_am$E2_corr, saliva_cycleday_merge_am$P4, na.rm=T)
-  return(correlation_coefficient)
-}
-
-
-# Split the data by ID and apply the function
-correlation_by_id <- tapply(saliva_cycleday_merge_am$ID, saliva_cycleday_merge_am$ID, FUN = function(ID) {
-  calculate_correlation(saliva_cycleday_merge_am[saliva_cycleday_merge_am$ID == ID, ])
-})
-
-print(correlation_by_id)
+## below didn't work #question 
+# saliva_cycleday_merge_am$P4 <- as.numeric(saliva_cycleday_merge_am$P4)
+# 
+# saliva_cycleday_merge_am$E2_corr <- saliva_cycleday_merge_am$E2*100
+# saliva_cycleday_merge_am$E2_corr <- as.numeric(saliva_cycleday_merge_am$E2_corr)
+# 
+# calculate_correlation <- function(saliva_cycleday_merge_am) {
+#   correlation_coefficient <- cor(saliva_cycleday_merge_am$E2_corr, saliva_cycleday_merge_am$P4)
+#   return(correlation_coefficient)
+# }
+# 
+# 
+# # Split the data by ID and apply the function
+# correlation_by_id <- tapply(saliva_cycleday_merge_am$ID, saliva_cycleday_merge_am$ID, FUN = function(ID) {
+#   calculate_correlation(saliva_cycleday_merge_am[saliva_cycleday_merge_am$ID == ID, ])
+# })
+# 
+# print(correlation_by_id)
 
 ## another way to try correlation loop 
+### got error message: Error in if (is.na(na.method)) stop("invalid 'use' argument") : 
+  #the condition has length > 1
 # Function to calculate correlations for a given column ID
-calculate_correlations <- function(saliva_cycleday_merge_am, ID) {
-  num_columns <- ncol(saliva_cycleday_merge_am)
-  
-  # Initialize an empty vector to store correlation values
-  cor_vector <- numeric(num_columns)
-  
-  for (j in 1:num_columns) {
-    # Calculate correlation between the specified column and column j
-    cor_value <- cor(saliva_cycleday_merge_am[, P4], saliva_cycleday_merge_am[, j])
-    
-    # Store the correlation value in the vector
-    cor_vector[j] <- cor_value
-  }
-  
-  # Print or return the correlation vector
-  return(cor_vector)
-}
 
-# Example usage: calculate correlations for column with ID 2
-column_id <- 2
-correlations <- calculate_correlations(saliva_cycleday_merge_am, E2)
+ids <- c(101, 102, 103, 105, 106, 107, 108, 109, 112, 113, 114, 115, 117, 118, 119, 121, 122, 123, 124, 125, 126, 128, 129, 130, 131, 133, 134, 135, 136, 138, 139, 140, 141, 143, 145, 146, 147, 148, 149, 150, 152, 154, 155, 156, 157, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185) 
 
-# Print the correlation vector
-print(correlations)
+for (i in ids) {
+
+   #make empty list to store the values
+  corr_values <- list()
+  
+  #store and save one plot at a time
+  corr_values <- saliva_cycleday_merge_am %>%  
+  filter(ID==i) %>%
+    cor(saliva_cycleday_merge_am$P4, saliva_cycleday_merge_am$E2) 
+  #save the values we just made into the list
+  corr_values[[i]] <- list()
+  #print to console
+  print(corr_values)}
+
+## linear regression for E2 and P4 
+
+hormones$P4 <- as.numeric(hormones$P4)
+hormones$E2 <- as.numeric(hormones$E2)
+
+regression_results <- hormones %>%
+  group_by(ID) %>%
+  do(model = lm(E2 ~ P4, data = ., na.rm=T))
+
+## verified that no r > |0.1| from list above  
+  
 ```
-
 
 #make graphs by ID for lab visit attentional bias 
 ```{r}
