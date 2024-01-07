@@ -471,6 +471,14 @@ change_liq_between_plac_alc_scatter <- ggplot(labvisit, aes(x = Subject, y = dif
   geom_point(color = "blue") +
   labs(title = "Late to Early Follicular Phase Attn to Liquor (Placebo - Alcohol)", x = "Subject", y = "Difference in Attention")
 
+# graph differences in change from late-early follicular attn to neutral cues between placebo and alc 
+labvisit_boxplot_neut <- labvisit %>% 
+  select(diff_neut_plac_min_alc)
+change_neut_between_plac_alc_box <- boxplot(labvisit_boxplot_neut) 
+change_neut_between_plac_alc_scatter <- ggplot(labvisit, aes(x = Subject, y = diff_neut_plac_min_alc)) +
+  geom_point(color = "blue") +
+  labs(title = "Late to Early Follicular Phase Attn to Neutral (Placebo - Alcohol)", x = "Subject", y = "Difference in Attention")
+
 
 
 ```
