@@ -251,6 +251,33 @@ correlation_by_id <- tapply(saliva_cycleday_merge_am$ID, saliva_cycleday_merge_a
 })
 
 print(correlation_by_id)
+
+## another way to try correlation loop 
+# Function to calculate correlations for a given column ID
+calculate_correlations <- function(saliva_cycleday_merge_am, ID) {
+  num_columns <- ncol(saliva_cycleday_merge_am)
+  
+  # Initialize an empty vector to store correlation values
+  cor_vector <- numeric(num_columns)
+  
+  for (j in 1:num_columns) {
+    # Calculate correlation between the specified column and column j
+    cor_value <- cor(saliva_cycleday_merge_am[, P4], saliva_cycleday_merge_am[, j])
+    
+    # Store the correlation value in the vector
+    cor_vector[j] <- cor_value
+  }
+  
+  # Print or return the correlation vector
+  return(cor_vector)
+}
+
+# Example usage: calculate correlations for column with ID 2
+column_id <- 2
+correlations <- calculate_correlations(saliva_cycleday_merge_am, E2)
+
+# Print the correlation vector
+print(correlations)
 ```
 
 
