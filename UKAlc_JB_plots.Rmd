@@ -478,6 +478,10 @@ change_neut_between_plac_alc_box <- boxplot(labvisit_boxplot_neut)
 change_neut_between_plac_alc_scatter <- ggplot(labvisit, aes(x = Subject, y = diff_neut_plac_min_alc)) +
   geom_point(color = "blue") +
   labs(title = "Late to Early Follicular Phase Attn to Neutral (Placebo - Alcohol)", x = "Subject", y = "Difference in Attention")
+#calculate number of subjects with negative differences in attention 
+less_attn_neut_plac_alc <- sum(labvisit$diff_neut_plac_min_alc < 0) #32 
+#calculate number of subjects with positive differences in attention 
+more_attn_neut_plac_alc <- sum(labvisit$diff_neut_plac_min_alc > 0) #18 
 
 
 
