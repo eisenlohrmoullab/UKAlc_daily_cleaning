@@ -102,7 +102,9 @@ geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid
                      values = c("E2" = "red", "H_LH" = "forestgreen", "H_P4" = "blue"), 
                      labels = c("Estrogen", "LH", "Progesterone"))
 
-# Plot individually using ggplot2 ##working plot for corr coeff 
+# Plot individually using ggplot2 
+## question - how to add correlation coefficient to plot 
+## question - how to add second period start date to plots for participants whose late follicular datapoint was after a second period date 
 ID_101_plot <- saliva_cycleday_merge_am %>% 
   filter(ID==101) %>% 
 ggplot() +
@@ -394,7 +396,7 @@ cycleday.am.merge %>%
   
   UKAlc_labvis_attn_alc_plot <- paste0("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace//UKAlc_labvis_attn_alc_plot", i, ".png")  
   ggsave(UKAlc_labvis_attn_alc_plot, plot, width = 8, height = 6, dpi = 300) } 
- #question for Anisha - I'm getting an error message above when saving all of them. Error in plot.default() : argument "x" is missing, with no default 
+ #question - I'm getting an error message above when saving all of them. Error in plot.default() : argument "x" is missing, with no default 
 
 ```
 
