@@ -468,6 +468,7 @@ change_liq_between_plac_alc_scatter <- ggplot(labvisit, aes(x = Subject, y = dif
   labs(title = "Late to Early Follicular Phase Attn to Liquor (Placebo - Alcohol)", x = "Subject", y = "Difference in Attention")
 ## stats for these changes 
 mean(labvisit$diff_liq_plac_min_alc) #mean of -3.8228 
+median(labvisit$diff_liq_plac_min_alc) #median of -12.425 
 range(labvisit$diff_liq_plac_min_alc) #range of -216.39 to 216.76 
 sd(labvisit$diff_liq_plac_min_alc) #sd of 89.57 
 #calculate number of subjects with negative differences in attention 
@@ -484,6 +485,7 @@ change_neut_between_plac_alc_scatter <- ggplot(labvisit, aes(x = Subject, y = di
   labs(title = "Late to Early Follicular Phase Attn to Neutral (Placebo - Alcohol)", x = "Subject", y = "Difference in Attention")
 ## stats for these changes 
 mean(labvisit$diff_neut_plac_min_alc) #mean of -25.7533
+median(labvisit$diff_neut_plac_min_alc) #median of -21.85
 range(labvisit$diff_neut_plac_min_alc) #range of -164.80 to 261.14
 sd(labvisit$diff_neut_plac_min_alc) #sd of 82.48287
 ### calculate number of subjects with negative differences in attention 
