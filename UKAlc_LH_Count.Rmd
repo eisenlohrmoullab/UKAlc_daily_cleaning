@@ -43,8 +43,9 @@ LH.Count$posov_pred <- LH.Count$daterated
 #make A a new temp column where pt received pos ov test
 LH.Count$A <- LH.Count$ovpos
 
-#add ID column to match other spreadsheets 
+#rename Subject column to "ID" to match other spreadsheets 
 LH.Count$ID <- LH.Count$Subject
+LH.Count <- subset(LH.Count, select = -Subject)
 
 #Fill in missing days by ID 
 LH.Count <- LH.Count %>% 
