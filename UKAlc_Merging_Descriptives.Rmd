@@ -1586,7 +1586,7 @@ pm_data_clean <- pm_data_clean %>% group_by(ID) %>%
 
 ```{r}
 #Lab Visit Data 
-labvisit <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_LABVISITS/01_raw_data/Mini Dataset 11.30.23.csv") 
+labvisit <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_LABVISITS/01_raw_data/Mini Dataset 1.8.24.csv") 
 ```
 
 ## rename vars to match am_data and pm_data and delete irrelevant columns 
