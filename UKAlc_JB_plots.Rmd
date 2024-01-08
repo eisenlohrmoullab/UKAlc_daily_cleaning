@@ -450,6 +450,18 @@ labvisit$diff_liq_alc <- labvisit$E2t2dwliq - labvisit$E1t2dwliq
 labvisit$diff_neut_plac <- labvisit$E2t1dwneut_Liq - labvisit$E1t1dwneut_Liq
 labvisit$diff_neut_alc <- labvisit$E2t2dwneut_Liq - labvisit$E1t2dwneut_Liq
 
+## stats for late fol - early fol phase attentional biases 
+### differences in bias to liquor in placebo condition 
+mean(labvisit$diff_liq_plac) #mean of 1.68
+median(labvisit$diff_liq_plac) #median of 0.85
+range(labvisit$diff_liq_plac) #range of -153.07 to 217.47 
+sd(labvisit$diff_liq_plac) #sd of 62.01 
+### differences in bias to liquor in alcohol condition 
+mean(labvisit$diff_liq_alc) #mean of 5.50
+median(labvisit$diff_liq_alc) #median of 0.905
+range(labvisit$diff_liq_alc) #range of -125.11 to 217.47 
+sd(labvisit$diff_liq_alc) #sd of 63.4 
+
 # create new column for change in late fol - early fol attentional bias by cue 
 labvisit$diff_liq_plac_min_alc <- labvisit$diff_liq_plac - labvisit$diff_liq_alc #change in attention to liquor across follicular phase - between placebo and alcohol 
 labvisit$diff_neut_plac_min_alc <- labvisit$diff_neut_plac - labvisit$diff_neut_alc #change in attention to neutral cues across follicular phase - between placebo and alcohol 
