@@ -12,6 +12,8 @@ knitr::opts_chunk$set(echo = TRUE)
 #Load Libraries and Files
 ```{r cars}
 library(lubridate)
+library(dplyr)
+library(tidyverse)
 
 LH.Count <- read.csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/01_raw_data/Ovulation_Dates.csv")
 ```
@@ -41,10 +43,12 @@ LH.Count$posov_pred <- LH.Count$daterated
 #make A a new temp column where pt received pos ov test
 LH.Count$A <- LH.Count$ovpos
 
-#rename Subject column to ID 
+#add ID column to match other spreadsheets 
+LH.Count$ID <- LH.Count$Subject
 
 #Fill in missing days by ID 
-LH.Count <- LH.Count %>% group_by(ID) %>%
+LH.Count <- LH.Count %>% 
+  group_by(ID) %>%
   complete(daterated = seq.Date((daterated)-7, max(daterated)+15, by = "day"))
 
 #Change NAs to 0 for ovpos column 
