@@ -113,8 +113,6 @@ ggplot() +
   geom_point(aes(x = daterated, y = value, color = variable, group = variable)) +
        geom_point(aes(x = daterated, y = E2*100, color = "E2")) +
   theme_minimal() + 
-  geom_text(aes(label = paste("Correlation: ", round(cor(E2, P4), 2))),
-            x = 1, y = max(df$y), hjust = 0, vjust = 1, col = "blue") +
   ggtitle("101",
           subtitle = "red line = menses onset, green line = pos LH test") +
   geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "forestgreen") +
@@ -125,33 +123,33 @@ geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid
                      labels = c("Estrogen", "LH", "Progesterone"))
 
 
---- ##working plot - Ask Anisha - Error: object 'ovpos' not found #add lab visit dates to this
-    saliva_cycleday_merge_am %>% 
-  filter(ID==101) %>% 
-ggplot() +
-  geom_line(aes(x = daterated, y = value, color = variable, group = variable)) +
-  geom_line(aes(x = daterated, y = E2*100, color = "E2")) +
-    scale_y_continuous(sec.axis = sec_axis(~./100, name="estradiol")) +
-  labs(x = "date", y = "hormone level") +
-  geom_point(aes(x = daterated, y = value, color = variable, group = variable)) +
-       geom_point(aes(x = daterated, y = E2*100, color = "E2")) +
-  theme_minimal() + 
-  ggtitle("101",
-          subtitle = "dotted line = menses onset, dashed line = pos LH test") +
-  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "forestgreen") +
-  annotate(geom = "text",
-             label = c(as.character(xintercept=ifelse(ovpos==1, daterated, NA)), as.character(xintercept=ifelse(ovpos==1, daterated, NA))),
-             x = c(xintercept=ifelse(ovpos==1, daterated, NA)),
-             y = c(200, 200),
-             angle = 90, 
-             vjust = 1) +
-  geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dotted", color = "maroon") + 
-    annotate(geom = "text",
-             label = c(as.character(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), as.character(xintercept=ifelse(firstdayofperiod==1, daterated, NA))),
-             x = c(xintercept=ifelse(firstdayofperiod==1, daterated, NA)),
-             y = c(200, 200),
-             angle = 90, 
-             vjust = 1) 
+--- ##working plot - question - Error: object 'ovpos' not found #add lab visit dates to this
+#     saliva_cycleday_merge_am %>% 
+#   filter(ID==101) %>% 
+# ggplot() +
+#   geom_line(aes(x = daterated, y = value, color = variable, group = variable)) +
+#   geom_line(aes(x = daterated, y = E2*100, color = "E2")) +
+#     scale_y_continuous(sec.axis = sec_axis(~./100, name="estradiol")) +
+#   labs(x = "date", y = "hormone level") +
+#   geom_point(aes(x = daterated, y = value, color = variable, group = variable)) +
+#        geom_point(aes(x = daterated, y = E2*100, color = "E2")) +
+#   theme_minimal() + 
+#   ggtitle("101",
+#           subtitle = "dotted line = menses onset, dashed line = pos LH test") +
+#   geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "forestgreen") +
+#   annotate(geom = "text",
+#              label = c(as.character(xintercept=ifelse(ovpos==1, daterated, NA)), as.character(xintercept=ifelse(ovpos==1, daterated, NA))),
+#              x = c(xintercept=ifelse(ovpos==1, daterated, NA)),
+#              y = c(200, 200),
+#              angle = 90, 
+#              vjust = 1) +
+#   geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dotted", color = "maroon") + 
+#     annotate(geom = "text",
+#              label = c(as.character(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), as.character(xintercept=ifelse(firstdayofperiod==1, daterated, NA))),
+#              x = c(xintercept=ifelse(firstdayofperiod==1, daterated, NA)),
+#              y = c(200, 200),
+#              angle = 90, 
+#              vjust = 1) 
 ```
 
 #make list and perform graphing function on all IDs 
@@ -173,8 +171,6 @@ for (i in ids) {
   geom_line(aes(x = daterated, y = value, color = variable, group = variable)) +
   geom_line(aes(x = daterated, y = E2*100, color = "E2")) +
     scale_y_continuous(sec.axis = sec_axis(~./100, name="estradiol")) +
-      geom_text(aes(label = paste("Correlation: ", round(cor(E2, P4), 2))),
-            x = 1, y = max(df$y), hjust = 0, vjust = 1, col = "blue") +
   labs(x = "date", y = "hormone level") +
      geom_point(aes(x = daterated, y = value, color = variable, group = variable)) +
      geom_point(aes(x = daterated, y = E2*100, color = "E2")) +
@@ -470,6 +466,10 @@ change_liq_between_plac_alc_box <- boxplot(labvisit_boxplot_liq)
 change_liq_between_plac_alc_scatter <- ggplot(labvisit, aes(x = Subject, y = diff_liq_plac_min_alc)) +
   geom_point(color = "blue") +
   labs(title = "Late to Early Follicular Phase Attn to Liquor (Placebo - Alcohol)", x = "Subject", y = "Difference in Attention")
+## stats for these changes 
+mean(labvisit$diff_liq_plac_min_alc) #mean of -3.8228 
+range(labvisit$diff_liq_plac_min_alc) #range of -216.39 to 216.76 
+sd(labvisit$diff_liq_plac_min_alc) #sd of 89.57 
 #calculate number of subjects with negative differences in attention 
 less_attn_liq_plac_alc <- sum(labvisit$diff_liq_plac_min_alc < 0) #28
 #calculate number of subjects with positive differences in attention 
@@ -482,9 +482,13 @@ change_neut_between_plac_alc_box <- boxplot(labvisit_boxplot_neut)
 change_neut_between_plac_alc_scatter <- ggplot(labvisit, aes(x = Subject, y = diff_neut_plac_min_alc)) +
   geom_point(color = "blue") +
   labs(title = "Late to Early Follicular Phase Attn to Neutral (Placebo - Alcohol)", x = "Subject", y = "Difference in Attention")
-#calculate number of subjects with negative differences in attention 
+## stats for these changes 
+mean(labvisit$diff_neut_plac_min_alc) #mean of -25.7533
+range(labvisit$diff_neut_plac_min_alc) #range of -164.80 to 261.14
+sd(labvisit$diff_neut_plac_min_alc) #sd of 82.48287
+### calculate number of subjects with negative differences in attention 
 less_attn_neut_plac_alc <- sum(labvisit$diff_neut_plac_min_alc < 0) #32 
-#calculate number of subjects with positive differences in attention 
+### calculate number of subjects with positive differences in attention 
 more_attn_neut_plac_alc <- sum(labvisit$diff_neut_plac_min_alc > 0) #18 
 
 ```
