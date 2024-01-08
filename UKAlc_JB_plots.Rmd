@@ -461,6 +461,16 @@ mean(labvisit$diff_liq_alc) #mean of 5.50
 median(labvisit$diff_liq_alc) #median of 0.905
 range(labvisit$diff_liq_alc) #range of -125.11 to 217.47 
 sd(labvisit$diff_liq_alc) #sd of 63.4 
+### differences in bias to neutral cues in placebo condition 
+mean(labvisit$diff_neut_plac) #mean of -28.85
+median(labvisit$diff_neut_plac) #median of -27.95
+range(labvisit$diff_neut_plac) #range of -129.53 to 61.68 
+sd(labvisit$diff_neut_plac) #sd of 47.38
+### differences in bias to neutral cues in alcohol condition 
+mean(labvisit$diff_neut_alc) #mean of -3.1
+median(labvisit$diff_neut_alc) #median of 11.15 
+range(labvisit$diff_neut_alc) #range of -206 to 158 
+sd(labvisit$diff_neut_alc) #sd of 71.3 
 
 # create new column for change in late fol - early fol attentional bias by cue 
 labvisit$diff_liq_plac_min_alc <- labvisit$diff_liq_plac - labvisit$diff_liq_alc #change in attention to liquor across follicular phase - between placebo and alcohol 
