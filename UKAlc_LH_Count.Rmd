@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r cars}
 library(lubridate)
 
-LH.Count <- read.csv("/Users/apatte21/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/01_raw_data/OvulationDates.csv")
+LH.Count <- read.csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/01_raw_data/Ovulation_Dates.csv")
 ```
 
 #Rename LH test and ovulation date columns 
@@ -40,6 +40,8 @@ LH.Count$posov_pred <- LH.Count$daterated
 
 #make A a new temp column where pt received pos ov test
 LH.Count$A <- LH.Count$ovpos
+
+#rename Subject column to ID 
 
 #Fill in missing days by ID 
 LH.Count <- LH.Count %>% group_by(ID) %>%
