@@ -1649,7 +1649,7 @@ hormones <- read_xlsx("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Fol
 
 #add "day in study column" for hormone data and save new csv 
 ```{r}
-hormones <- separate(hormones.lab, col = Sample, into = c("ID", "day_in_study"), sep = "-")
+hormones <- separate(hormones, col = Sample, into = c("ID", "day_in_study"), sep = "-")
 
 write.csv(hormones, "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace/Salivary_Hormones_StudyDays.csv", row.names=TRUE)
 ```
