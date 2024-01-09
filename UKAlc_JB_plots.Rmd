@@ -35,7 +35,7 @@ hormones <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Fold
 
 cycleday.am.merge <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/Cycle_Day_LH_menses_am_labvisit.csv")
 
-labvisit <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_LABVISITS/01_raw_data/MIni_Dataset_11.30.23.csv")  # raw dataset of lab visit values 
+labvisit <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_LABVISITS/03_cleaned_data/labvisit_cleaned_AP.csv")  # cleaned dataset of lab visit values 
 ```
 ##JB: data wrangling to plot firstdayofperiod
 ```{r}
