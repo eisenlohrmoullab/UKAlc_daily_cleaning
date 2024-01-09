@@ -1607,8 +1607,6 @@ labvisit <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Fold
 #read csv for alcohol session dates as ordered by PHASE not sequential order 
 alc.visit.dates <- read_xlsx("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_LABVISITS/01_raw_data/Alc_Visits_By_Follicular_Phase.xlsx")
 
-names(alc.visit.dates)[names(alc.visit.dates) == "Subject"] <- "ID"
-
 #new column for presence of lab visit 
 alc.visit.dates$labvisit <- 1 
 
@@ -1644,7 +1642,6 @@ labvisit.pm.data.merge <- merge(labvisit_clean, pm_data_clean, by =c("ID", "date
 
 ## merge in salivary hormone data 
 ```{r}
-library(readxl)
 hormones <- read_xlsx("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace/Salivary_Results_For_Import.xlsx")
 ```
 
