@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ### Load libraries and import data
 ```{r}
 #Lab Visit Data 
+library(readxl)
 labvisit <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_LABVISITS/01_raw_data/Mini Dataset 1.8.24.csv") 
 ```
 
@@ -28,9 +29,8 @@ write.csv(labvisit, "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folde
 
 ## merge in lab visit dates 
 ```{r}
-library(readxl)
 #read csv for alcohol session dates as ordered by PHASE not sequential order 
-alc.visit.dates <- read_xlsx("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/01_raw_data/Alcohol Session Dates.xlsx")
+alc.visit.dates <- read_xlsx("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_LABVISITS/01_raw_data/Alc_Visits_By_Follicular_Phase.xlsx")
 
 names(alc.visit.dates)[names(alc.visit.dates) == "Subject"] <- "ID"
 
