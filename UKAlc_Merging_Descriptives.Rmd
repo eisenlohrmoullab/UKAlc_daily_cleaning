@@ -743,32 +743,35 @@ alc.visit.dates <- read_xlsx("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Loc
 alc.visit.dates$labvisit <- 1 
 
 labvisit <- merge(alc.visit.dates, labvisit, by = c("ID"), all = T) 
-labvisit$S1 <- ymd(labvisit$S1)
-labvisit$S2 <- ymd(labvisit$S2)
+#question - don't think below is relevant now that we're doing EF and LF not S1 and S2 
+#labvisit$S1 <- ymd(labvisit$S1)
+#labvisit$S2 <- ymd(labvisit$S2)
 ```
 
 ## re-format 
 ```{r}
-labvisit_S1 <- labvisit %>% select(ID, S1, starts_with("E1"))
-labvisit_S2 <- labvisit %>% select(ID, S2, starts_with("E2"))
 
-labvisit_S1 <- labvisit_S1 %>% rename_all(~ gsub("^E1", "", .))
-labvisit_S2 <- labvisit_S2 %>% rename_all(~ gsub("^E2", "", .))
+#make new df with early foll and late foll lab visit days 
+labvisit_EF <- labvisit %>% select(ID, starts_with("E1"))
+labvisit_LF <- labvisit %>% select(ID, starts_with("E2"))
 
-names(labvisit_S1)[names(labvisit_S1) == "S1"] <- "daterated"
-names(labvisit_S2)[names(labvisit_S2) == "S2"] <- "daterated"
+labvisit_EF <- labvisit_EF %>% rename_all(~ gsub("^E1", "", .))
+labvisit_LF <- labvisit_LF %>% rename_all(~ gsub("^E2", "", .))
 
-labvisit_S1$visitnum <- 1 
-labvisit_S2$visitnum <- 2
+names(labvisit_EF)[names(labvisit_EF) == "S1"] <- "daterated"
+names(labvisit_LF)[names(labvisit_LF) == "S2"] <- "daterated"
 
-labvisit_clean <- rbind(labvisit_S1, labvisit_S2)
+labvisit_EF$follphase <- 1 
+labvisit_LF$follphase <- 2
+
+labvisit_clean <- rbind(labvisit_EF, labvisit_LF) 
 
 labvisit_clean <- labvisit_clean %>% arrange(ID)
 ```
 
 ## merge file with daily data 
 ```{r}
-labvisit.am.data.merge <- merge(labvisit_clean, am_data_clean, by = c("ID", "daterated"), all = T)
+labvisit.am.data.merge <- merge(labvisit_clean, am_data_clean, by = c("ID", "daterated"), all = T) #question - add daterated now 
 labvisit.pm.data.merge <- merge(labvisit_clean, pm_data_clean, by =c("ID", "daterated"), all = T)
 ```
 
