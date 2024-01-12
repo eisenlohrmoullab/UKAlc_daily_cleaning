@@ -5,6 +5,30 @@ date: "2024-01-12"
 output: html_document
 ---
 
+# Load libraries for plotting 
+```{r}
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(lme4)
+library(nlme)
+library(lmerTest) #to extract P values when lmer doesnt feel like showing them
+library(performance) #to extract ICCs
+library(emmeans) #for plotting interactions
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(ggdist)
+library(ggrain)
+library(zoo)
+```
+
+# Load clean data 
+```{r}
+am_data_clean <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/am_data_cleaned.csv")
+
+pm_data_clean <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/pm_data_cleaned.csv")
+```
 
 
 #raincloud plots on raw variables on interest from am_data
