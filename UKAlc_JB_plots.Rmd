@@ -165,7 +165,7 @@ ggplot() +
   ) +
        geom_point(aes(x = daterated, y = E2*100, color = "E2")) +
   theme_minimal() + 
-  ggtitle("125",
+  ggtitle("125 Part 1",
           subtitle = "red line = menses onset, green line = pos LH test") +
   geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "forestgreen") +
   geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dashed", color = "maroon") +
@@ -188,7 +188,7 @@ ggplot() +
   ) +
        geom_point(aes(x = daterated, y = E2*100, color = "E2")) +
   theme_minimal() + 
-  ggtitle("125",
+  ggtitle("125 Part 2",
           subtitle = "red line = menses onset, green line = pos LH test") +
   geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "forestgreen") +
   geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dashed", color = "maroon") +
