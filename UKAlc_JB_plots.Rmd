@@ -103,9 +103,8 @@ geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid
                      labels = c("Estrogen", "LH", "Progesterone"))
 
 # Plot individually using ggplot2 
-## question - how to add correlation coefficient to plot 
 ## question - how to add second period start date to plots for participants whose late follicular datapoint was after a second period date 
-## question - I went back and tried to find where we originally imported period start dates in UKAlc_Menses_Count.rmd, UKAlc_Merging_Descriptives.Rmd, UKAlc_LabVisit_Data_Cleaning.Rmd, and UKAlc_LH_Count.Rmd and couldn't find them. Would Anisha or Jordan be able to refer to where we imported them initially? 
+
 ID_101_plot <- saliva_cycleday_merge_am %>% 
   filter(ID==101) %>% 
 ggplot() +
@@ -233,6 +232,7 @@ geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid
 
 ```
 # calculate correlations between estrogen and progesterone per ID ## work in progress
+# not really relevant because there can be correlation on a day-to-day level
 ```{r}
 ## below didn't work #question 
 # saliva_cycleday_merge_am$P4 <- as.numeric(saliva_cycleday_merge_am$P4)
