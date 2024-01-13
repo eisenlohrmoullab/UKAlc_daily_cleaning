@@ -124,9 +124,9 @@ geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid
                      values = c("E2" = "red", "H_LH" = "forestgreen", "H_P4" = "blue"), 
                      labels = c("Estrogen", "LH", "Progesterone"))
 
-## graph 152 
+## graph 152 due to auto-scale issue
 
-#make daterated ymd for easier graphing 
+#### make daterated ymd for easier graphing 
 saliva_cycleday_merge_am$daterated <- ymd(saliva_cycleday_merge_am$daterated)
 
 ID_152_plot <- saliva_cycleday_merge_am %>% 
@@ -148,6 +148,10 @@ ggplot() +
   scale_color_manual(name = "Legend",
                      values = c("E2" = "red", "H_LH" = "forestgreen", "H_P4" = "blue"), 
                      labels = c("Estrogen", "LH", "Progesterone"))
+
+### save graph 
+  ID_152_plot <- paste0("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace//UKAlc_menses_ov_horm_plot_", 152, ".png")  
+  ggsave(ID_152_plot, plot, width = 8, height = 6, dpi = 300) 
 
 --- ##working plot - question - Error: object 'ovpos' not found #add lab visit dates to this
 #     saliva_cycleday_merge_am %>% 
