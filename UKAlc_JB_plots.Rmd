@@ -5,10 +5,8 @@ date: "`r Sys.Date()`"
 output: html_document
 ---
 
-#Setup:
--data
--libraries
--wd
+#Setup: -data -libraries -wd
+
 ```{r}
 library(haven) #for reading files
 library(ggplot2) #for plotting
@@ -28,6 +26,7 @@ knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (
 ```
 
 ## import the clean dataset
+
 ```{r}
 df <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace/UKAlc.LH.Data.csv")
 
@@ -37,7 +36,9 @@ cycleday.am.merge <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Lo
 
 labvisit <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_LABVISITS/03_cleaned_data/labvisit_cleaned_AP.csv")  # cleaned dataset of lab visit values 
 ```
+
 ##JB: data wrangling to plot firstdayofperiod
+
 ```{r}
 cycleday.am.merge %>% filter(ID == 101) %>%
   select(ID, daterated, Period.Start.Date) %>% print(n=65)
@@ -65,8 +66,8 @@ cycleday.am.merge <- cycleday.am.merge %>%
 
 ```
 
+## plot daily hormones, lab visit data against period start date and ov date for verification
 
-## plot daily hormones, lab visit data against period start date and ov date for verification     
 ```{r}
 saliva_cycleday_merge_am <- merge(hormones, cycleday.am.merge, by = c("ID", "day_in_study"), all = T)
 
@@ -149,9 +150,52 @@ ggplot() +
                      values = c("E2" = "red", "H_LH" = "forestgreen", "H_P4" = "blue"), 
                      labels = c("Estrogen", "LH", "Progesterone"))
 
-### save graph 
-  ID_152_plot <- paste0("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace//UKAlc_menses_ov_horm_plot_", 152, ".png")  
-  ggsave(ID_152_plot, plot, width = 8, height = 6, dpi = 300) 
+## manually graph 125 in 2 parts due to long break in study days
+### part 1 
+ID_125_plot_1 <- saliva_cycleday_merge_am %>% 
+  filter(ID==125) %>% 
+ggplot() +
+  geom_line(aes(x = daterated, y = value, color = variable, group = variable)) +
+  geom_line(aes(x = daterated, y = E2*100, color = "E2")) +
+    scale_y_continuous(sec.axis = sec_axis(~./100, name="estradiol")) +
+  labs(x = "date", y = "hormone level") +
+  geom_point(aes(x = daterated, y = value, color = variable, group = variable)) +
+    scale_x_date(
+    limits = c(as.Date("2021-08-19"), as.Date("2021-09-10"))
+  ) +
+       geom_point(aes(x = daterated, y = E2*100, color = "E2")) +
+  theme_minimal() + 
+  ggtitle("125",
+          subtitle = "red line = menses onset, green line = pos LH test") +
+  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "forestgreen") +
+  geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dashed", color = "maroon") +
+geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid", color = "black") +
+  geom_vline(aes(xintercept=ifelse(visitnum==2, daterated, NA)), linetype = "solid", color = "black") +   scale_color_manual(name = "Legend",
+                     values = c("E2" = "red", "H_LH" = "forestgreen", "H_P4" = "blue"), 
+                     labels = c("Estrogen", "LH", "Progesterone"))
+
+### part 2 
+ID_125_plot_2 <- saliva_cycleday_merge_am %>% 
+  filter(ID==125) %>% 
+ggplot() +
+  geom_line(aes(x = daterated, y = value, color = variable, group = variable)) +
+  geom_line(aes(x = daterated, y = E2*100, color = "E2")) +
+    scale_y_continuous(sec.axis = sec_axis(~./100, name="estradiol")) +
+  labs(x = "date", y = "hormone level") +
+  geom_point(aes(x = daterated, y = value, color = variable, group = variable)) +
+    scale_x_date(
+    limits = c(as.Date("2022-01-13"), as.Date("2022-04-10"))
+  ) +
+       geom_point(aes(x = daterated, y = E2*100, color = "E2")) +
+  theme_minimal() + 
+  ggtitle("125",
+          subtitle = "red line = menses onset, green line = pos LH test") +
+  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "forestgreen") +
+  geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dashed", color = "maroon") +
+geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid", color = "black") +
+  geom_vline(aes(xintercept=ifelse(visitnum==2, daterated, NA)), linetype = "solid", color = "black") +   scale_color_manual(name = "Legend",
+                     values = c("E2" = "red", "H_LH" = "forestgreen", "H_P4" = "blue"), 
+                     labels = c("Estrogen", "LH", "Progesterone"))
 
 --- ##working plot - question - Error: object 'ovpos' not found #add lab visit dates to this
 #     saliva_cycleday_merge_am %>% 
@@ -182,7 +226,8 @@ ggplot() +
 #              vjust = 1) 
 ```
 
-#make list and perform graphing function on all IDs 
+#make list and perform graphing function on all IDs
+
 ```{r}
 #make list of IDs for which to graph hormone data 
 #omitted IDs 104, 110, 111, 116, 120, 142, 144, 153, 158 for insufficient data 
@@ -259,8 +304,11 @@ geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid
   ggsave(UKAlc_menses_ov_horm_plots_, plot, width = 8, height = 6, dpi = 300) }  
 
 ```
-# calculate correlations between estrogen and progesterone per ID ## work in progress
+
+# calculate correlations between estrogen and progesterone per ID \## work in progress
+
 # not really relevant because there can be correlation on a day-to-day level
+
 ```{r}
 ## below didn't work #question 
 # saliva_cycleday_merge_am$P4 <- as.numeric(saliva_cycleday_merge_am$P4)
@@ -315,7 +363,8 @@ regression_results <- hormones %>%
   
 ```
 
-#make graphs by ID for lab visit attentional bias 
+#make graphs by ID for lab visit attentional bias
+
 ```{r}
 
  #rename vars for easier graphing 
@@ -429,7 +478,8 @@ cycleday.am.merge %>%
 
 ```
 
-#graph lab visit attentional bias in aggregate 
+#graph lab visit attentional bias in aggregate
+
 ```{r}
 #bias to liquor - alc condition
 spaghetti_plot_liq_alc <- ggplot(cycleday.am.merge, aes(x = visitnum, y = t2dwliq, group = ID, color = as.factor(ID))) +
@@ -472,7 +522,8 @@ spaghetti_plot_neut_plac <- ggplot(cycleday.am.merge, aes(x = visitnum, y = t1dw
   theme(axis.text.x = element_blank()) 
 ```
 
-#graph change of change scores for attentional bias in placebo and alc conditions 
+#graph change of change scores for attentional bias in placebo and alc conditions
+
 ```{r}
 # to look at differences in change between bias scores in alcohol v placebo conditions 
 # create new column for change values in lab visit dataset (late fol - early fol)
@@ -548,8 +599,8 @@ more_attn_neut_plac_alc <- sum(labvisit$diff_neut_plac_min_alc > 0) #18
 
 ```
 
-
 ## JB: create hybridcycleday (one variable combining data surrounding LH and surrounding menses)
+
 ```{r}
 #create hybrid version of cycle day:
 df <- df %>%
@@ -679,8 +730,6 @@ data_cycleday_plot <- am_data_hybridcycleday %>%
 
 ```
 
-
-
 ```{r}
 
 
@@ -705,6 +754,7 @@ data_cycleday_plot %>% group_by(hybridcycleday) %>%
 ```
 
 ## JB: repeat prior block but on daycountLH to see if we get better coverage of the luteal phase
+
 ```{r}
 
 #person-mean-center: daycountLH
@@ -756,6 +806,7 @@ data_mensescountplot %>% group_by(cycleday) %>%
 ```
 
 ## troubleshoot the centering issue
+
 ```{r}
 
 am_data_cycleday %>% filter(ID=="101") %>% nrow()
@@ -809,6 +860,7 @@ cycleday.am.merge %>%
 ```
 
 ## can we person-center and plot one other var? maybe numdrinks?
+
 ```{r}
 
 #person-mean-center Urg_Alc on each specific day: NOTE, this only needs to be done if there are multiple of the same days per person
@@ -873,7 +925,9 @@ am_data_hybridcycleday %>%
   ylab("Person-Centered Alcohol Craving")
 
 ```
+
 ## cleaning hormone data
+
 ```{r}
 
 #rename vars
@@ -894,7 +948,8 @@ hormones <- hormones %>%
 
 ```
 
-## plot hormones 
+## plot hormones
+
 ```{r}
 
 hormones %>% 
@@ -908,7 +963,9 @@ hormones %>%
   xlab("sample number")
 
 ```
+
 ## code to save an individual plot of hormones for everyone!
+
 ```{r}
 
 ##TO DO: make a list of IDS called "ids"
@@ -938,7 +995,8 @@ for (i in ids) {
 }
 ```
 
-## Anna trying loop code above, didn't want to erase what Jordan made above 
+## Anna trying loop code above, didn't want to erase what Jordan made above
+
 ```{r}
 
 ##TO DO: make a list of IDS called "ids"
@@ -969,10 +1027,8 @@ for (i in ids) {
 }
 ```
 
+==== ALL EXAMPLE CODE BELOW ===== \## spaghetti plots by cycle phase (one line per person, person-centered)
 
-
-==== ALL EXAMPLE CODE BELOW =====
-## spaghetti plots by cycle phase (one line per person, person-centered)
 ```{r}
 RR_data_for_plot1a %>% 
   group_by(id, LH_cyclephasenames) %>%
@@ -994,8 +1050,8 @@ RR_data_for_plot1a %>%
   ylab("Person-Centered Prob. of Drinking")
 ```
 
-
 ## outcome by cycle phase (one line, person-centered)
+
 ```{r}
 RR_data_for_plot1a %>% 
   group_by(LH_cyclephasenames) %>%
@@ -1018,6 +1074,7 @@ RR_data_for_plot1a %>%
 ```
 
 ## outcome by day of week (one line, person-centered)
+
 ```{r}
 RR_data_for_plot1b <- etoh_data %>% group_by(id, dayofweek) %>% 
   filter(!is.na(dayofweek)) %>%
@@ -1044,6 +1101,7 @@ RR_PLOT1bpersoncentered_by_dayofweek_line <- RR_data_for_plot1b %>% group_by(day
 ```
 
 ## outcome by cycle day (one line, person-centered)
+
 ```{r}
 
 #create hybrid version of cycle day:
@@ -1131,7 +1189,9 @@ RR_PLOT1cpersoncentered_by_day_roll <-
 ```
 
 ## outcome by cycle day, separated by weekend and weekday (one line, person centered
+
 )
+
 ```{r}
 #plot 1d = weekendvsweekday
 RR_PLOT1dpersoncentered_by_day_roll <- etoh_data_cycleday %>% 
@@ -1200,6 +1260,7 @@ RR_PLOT1dpersoncentered_by_day_roll <- etoh_data_cycleday %>%
 ```
 
 ## plot hormone levels by person (one plot per id)
+
 ```{r}
 
 adhd_ky_bio %>% 
@@ -1228,4 +1289,3 @@ figfortheorypaper <- rollingavgs %>%
   theme_bw()+
   theme(legend.position = "bottom")
 ```
-
