@@ -197,6 +197,27 @@ geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid
                      values = c("E2" = "red", "H_LH" = "forestgreen", "H_P4" = "blue"), 
                      labels = c("Estrogen", "LH", "Progesterone"))
 
+## graph 165 manually  due to auto-scale issue due to very early lab visit 
+ID_165_plot <- saliva_cycleday_merge_am %>% 
+  filter(ID==165) %>% 
+ggplot() +
+  geom_line(aes(x = daterated, y = value, color = variable, group = variable)) +
+  geom_line(aes(x = daterated, y = E2*100, color = "E2")) +
+    scale_y_continuous(sec.axis = sec_axis(~./100, name="estradiol")) +
+  labs(x = "date", y = "hormone level") +
+  geom_point(aes(x = daterated, y = value, color = variable, group = variable)) +
+  scale_x_date(limits = c(as.Date("2022-08-22"), as.Date("2022-09-30")), date_labels = "%Y-%m-%d") +
+       geom_point(aes(x = daterated, y = E2*100, color = "E2")) +
+  theme_minimal() + 
+  ggtitle("165",
+          subtitle = "red line = menses onset, green line = pos LH test") +
+  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "forestgreen") +
+  geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dashed", color = "maroon") +
+  geom_vline(aes(xintercept=ifelse(visitnum==2, daterated, NA)), linetype = "solid", color = "black") +
+  scale_color_manual(name = "Legend",
+                     values = c("E2" = "red", "H_LH" = "forestgreen", "H_P4" = "blue"), 
+                     labels = c("Estrogen", "LH", "Progesterone"))
+
 --- ##working plot - question - Error: object 'ovpos' not found #add lab visit dates to this
 #     saliva_cycleday_merge_am %>% 
 #   filter(ID==101) %>% 
