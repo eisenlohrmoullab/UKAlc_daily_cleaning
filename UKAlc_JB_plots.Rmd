@@ -124,6 +124,33 @@ geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid
   geom_vline(aes(xintercept=ifelse(visitnum==2, daterated, NA)), linetype = "solid", color = "black") +   scale_color_manual(name = "Legend",
                      values = c("E2" = "red", "H_LH" = "forestgreen", "H_P4" = "blue"), 
                      labels = c("Estrogen", "LH", "Progesterone"))
+## working below 
+
+Second.Menses.Date <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/01_raw_data/second.menses.cleaned.AP.csv")
+
+# merge second menses date column into dataset 
+saliva_cycleday_merge_am <- merge(saliva_cycleday_merge_am, Second.Menses.Date, by = c("ID", "daterated"), all = T)
+
+
+
+ID_101_plot <- saliva_cycleday_merge_am %>% 
+  filter(ID==101) %>% 
+ggplot() +
+  geom_line(aes(x = daterated, y = value, color = variable, group = variable)) +
+  geom_line(aes(x = daterated, y = E2*100, color = "E2")) +
+    scale_y_continuous(sec.axis = sec_axis(~./100, name="estradiol")) +
+  labs(x = "date", y = "hormone level") +
+  geom_point(aes(x = daterated, y = value, color = variable, group = variable)) +
+       geom_point(aes(x = daterated, y = E2*100, color = "E2")) +
+  theme_minimal() + 
+  ggtitle("101",
+          subtitle = "red line = menses onset, green line = pos LH test") +
+  geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "forestgreen") +
+  geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dashed", color = "maroon") +
+geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid", color = "black") +
+  geom_vline(aes(xintercept=ifelse(visitnum==2, daterated, NA)), linetype = "solid", color = "black") +   scale_color_manual(name = "Legend",
+                     values = c("E2" = "red", "H_LH" = "forestgreen", "H_P4" = "blue"), 
+                     labels = c("Estrogen", "LH", "Progesterone"))
 ```
 
 ## graph 152 due to auto-scale issue
@@ -1061,7 +1088,7 @@ for (i in ids) {
 }
 ```
 
-==== ALL EXAMPLE CODE BELOW ===== \## spaghetti plots by cycle phase (one line per person, person-centered)
+==== ALL EXAMPLE CODE BELOW ===== ## spaghetti plots by cycle phase (one line per person, person-centered)
 
 ```{r}
 RR_data_for_plot1a %>% 
