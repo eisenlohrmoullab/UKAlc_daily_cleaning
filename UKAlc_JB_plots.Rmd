@@ -35,6 +35,9 @@ hormones <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Fold
 cycleday.am.merge <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/Cycle_Day_LH_menses_am_labvisit.csv")
 
 labvisit <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_LABVISITS/03_cleaned_data/labvisit_cleaned_AP.csv")  # cleaned dataset of lab visit values 
+
+Second.Menses.Date <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/01_raw_data/second.menses.cleaned.AP.csv")
+
 ```
 
 ##JB: data wrangling to plot firstdayofperiod
@@ -64,6 +67,35 @@ cycleday.am.merge <- cycleday.am.merge %>%
 
 
 
+```
+
+# AP data wrangling for Second.Period.Start.Date 
+```{r}
+# maybe merge second menses date column into dataset 
+# 26 participants have a second period start date 
+saliva_cycleday_merge_am <- merge(saliva_cycleday_merge_am, Second.Menses.Date, by = c("ID"), all = T) ## question - start here on how to bundle second.menses w/ date -- look at first period start date for this  
+
+cycleday.am.merge %>% filter(ID == 148) %>%
+  select(ID, daterated, Second.Period.Start.Date) %>% print(n=28)
+
+
+#first problem is that "Period.Start.Date" is just a text entry in one random row, not in the long format of dataset
+cycleday.am.merge$Second.Period.Start.Date <- as.Date(cycleday.am.merge$Second.Period.Start.Date, format = "%m/%d/%y")
+
+cycleday.am.merge <- cycleday.am.merge %>%
+  group_by(ID) %>%
+  #this step fills in the rows starting from the Period.Start.Date until the end of the daterated
+  complete(daterated = seq(min(coalesce(Second.Period.Start.Date, min(daterated, na.rm = TRUE))),
+                           max(daterated, na.rm = TRUE),
+                           by = "1 day")) %>%
+  #this step fills Period.Start.Date by ID, since one person's period start date is a trait-level variable
+  fill(Second.Period.Start.Date, .direction = "updown") %>%
+  #switch to rowwise instead of grouped df for next step
+  rowwise() %>%
+  #now edit firstdayofperiod 0-1 variable to say that if we get to a row where the daterated matches the reported Period.Start.Date, make firstdayofperiod==1, otherwise keep it as it was
+  mutate(firstdayofsecondperiod= ifelse(daterated==Second.Period.Start.Date, 1, firstdayofsecondperiod)) %>%
+  #get rid of all the rows of daterated that don't fit between first Period.Start.Date and end of study
+  filter(!is.na(daterated))
 ```
 
 ## plot daily hormones, lab visit data against period start date and ov date for verification
