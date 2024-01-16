@@ -1,5 +1,5 @@
 ---
-title: "UKAlc_Merging_Descriptives"
+title: "UKAlc_Daily_Lab_Cycle_Merge"
 author: "Anna Patterson"
 date: "2024-01-16"
 output: html_document
@@ -246,3 +246,68 @@ cycleday.am.merge %>%
 
 
 ```                                             
+
+#edit days that got double-counted
+```{r}
+
+cycleday.am.merge  <- cycleday.am.merge  %>%
+  #if perimenstrual by firstdayofperiod and midfol by pre-LH count are both 1, perimen wins, make midfol=0
+  mutate(midfol_LH = case_when(perimenstrual_LH==1 ~ 0,
+                                        TRUE ~ midfol_LH)) 
+
+#review midlut and perimens overlaps - can override midluteal with perimens IF luteal phase is short but still seems normal (such as 9-10 days)
+## make notes of any SUPER short luteal phases (like 4-5 days) that you might want to flag for anovulation
+cycleday.am.merge %>% filter(midluteal_LH==1 & perimenstrual_LH==1) %>% 
+  select(ID, daterated, daycountLH, cycleday, midluteal_LH, perimenstrual_LH)
+
+#code for if you are ready to override midluteals with perimens
+cycleday.am.merge  <- cycleday.am.merge  %>%
+  #if perimenstrual by firstdayofperiod and midlut by count after LH test are both 1, perimen wins, make midlut=0
+  mutate(midluteal_LH = case_when(perimenstrual_LH==1 ~ 0,
+                                        TRUE ~ midluteal_LH)) 
+
+## ANY OTHER COMBOS need hand review!!
+
+#good practice to review again and ensure that dummy code is fixed
+cycleday.am.merge %>%
+  group_by(periov_LH, earlylut_LH, midluteal_LH, perimenstrual_LH, midfol_LH) %>%
+  summarize(n=n())
+
+```
+
+```{r}
+
+cycleday.pm.merge  <- cycleday.pm.merge  %>%
+  #if perimenstrual by firstdayofperiod and midfol by pre-LH count are both 1, perimen wins, make midfol=0
+  mutate(midfol_LH = case_when(perimenstrual_LH==1 ~ 0,
+                                        TRUE ~ midfol_LH)) 
+
+#review midlut and perimens overlaps - can override midluteal with perimens IF luteal phase is short but still seems normal (such as 9-10 days)
+## make notes of any SUPER short luteal phases (like 4-5 days) that you might want to flag for anovulation
+cycleday.pm.merge %>% filter(midluteal_LH==1 & perimenstrual_LH==1) %>% 
+  select(ID, daterated, daycountLH, cycleday, midluteal_LH, perimenstrual_LH)
+
+#code for if you are ready to override midluteals with perimens
+cycleday.pm.merge  <- cycleday.pm.merge  %>%
+  #if perimenstrual by firstdayofperiod and midlut by count after LH test are both 1, perimen wins, make midlut=0
+  mutate(midluteal_LH = case_when(perimenstrual_LH==1 ~ 0,
+                                        TRUE ~ midluteal_LH)) 
+
+## ANY OTHER COMBOS need hand review!!
+
+#good practice to review again and ensure that dummy code is fixed
+cycleday.pm.merge %>%
+  group_by(periov_LH, earlylut_LH, midluteal_LH, perimenstrual_LH, midfol_LH) %>%
+  summarize(n=n())
+
+```     
+
+## save new cycle day am and pm files 
+```{r}
+cycleday.am.merge %>% write.csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace/Cycleday.am.LH.menses.data.csv")
+```
+
+
+#as factor for each variable, then rename levels as factors - update data dictionary so you know max/min when factoring. Then do as numeric. It may automatically do numeric but double-check. 
+#Calculate luteal phase by subtracting the period start date column by posov_pred column but group by person first! 
+
