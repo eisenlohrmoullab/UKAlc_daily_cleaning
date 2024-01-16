@@ -312,6 +312,12 @@ cycleday.pm.merge %>%
 
 ```     
 
+# Add new column for second period start date 
+```{r}
+Second.Menses.Date <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/01_raw_data/Participants With Second Period Start Date.csv")
+```
+
+
 ## save new cycle day am and pm files 
 ```{r}
 cycleday.am.merge %>% write.csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace/Cycleday.am.LH.menses.data.csv")
