@@ -325,7 +325,7 @@ Second.Menses.Date$secondmenses <- 1
 write.csv(Second.Menses.Date, "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/01_raw_data/second.menses.cleaned.AP.csv", row.names=TRUE)
 
 #Remove NAs (participants with only one menses start date)
-Second.Menses.Date <- Second.Menses.Date[complete.cases(Second.Menses.Date), ]    
+Second.Menses.Date <- Second.Menses.Date[complete.cases(Second.Menses.Date), ]  # maybe add if you can still merge by ID  
 ```
 
 
