@@ -129,12 +129,10 @@ geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid
 Second.Menses.Date <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/01_raw_data/second.menses.cleaned.AP.csv")
 
 # merge second menses date column into dataset 
-saliva_cycleday_merge_am <- merge(saliva_cycleday_merge_am, Second.Menses.Date, by = c("ID", "daterated"), all = T)
+saliva_cycleday_merge_am <- merge(saliva_cycleday_merge_am, Second.Menses.Date, by = c("ID"), all = T) ## question - start here on how to bundle second.menses w/ date -- look at first period start date for this 
 
-
-
-ID_101_plot <- saliva_cycleday_merge_am %>% 
-  filter(ID==101) %>% 
+ID_182_plot <- saliva_cycleday_merge_am %>% 
+  filter(ID==182) %>% 
 ggplot() +
   geom_line(aes(x = daterated, y = value, color = variable, group = variable)) +
   geom_line(aes(x = daterated, y = E2*100, color = "E2")) +
@@ -143,10 +141,11 @@ ggplot() +
   geom_point(aes(x = daterated, y = value, color = variable, group = variable)) +
        geom_point(aes(x = daterated, y = E2*100, color = "E2")) +
   theme_minimal() + 
-  ggtitle("101",
+  ggtitle("182",
           subtitle = "red line = menses onset, green line = pos LH test") +
   geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "forestgreen") +
   geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dashed", color = "maroon") +
+    geom_vline(aes(xintercept=ifelse(second.menses==1, daterated, NA)), linetype = "dashed", color = "maroon") +
 geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid", color = "black") +
   geom_vline(aes(xintercept=ifelse(visitnum==2, daterated, NA)), linetype = "solid", color = "black") +   scale_color_manual(name = "Legend",
                      values = c("E2" = "red", "H_LH" = "forestgreen", "H_P4" = "blue"), 
