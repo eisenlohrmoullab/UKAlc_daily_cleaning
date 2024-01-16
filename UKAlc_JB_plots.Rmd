@@ -124,9 +124,10 @@ geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid
   geom_vline(aes(xintercept=ifelse(visitnum==2, daterated, NA)), linetype = "solid", color = "black") +   scale_color_manual(name = "Legend",
                      values = c("E2" = "red", "H_LH" = "forestgreen", "H_P4" = "blue"), 
                      labels = c("Estrogen", "LH", "Progesterone"))
+```
 
 ## graph 152 due to auto-scale issue
-
+```{r}
 #### make daterated ymd for easier graphing 
 saliva_cycleday_merge_am$daterated <- ymd(saliva_cycleday_merge_am$daterated)
 
@@ -150,7 +151,12 @@ ggplot() +
                      values = c("E2" = "red", "H_LH" = "forestgreen", "H_P4" = "blue"), 
                      labels = c("Estrogen", "LH", "Progesterone"))
 
+```
+
 ## manually graph 125 in 2 parts due to long break in study days
+```{r}
+#### make daterated ymd for easier graphing 
+saliva_cycleday_merge_am$daterated <- ymd(saliva_cycleday_merge_am$daterated)
 ### part 1 
 ID_125_plot_1 <- saliva_cycleday_merge_am %>% 
   filter(ID==125) %>% 
@@ -197,7 +203,10 @@ geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid
                      values = c("E2" = "red", "H_LH" = "forestgreen", "H_P4" = "blue"), 
                      labels = c("Estrogen", "LH", "Progesterone"))
 
+```
+
 ## graph 165 manually  due to auto-scale issue due to very early lab visit 
+```{r}
 ID_165_plot <- saliva_cycleday_merge_am %>% 
   filter(ID==165) %>% 
 ggplot() +
@@ -218,7 +227,12 @@ ggplot() +
                      values = c("E2" = "red", "H_LH" = "forestgreen", "H_P4" = "blue"), 
                      labels = c("Estrogen", "LH", "Progesterone"))
 
---- ##working plot - question - Error: object 'ovpos' not found #add lab visit dates to this
+```
+
+
+##working plot - question - Error: object 'ovpos' not found #add lab visit dates to this
+```{r}
+
 #     saliva_cycleday_merge_am %>% 
 #   filter(ID==101) %>% 
 # ggplot() +
@@ -247,8 +261,7 @@ ggplot() +
 #              vjust = 1) 
 ```
 
-#make list and perform graphing function on all IDs
-
+# Make list and perform graphing function for saliva hormone w/ ovpos and menseson all IDs
 ```{r}
 #make list of IDs for which to graph hormone data 
 #omitted IDs 104, 110, 111, 116, 120, 142, 144, 153, 158 for insufficient data 
@@ -326,7 +339,7 @@ geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid
 
 ```
 
-# calculate correlations between estrogen and progesterone per ID \## work in progress
+# calculate correlations between estrogen and progesterone per ID ## work in progress
 
 # not really relevant because there can be correlation on a day-to-day level
 
