@@ -320,7 +320,10 @@ Second.Menses.Date$Second.Period.Start.Date <- mdy(Second.Menses.Date$Second.Per
 
 #Add new column for presence of second menses start date 
 Second.Menses.Date <- Second.Menses.Date %>%
-  mutate(second.menses = ifelse(!is.na(Second.Period.Start.Date), 1, 0))
+  mutate(second.menses = ifelse(!is.na(Second.Period.Start.Date), 1, 0)) 
+
+#Rename Second.Period.Start.Date to daterated for easier merging with subsequent datasets 
+Second.Menses.Date$daterated <- Second.Menses.Date$Second.Period.Start.Date
 
 #Save second menses start date data 
 write.csv(Second.Menses.Date, "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/01_raw_data/second.menses.cleaned.AP.csv", row.names=TRUE)
