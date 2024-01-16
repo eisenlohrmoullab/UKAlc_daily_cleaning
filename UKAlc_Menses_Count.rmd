@@ -90,5 +90,75 @@ df %>% filter(cycleday==0) %>% pull(id)
 
 ```
 
+# Repeat above for Second.Period.Start.Date
+```{r}
+dat$firstdayofsecondperiod <- 1 
+
+dat$daterated <- dat$Second.Period.Start.Date
+
+dat$daterated <- mdy(dat$daterated)
+dat$Second.Period.Start.Date <- mdy(dat$Second.Period.Start.Date)
+
+#Fill in missing days by ID 
+df <- dat %>% group_by(ID) %>% #question - getting error message 
+  complete(daterated = seq.Date((Second.Period.Start.Date)-15, max(Second.Period.Start.Date)+14, by = "day"))
+
+df$cycleday <- ifelse(df$firstdayofsecondperiod == 1, 1, 0)
+
+#make A the variable where period starts
+df$A2 <- df$cycleday2
+
+cycleCount <- function(x) {
+  #Get the index of 1
+  inds <- which(x == 1)
+  if(!length(inds)) return(0) 
+  #Create a sequence with that index as 0
+  num <- lapply(inds, function(i) {
+    num <- seq_along(x) - i
+    #Add 1 to values greater than equal to 0
+    num[num >= 0] <- num[num >= 0] + 1
+    num[num < -15 | num > 10] <- NA #jb changed days here 8/24/21
+    num
+  })
+  #Select the first non-NA values from the sequence
+  do.call(coalesce, num)
+}
+
+
+cycleCountw0 <- function(x) {
+  #Get the index of 1
+  inds <- which(x == 1)
+  if(!length(inds)) return(0) 
+  #Create a sequence with that index as 0
+  num <- lapply(inds, function(i) {
+    num <- seq_along(x) - i
+    #Add 1 to values greater than equal to 0
+    #[num > 0] <- num[num > 0] 
+    num[num < -15] <- NA
+    num[num > 10] <- NA
+    num
+  })
+  #Select the first non-NA values from the sequence
+  do.call(coalesce, num)
+}
+
+
+
+
+
+
+#rename Subject.Number to id 
+names(df)[names(df) == "Subject.Number"  ] <- "id"
+
+df <- df %>% group_by(id) %>% 
+  mutate(cycleday = cycleCount(A))
+
+df <- df %>% select(!A)
+
+df <- df %>% group_by(id) %>% 
+  mutate(cycledaywzero = cycleCountw0(firstdayofperiod))
+
+df %>% filter(cycleday==0) %>% pull(id)
+```
 
 
