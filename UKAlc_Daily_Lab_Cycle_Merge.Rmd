@@ -5,6 +5,16 @@ date: "2024-01-16"
 output: html_document
 ---
 
+# Load Libraries 
+```{r}
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(janitor)
+library(lubridate) 
+library(ggplot2)
+```
 
 # Add in study day variable 
 ```{r}
