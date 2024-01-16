@@ -73,27 +73,27 @@ cycleday.am.merge <- cycleday.am.merge %>%
 ```{r}
 # maybe merge second menses date column into dataset 
 # 26 participants have a second period start date 
-saliva_cycleday_merge_am <- merge(saliva_cycleday_merge_am, Second.Menses.Date, by = c("ID"), all = T) ## question - start here on how to bundle second.menses w/ date -- look at first period start date for this  
+cycleday.am.merge <- merge(cycleday.am.merge, Second.Menses.Date, by = c("ID", "daterated"), all = T) ## question - start here on how to bundle second.menses w/ date -- look at first period start date for this  
 
 cycleday.am.merge %>% filter(ID == 148) %>%
-  select(ID, daterated, Second.Period.Start.Date) %>% print(n=28)
+  select(ID, daterated, second.menses) %>% print(n=60)
 
 
 #first problem is that "Period.Start.Date" is just a text entry in one random row, not in the long format of dataset
-cycleday.am.merge$Second.Period.Start.Date <- as.Date(cycleday.am.merge$Second.Period.Start.Date, format = "%m/%d/%y")
+cycleday.am.merge$Second.Period.Start.Date.y <- as.Date(cycleday.am.merge$Second.Period.Start.Date.y, format = "%m/%d/%y")
 
 cycleday.am.merge <- cycleday.am.merge %>%
   group_by(ID) %>%
   #this step fills in the rows starting from the Period.Start.Date until the end of the daterated
-  complete(daterated = seq(min(coalesce(Second.Period.Start.Date, min(daterated, na.rm = TRUE))),
+  complete(daterated = seq(min(coalesce(Second.Period.Start.Date.y, min(daterated, na.rm = TRUE))),
                            max(daterated, na.rm = TRUE),
                            by = "1 day")) %>%
   #this step fills Period.Start.Date by ID, since one person's period start date is a trait-level variable
-  fill(Second.Period.Start.Date, .direction = "updown") %>%
+  fill(Second.Period.Start.Date.y, .direction = "updown") %>%
   #switch to rowwise instead of grouped df for next step
   rowwise() %>%
   #now edit firstdayofperiod 0-1 variable to say that if we get to a row where the daterated matches the reported Period.Start.Date, make firstdayofperiod==1, otherwise keep it as it was
-  mutate(firstdayofsecondperiod= ifelse(daterated==Second.Period.Start.Date, 1, firstdayofsecondperiod)) %>%
+  mutate(second.menses= ifelse(daterated==Second.Period.Start.Date.y, 1, second.menses)) %>%
   #get rid of all the rows of daterated that don't fit between first Period.Start.Date and end of study
   filter(!is.na(daterated))
 ```
@@ -163,8 +163,8 @@ Second.Menses.Date <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (L
 # merge second menses date column into dataset 
 saliva_cycleday_merge_am <- merge(saliva_cycleday_merge_am, Second.Menses.Date, by = c("ID"), all = T) ## question - start here on how to bundle second.menses w/ date -- look at first period start date for this 
 
-ID_182_plot <- saliva_cycleday_merge_am %>% 
-  filter(ID==182) %>% 
+ID_148_plot <- saliva_cycleday_merge_am %>% 
+  filter(ID==148) %>% 
 ggplot() +
   geom_line(aes(x = daterated, y = value, color = variable, group = variable)) +
   geom_line(aes(x = daterated, y = E2*100, color = "E2")) +
