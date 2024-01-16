@@ -152,16 +152,12 @@ ggplot() +
           subtitle = "red line = menses onset, green line = pos LH test") +
   geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "forestgreen") +
   geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dashed", color = "maroon") +
+   geom_vline(aes(xintercept=ifelse(second.menses==1, daterated, NA)), linetype = "dashed", color = "maroon") +
 geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid", color = "black") +
   geom_vline(aes(xintercept=ifelse(visitnum==2, daterated, NA)), linetype = "solid", color = "black") +   scale_color_manual(name = "Legend",
                      values = c("E2" = "red", "H_LH" = "forestgreen", "H_P4" = "blue"), 
                      labels = c("Estrogen", "LH", "Progesterone"))
-## working below 
-
-Second.Menses.Date <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/01_raw_data/second.menses.cleaned.AP.csv")
-
-# merge second menses date column into dataset 
-saliva_cycleday_merge_am <- merge(saliva_cycleday_merge_am, Second.Menses.Date, by = c("ID"), all = T) ## question - start here on how to bundle second.menses w/ date -- look at first period start date for this 
+## working below to add second period start date 
 
 ID_148_plot <- saliva_cycleday_merge_am %>% 
   filter(ID==148) %>% 
@@ -345,7 +341,8 @@ for (i in ids) {
   ggtitle(i,
           subtitle = "dotted line = menses onset, dashed line = posLH test") +
   geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "green") +
-  geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dotted", color = "maroon") 
+  geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dotted", color = "maroon") +
+      geom_vline(aes(xintercept=ifelse(second.menses==1, daterated, NA)), linetype = "dashed", color = "maroon") 
   
   #save the plot we just made into the list
   plots[[i]] <- plot
@@ -382,6 +379,7 @@ ggplot() +
           subtitle = "red line = menses onset, green line = posLH test") +
   geom_vline(aes(xintercept=ifelse(ovpos==1, daterated, NA)), linetype = "dashed", color = "forestgreen") +
   geom_vline(aes(xintercept=ifelse(firstdayofperiod==1, daterated, NA)), linetype = "dashed", color = "maroon") +
+          geom_vline(aes(xintercept=ifelse(second.menses==1, daterated, NA)), linetype = "dashed", color = "maroon") +
 geom_vline(aes(xintercept=ifelse(visitnum==1, daterated, NA)), linetype = "solid", color = "black") +
   geom_vline(aes(xintercept=ifelse(visitnum==2, daterated, NA)), linetype = "solid", color = "black") +   scale_color_manual(name = "Legend",
                      values = c("E2" = "red", "H_LH" = "forestgreen", "H_P4" = "blue"), 
