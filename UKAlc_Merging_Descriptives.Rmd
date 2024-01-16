@@ -40,7 +40,7 @@ library(readxl)
 # pm_rc <- read.csv("C:/Users/anish/Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_REDCap_csv.csv")
 
 
-#Anna's Paths (jb updated to ~)
+#Mac Paths 
 
 am_qual <- read.csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/AM_Qualtrics_csv.csv")
 
@@ -51,9 +51,9 @@ am_rc <- read.csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders
 pm_rc <- read.csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/PM_REDCap_csv.csv")
 ```
 
-ID's in am_qual: 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 126
+IDs in am_qual: 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 126
 
-ID's in a_rc: [1] "123"       "124"       "125"       "125b"      "125c"      "125d"      "127"       "127 (new)" "128"      
+IDss in am_rc: [1] "123"       "124"       "125"       "125b"      "125c"      "125d"      "127"       "127 (new)" "128"      
 [10] "129"       "130"       "131"       "132"       "133"       "134"       "134b"      "135"       "136"      
 [19] "138"       "139"       "139b"      "140"       "141"       "142"       "142b"      "143"       "144"      
 [28] "145"       "146"       "147"       "148"       "149"       "150"       "152"       "153"       "154"      
@@ -62,9 +62,9 @@ ID's in a_rc: [1] "123"       "124"       "125"       "125b"      "125c"      "1
 [55] "171"       "172"       "173"       "174"       "175"       "176"       "177"       "178"       "179"      
 [64] "180"       "181"       "182"       "183"       "184"       "185"   
 
-ID's in pm_qual: 101 102 103 104 105 106 107 108 109 111 112 113 114 115 116 117 118 119 120 121 122 126 
+IDs in pm_qual: 101 102 103 104 105 106 107 108 109 111 112 113 114 115 116 117 118 119 120 121 122 126 
 
-ID's in pm_rc: [1] "123"       "124"       "125"       "125b"      "125c"      "125d"      "127"       "127 (new)" "128"      
+IDs in pm_rc: [1] "123"       "124"       "125"       "125b"      "125c"      "125d"      "127"       "127 (new)" "128"      
 [10] "129"       "130"       "131"       "132"       "133"       "134"       "134b"      "135"       "136"      
 [19] "138"       "139"       "139b"      "140"       "141"       "142"       "142b"      "143"       "144"      
 [28] "145"       "146"       "147"       "148"       "149"       "150"       "152"       "153"       "154"      
@@ -74,16 +74,15 @@ ID's in pm_rc: [1] "123"       "124"       "125"       "125b"      "125c"      "
 [64] "180"       "181"       "182"       "183"       "184"       "185"    
 
 
-
-#IDs in am qualtrics are numerical, IDs in rc are string form -- letters at end of some IDs indicate different sessions of same participant 
+# Merge qualtrics and redcap datasets by am and pm 
+## IDs in am qualtrics are numerical, IDs in rc are string form -- letters at end of some IDs indicate different sessions of same participant 
 ```{r}
 am_data <- merge(am_qual, am_rc, by = c("ID", "DateTime"), all = T)
 
 pm_data <- merge(pm_qual, pm_rc, by = c("ID", "DateTime"), all = T)
-
 ```
-#view overlap between am and pm data 
-#See how many unique IDs are in each dataset 
+
+# View overlap between am and pm data and see how many unique IDs are in each dataset 
 ```{r}
 intersect(am_data$ID, pm_data$ID)
 
@@ -96,29 +95,30 @@ am_data$ID <- gsub("[^0-9.-]", "", am_data$ID)
 pm_data$ID <- gsub("[^0-9.-]", "", pm_data$ID)
 
 #seeing how many IDs are in each data set, viewed the output and saw they included NA in the calculation, so subtracted 1 from final calculation 
-length(unique(am_data$ID))
-length(unique(pm_data$ID))
+length(unique(am_data$ID)) # 83 unique IDs in am_data
+length(unique(pm_data$ID)) # 82 unique IDs in pm_data 
+# after correcting for duplicates, we have n = 78 for daily survey data 
 ```
 
-#Before correcting for duplicates, we have n = 83 for am data and n = 82 for pm data 
-#After correcting for duplicates, we have n = 78 for daily survey data 
-
+# Separate datetime variable 
 ```{r}
-#separate datetime variable 
 am_data[c('daterated', 'time')] <- str_split_fixed(am_data$DateTime, ' ', 2)
 pm_data[c('daterated', 'time')] <- str_split_fixed(pm_data$DateTime, ' ', 2)
 ```
 
+# Change time character to a time-realized variable 
 ```{r}
-#first step change time character to a time-realized variable 
 pm_data$time <- lubridate::hm(pm_data$time)
 pm_data$daterated <- lubridate::mdy(pm_data$daterated)
+```
 
-#flag observations that were done before 12pm 
+# Flag observations that were done before 12pm 
+```{r}
 pm_data <- pm_data %>% mutate(pm_data, b4noon = ifelse(time < lubridate::hm("12:00"),1, 0)) 
+```
 
-#if b4noon = 1, change pm_data$daterated - 1
-
+# If pm survey filled out before noon, assign to day prior 
+```{r}
 pm_data <- pm_data %>%
   mutate(daterated = case_when(
     b4noon == 1 ~ daterated -1,
@@ -126,16 +126,15 @@ pm_data <- pm_data %>%
   ))
 ```
 
+# Transform daterated into a date variable and remove DateTime column 
 ```{r}
-#Transform daterated into a date variable in am_data as well so R can recognize as date variable
-
 am_data$daterated <- lubridate::mdy(am_data$daterated)
 
-#Remove DateTime column from df 
 am_data = subset(am_data, select = -c(DateTime))
-
 ```
 
+# Replace blank responses with NA so that NA and blank are coded the same for subsequent analysis 
+# Consolidate xy variable names that existed as a byproduct of merging the two datasets with the same column names
 ```{r}
 replace_empty_with_na <- function(data) {
   data %>% mutate_if(is.character, ~ ifelse(. == "", NA, .))
@@ -164,15 +163,15 @@ xymerge <- function(dat) {
   # Return the updated data frame
   return(dat)
 }
-#replace empty with NA so they're coded the same for subsequent functions 
+# replace empty with NA 
 am_data <- replace_empty_with_na(am_data)
 pm_data <- replace_empty_with_na(pm_data)
-#consolidate xy variable names that existed as a byproduct of merging the two datasets with the same column names
+#consolidate xy variable names 
 am_data <- xymerge(am_data)
 pm_data <- xymerge(pm_data)
 ```
 
-#relocate daterated to be after ID and remove time column 
+# Relocate daterated to be after ID and remove time column 
 ```{r}
 am_data <- am_data %>% 
   relocate(daterated, .after = ID) 
@@ -180,15 +179,15 @@ pm_data <- pm_data %>%
   relocate(daterated, .after = ID) 
 ```
 
+# Add _am and _pm suffixes to each dataset 
 ```{r}
-#Add _am and _pm suffixes to each dataset 
 colnames(am_data) <- paste(colnames(am_data), "am", sep="_")
 
 colnames(pm_data) <- paste(colnames(pm_data), "pm", sep="_")
 ```
 
+# Rename daterated and ID to drop the _am and _pm suffixes 
 ```{r}
-#rename daterated and ID to drop the _am and _pm suffixes 
 colnames(am_data)[colnames(am_data) == "daterated_am"] ="daterated"
 colnames(pm_data)[colnames(pm_data) == "daterated_pm"] ="daterated"
 
@@ -196,27 +195,25 @@ colnames(am_data)[colnames(am_data) == "ID_am"] ="ID"
 colnames(pm_data)[colnames(pm_data) == "ID_pm"] ="ID"
 ```
 
-#Remove rows where everything is NA except daterated, time, and ID
+# Remove rows where everything is NA except daterated, time, and ID
 ```{r}
 am_data <- am_data %>% drop_na(daterated, ID)
 pm_data <- pm_data %>% drop_na(daterated, ID)
 ```
 
-#Remove X_pm column from pm_data 
+# Remove X_pm column from pm_data 
 ```{r}
 pm_data = subset(pm_data, select=-c(X_pm))
 ```
 
-#drop ID 127 per Annie Griffith's recommendation (not much data for this ID)
+# Drop ID 127 per Annie Griffith's recommendation (not much data for this ID)
 ```{r}
-
 am_data <- subset(am_data, ID != 127)
 
 pm_data <- subset(pm_data, ID != 127)
-
 ```
 
-#Find Duplicates in Dates per ID for am_data
+# Find Duplicates in Dates per ID for am_data
 ```{r}
 result.am <- am_data %>%
   group_by(ID, daterated) %>%
@@ -233,7 +230,7 @@ dupdate_pm <- subset(result.pm, observations != 1)
 dupdate_pm
 ```
 
-#Remove am_data rows so that we no longer have >1 submission per am or pm data per date. Kept earliest timestamp if all submissions are identical, or kept most complete form if some are more completed than others. 
+# Remove am_data rows so that we no longer have >1 submission per am or pm data per date. Kept earliest timestamp if all submissions are identical, or kept most complete form if some are more completed than others. 
 ```{r}
 #remove duplicates for 106 on 2021-05-09 
 am_data %>%
@@ -359,7 +356,7 @@ am_data <- am_data[!(am_data$ID == 180 & am_data$daterated == "2023-03-26" & am_
 am_data <- am_data[!(am_data$ID == 181 & am_data$daterated == "2023-03-22" & am_data$time_am == "13:46"), ] 
 ```
 
-#Remove pm_data rows so that we no longer have >1 submission per am or pm data per date. Kept earliest timestamp if all submissions are identical, or kept most complete form if some are more completed than others.
+# Remove pm_data rows so that we no longer have >1 submission per am or pm data per date. Kept earliest timestamp if all submissions are identical, or kept most complete form if some are more completed than others.
 ```{r}
 #use this code to filter data pm_data %>%
   #filter(ID == x & daterated == ymd("x"))
@@ -446,19 +443,19 @@ pm_data <- pm_data[!(pm_data$ID == 181 & pm_data$daterated == "2023-03-22" & pm_
 pm_data <- pm_data[!(pm_data$ID == 185 & pm_data$daterated == "2023-05-29" & pm_data$time_pm == "23H 34M 0S"), ]
 ```
 
-### create new column for presence or absence of drinking in am dataset 
+# Create new column for presence or absence of drinking in am dataset 
 ```{r}
 am_data <- am_data %>%
   mutate(drink_today_am = ifelse(Alc_Amt_am == 0, 0, 1)) 
 ```
 
-### create new column for presence or absence of heavy drinking (> or eq to 4 in one day) in am dataset 
+# Create new column for presence or absence of heavy drinking (> or eq to 4 in one day) in am dataset 
 ```{r}
 am_data <- am_data %>%
   mutate(heavy_drink_am = ifelse(Alc_Amt_am >= 4, 1, 0))
 ```
 
-### identify how many people drank alcohol throughout the study 
+# Identify how many people drank alcohol throughout the study 
 ```{r}
 summary_Alc_daily <- am_data %>% group_by(ID) %>% 
   summarize(drink_today_am = n(),
@@ -479,7 +476,7 @@ am_data %>% group_by(ID) %>%
   filter(Alc_Amt_am >= 4) 
 ```
 
-### create person means, person deviations and 3 day rolling avg for am_data
+# AM Data person means, person deviations and 3 day rolling avg 
 ```{r echo=T}
 #create person means
 
@@ -547,7 +544,7 @@ am_data <- create.3day.rolling.avg(am_data, Urg_Alc_am)
 
 ```
 
-#New column for day of week
+# New column for day of week
 ```{r}
 am_data <- am_data %>%
   mutate(DayOfWeek = wday(daterated, label = TRUE, abbr = TRUE))
@@ -557,14 +554,14 @@ am_data <- am_data %>%
 pm_data <- pm_data %>%
   mutate(DayOfWeek = wday(daterated, label = TRUE, abbr = TRUE))
 ```
-#Create Binge Drink Column
+# Create Binge Drink Column
 ```{r}
 #create binary variable for binge drink (>=4 drinks per day) 
 am_data <- am_data %>%
   mutate(BingeDrink_am = ifelse(Alc_Amt_am > 4, 1, 0)) 
 ```
 
-### pm data means, deviations, and rolling avg 
+# PM data means, deviations, and rolling avg 
 ```{r}
 #step 1: make variables numeric that aren't already 
 pm_data$Diff_Inhib_pm <- as.numeric(gsub("\\D", "", pm_data$Diff_Inhib_pm))
@@ -694,18 +691,18 @@ for (i in pm_vars_roll_list) {
 ```
 
 
-#Save cleaned files as csv files
+# Save cleaned files as csv files
 ```{r}
-write.csv(am_data, "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/am_data_cleaned_JB.csv", row.names=TRUE)
+write.csv(am_data, "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/am_data_cleaned_AP.csv", row.names=TRUE)
 
-write.csv(pm_data, "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/pm_data_cleaned.csv", row.names=TRUE)
+write.csv(pm_data, "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/pm_data_cleaned_AP.csv", row.names=TRUE)
 ```
 
-# add in study day variable 
+# Add in study day variable 
 ```{r}
-am_data_clean <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/am_data_cleaned.csv")
+am_data_clean <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/am_data_cleaned_AP.csv")
 
-pm_data_clean <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/pm_data_cleaned.csv")
+pm_data_clean <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/pm_data_cleaned_AP.csv")
 
 am_data_clean <- am_data_clean %>% group_by(ID) %>%
   mutate(day_in_study = seq(length = n())) 
