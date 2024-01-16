@@ -1,0 +1,248 @@
+---
+title: "UKAlc_Merging_Descriptives"
+author: "Anna Patterson"
+date: "2024-01-16"
+output: html_document
+---
+
+
+# Add in study day variable 
+```{r}
+am_data_clean <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/am_data_cleaned_AP.csv")
+
+pm_data_clean <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/03_cleaned_data/pm_data_cleaned_AP.csv")
+
+am_data_clean <- am_data_clean %>% group_by(ID) %>%
+  mutate(day_in_study = seq(length = n())) 
+
+pm_data_clean <- pm_data_clean %>% group_by(ID) %>%
+  mutate(day_in_study = seq(length = n())) 
+```
+
+#### Merge in lab visit data 
+
+```{r}
+#Lab Visit Data 
+labvisit <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_LABVISITS/01_raw_data/Mini Dataset 1.8.24.csv") 
+```
+
+## rename vars to match am_data and pm_data and delete irrelevant columns 
+```{r}
+names(labvisit)[names(labvisit) == "Subject"] <- "ID"
+labvisit <- subset(labvisit, select = -Weight)
+```
+
+## save cleaned file as csv 
+```{r}
+write.csv(labvisit, "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_LABVISITS/03_cleaned_data/labvisit_cleaned_AP.csv", row.names=TRUE)
+
+ labvisit <- read_csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_LABVISITS/03_cleaned_data/labvisit_cleaned_AP.csv")
+```
+
+## merge in lab visit dates 
+```{r} 
+#read csv for alcohol session dates as ordered by PHASE not sequential order 
+alc.visit.dates <- read_xlsx("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_LABVISITS/01_raw_data/Alc_Visits_By_Follicular_Phase.xlsx")
+
+#new column for presence of lab visit 
+alc.visit.dates$labvisit <- 1 
+
+labvisit <- merge(alc.visit.dates, labvisit, by = c("ID"), all = T) 
+#question - below isn't working 
+labvisit$Early Follicular Visit <- ymd(labvisit$Early Follicular Visit, na.rm = TRUE)
+labvisit$Late Follicular Visit <- ymd(labvisit$Late Follicular Visit, na.rm = TRUE)
+```
+
+## re-format 
+```{r}
+
+#make new df with early foll and late foll lab visit days 
+labvisit_EF <- labvisit %>% select(ID, starts_with("E1"))
+labvisit_LF <- labvisit %>% select(ID, starts_with("E2"))
+
+labvisit_EF <- labvisit_EF %>% rename_all(~ gsub("^E1", "", .))
+labvisit_LF <- labvisit_LF %>% rename_all(~ gsub("^E2", "", .))
+
+names(labvisit_EF)[names(labvisit_EF) == "S1"] <- "daterated"
+names(labvisit_LF)[names(labvisit_LF) == "S2"] <- "daterated"
+
+labvisit_EF$follphase <- 1 
+labvisit_LF$follphase <- 2
+
+labvisit_clean <- rbind(labvisit_EF, labvisit_LF) 
+
+labvisit_clean <- labvisit_clean %>% arrange(ID)
+```
+
+## merge file with daily data 
+```{r}
+labvisit.am.data.merge <- merge(labvisit_clean, am_data_clean, by = c("ID", "daterated"), all = T) #question - add daterated now 
+labvisit.pm.data.merge <- merge(labvisit_clean, pm_data_clean, by =c("ID", "daterated"), all = T)
+```
+
+## merge in salivary hormone data 
+```{r}
+hormones <- read_xlsx("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace/Salivary_Results_For_Import.xlsx")
+```
+
+#add "day in study column" for hormone data and save new csv 
+```{r}
+hormones <- separate(hormones, col = Sample, into = c("ID", "day_in_study"), sep = "-")
+
+write.csv(hormones, "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/02_data_prep_workspace/Salivary_Hormones_StudyDays.csv", row.names=TRUE)
+```
+
+# merge hormone data w am, pm, and lab visit data 
+```{r}
+am_data_clean_horm <- merge(labvisit.am.data.merge, hormones, by = c("ID", "day_in_study"), all = T)
+pm_data_clean_horm <- merge(labvisit.pm.data.merge, hormones, by = c("ID", "day_in_study"), all = T)
+```
+
+
+#Add in cycle day 
+```{r}
+
+cycle.day <- read.csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/UKAlc.Cycle.Day.csv")
+
+```
+
+#Merge in cycle day data 
+```{r}
+#use janitor package to make sure the 2 datasets can be merged
+#return=mismatch will return only columns that cannot merge
+
+cycle.day$daterated <- mdy(cycle.day$daterated)
+
+cycleday.am.merge <- merge(cycle.day, labvisit.am.data.merge, by = c("ID", "daterated"), all = T)
+cycleday.pm.merge <- merge(cycle.day, labvisit.pm.data.merge, by = c("ID", "daterated"), all = T)
+```
+#Add in LH Data
+```{r}
+LH.Count <- read.csv("~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_DAILY/02_data_prep_workspace/UKAlc.LH.Data.csv")
+
+LH.Count$daterated <- mdy(LH.Count$daterated)
+
+cycleday.am.merge <- merge(LH.Count, cycleday.am.merge, by = c("ID", "daterated"), all = T)
+cycleday.pm.merge <- merge(LH.Count, cycleday.pm.merge, by = c("ID", "daterated"), all = T)
+
+write_csv(cycleday.am.merge, "Cycle_Day_LH_menses_am_labvisit.csv")
+write_csv(cycleday.pm.merge, "Cycle_Day_LH_menses_pm_labvisit.csv")
+```
+
+
+```{r cyclephase_count}
+
+cycleday.am.merge <- cycleday.am.merge %>% 
+  mutate(midluteal_count = ifelse(cycleday >= -9 & cycleday <= -5, 1, 0),
+         perimenstrual_count = ifelse(cycleday >=-3 & cycleday <=2, 1, 0),
+         midfol_count = ifelse(cycleday >=4 & cycleday <=7, 1, 0),
+         periov_count = ifelse(cycleday >= -15 & cycleday <= -12, 1, 0))
+
+#add a non-dummy coded variable with all of cycle phase info above, which will be useful for future visualizations and summaries
+cycleday.am.merge <- cycleday.am.merge %>% mutate(cyclephase_count = case_when(periov_count==1 ~ 1,
+                                                     midluteal_count==1 ~ 2,
+                                                     perimenstrual_count==1 ~ 3,
+                                                     midfol_count==1 ~ 4,
+                                                     TRUE ~ as.numeric(NA)))
+
+cycleday.pm.merge <- cycleday.pm.merge %>% 
+  mutate(midluteal_count = ifelse(cycleday >= -9 & cycleday <= -5, 1, 0),
+         perimenstrual_count = ifelse(cycleday >=-3 & cycleday <=2, 1, 0),
+         midfol_count = ifelse(cycleday >=4 & cycleday <=7, 1, 0),
+         periov_count = ifelse(cycleday >= -15 & cycleday <= -12, 1, 0))
+
+#add a non-dummy coded variable with all of cycle phase info above, which will be useful for future visualizations and summaries
+cycleday.pm.merge <- cycleday.pm.merge %>% mutate(cyclephase_count = case_when(periov_count==1 ~ 1,
+                                                     midluteal_count==1 ~ 2,
+                                                     perimenstrual_count==1 ~ 3,
+                                                     midfol_count==1 ~ 4,
+                                                     TRUE ~ as.numeric(NA)))
+
+
+
+```
+#This LH cyclephase code is adapted from github repository: code_templates/prep_Cycle Phase Coding 5 phase - ADHD-KY.Rmd starting at step 5a 
+```{r cyclephase_LH}
+
+cycleday.am.merge <- cycleday.am.merge %>% 
+  mutate(midluteal_LH = ifelse(daycountLH >= 6 & daycountLH <= 10, 1, 0),
+         perimenstrual_LH = ifelse(cycleday >=-3 & cycleday <=2, 1, 0), #note perimenstrual is based on cycleday
+         midfol_LH = ifelse(daycountLH >=-7 & daycountLH <=-3, 1, 0),
+         periov_LH = ifelse(daycountLH >= -2 & daycountLH <= 1, 1, 0),
+         earlylut_LH = ifelse(daycountLH >= 2 & daycountLH <= 5, 1, 0))
+
+#fill out the dummy code, so that if any phase is 1, all others should be 0 (not NA)
+cycleday.am.merge <- cycleday.am.merge %>%
+  rowwise() %>%
+  mutate(sumdummy = sum(midfol_LH,
+                        periov_LH,
+                        earlylut_LH,
+                        perimenstrual_LH,
+                        midluteal_LH, na.rm = T)) %>% 
+  #if all phases=0, make the midluteal_LH variable NA instead of 0,
+  #if perimenstrual by menses count = 1, change midluteal_LH to 0 instead of NA to fill out structural set,
+  #otherwise, keep as is
+  mutate(midluteal_LH = case_when(sumdummy==0 ~ as.numeric(NA),
+                                  sumdummy==1 & perimenstrual_LH==1 ~ 0,
+                                  TRUE ~ midluteal_LH), 
+         #same for midfol
+         midfol_LH = case_when(sumdummy==0 ~ as.numeric(NA),
+                               sumdummy==1 & perimenstrual_LH==1 ~ 0,
+                               TRUE ~ midfol_LH), 
+          #same for periov
+         periov_LH = case_when(sumdummy==0 ~ as.numeric(NA),
+                               sumdummy==1 & perimenstrual_LH==1 ~ 0,
+                               TRUE ~ periov_LH),
+         earlylut_LH = case_when(sumdummy==0 ~ as.numeric(NA),
+                                  sumdummy==1 & perimenstrual_LH==1 ~ 0,
+                                  TRUE ~ earlylut_LH), 
+         #if any other phase is 1, fill out perimenstrual to be 0
+         perimenstrual_LH = case_when(sumdummy==0 ~ as.numeric(NA), 
+                                        sumdummy==1 & midfol_LH==1 ~ 0,
+                                        sumdummy==1 & periov_LH==1 ~ 0,
+                                      sumdummy==1 & earlylut_LH==1 ~ 0,
+                                        sumdummy==1 & midluteal_LH==1 ~ 0,
+                                        TRUE ~ perimenstrual_LH))
+
+#add a non-dummy coded variable with all of cycle phase info above, which will be useful for future visualizations and summaries
+cycleday.am.merge <- cycleday.am.merge %>% mutate(cyclephase_LH = case_when(periov_LH==1 ~ 1,
+                                                                        earlylut_LH==1 ~ 2,
+                                                     midluteal_LH==1 ~ 3,
+                                                     perimenstrual_LH==1 ~ 4,
+                                                     midfol_LH==1 ~ 5,
+                                                     TRUE ~ as.numeric(NA)))
+
+#add names for easier visualization
+cycleday.am.merge <- cycleday.am.merge %>% mutate(cyclephase_LHnames = factor(cyclephase_LH, 
+                                                                              levels = c(1,2,3,4,5),
+                                                                              labels = c("periov",
+                                                                                         "earlylut",
+                                                                                         "midlut",
+                                                                                         "perimens",
+                                                                                         "midfol")))
+
+```
+
+```{r}
+
+#check overlaps: goal is to only have 6 possible group combinations here (1 row per dummy coded phase, then a row where ALL are NA)
+cycleday.am.merge %>%
+  group_by(periov_LH, earlylut_LH, midluteal_LH, perimenstrual_LH, midfol_LH) %>%
+  summarize(n=n())
+#make note of errors
+
+
+#example code to review midfol_LH and perimenstrual_LH overlaps, if they exist
+cycleday.am.merge %>%
+  filter(midfol_LH==1) %>%
+  filter(perimenstrual_LH==1) %>%
+  select(id, daterated, posLHtoday, daycountLH,
+         menstrualbleeding,
+         firstdayofperiod, cycleday,
+         midfol_LH, periov_LH, earlylut_LH,
+         midluteal_LH, perimenstrual_LH) %>%
+  View()
+
+
+
+```                                             
