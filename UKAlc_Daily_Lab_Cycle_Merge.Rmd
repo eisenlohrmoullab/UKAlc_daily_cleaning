@@ -65,7 +65,6 @@ labvisit$Late Follicular Visit <- ymd(labvisit$Late Follicular Visit, na.rm = TR
 
 ## re-format 
 ```{r}
-
 #make new df with early foll and late foll lab visit days 
 labvisit_EF <- labvisit %>% select(ID, starts_with("E1"))
 labvisit_LF <- labvisit %>% select(ID, starts_with("E2"))
@@ -321,6 +320,9 @@ Second.Menses.Date$Second.Period.Start.Date <- mdy(Second.Menses.Date$Second.Per
 
 #Add new column for second menses start date 
 Second.Menses.Date$secondmenses <- 1 
+
+#Save second menses start date data 
+write.csv(Second.Menses.Date, "~/Library/CloudStorage/Box-Box/00 - CLEAR Lab (Locked Folders)/02 - Data Management, Analysis, and Papers/Studies_Projects/UKALC/02_datasets/UKALC_HORM/01_raw_data/second.menses.cleaned.AP.csv", row.names=TRUE)
 
 #Remove NAs (participants with only one menses start date)
 Second.Menses.Date <- Second.Menses.Date[complete.cases(Second.Menses.Date), ]    
